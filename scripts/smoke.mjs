@@ -139,8 +139,8 @@ async function verifyViewport(page, viewport, label) {
   assertNonBlankCanvas(screenshot, label)
 
   const stats = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-  if (!stats || stats.phase !== 'ready' || stats.timeRemaining !== 60) {
-    throw new Error(`${label} did not boot into a ready 60 second run.`)
+  if (!stats || stats.phase !== 'ready' || stats.timeRemaining !== 90) {
+    throw new Error(`${label} did not boot into a ready 90 second run.`)
   }
 
   if (label === 'desktop') {
@@ -153,7 +153,7 @@ async function verifyViewport(page, viewport, label) {
     await page.mouse.up()
     await page.waitForTimeout(500)
     const afterPull = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!afterPull || afterPull.timeRemaining >= 60 || afterPull.phase === 'ready') {
+    if (!afterPull || afterPull.timeRemaining >= 90 || afterPull.phase === 'ready') {
       throw new Error('Pullback shot did not start the timed run.')
     }
     if (!afterPull.readyBallAvailable || afterPull.activeShots < 1) {
@@ -171,8 +171,8 @@ async function verifyViewport(page, viewport, label) {
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(20))
     await page.waitForTimeout(200)
     const inferno = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.level !== 5 || inferno.score <= 0) {
-      throw new Error(`Multiplier/level progression failed: ${JSON.stringify(inferno)}`)
+    if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.score <= 0) {
+      throw new Error(`Multiplier progression failed: ${JSON.stringify(inferno)}`)
     }
 
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMiss())
@@ -187,7 +187,7 @@ async function verifyViewport(page, viewport, label) {
     await page.getByRole('button', { name: 'Restart Run' }).click()
     await page.waitForTimeout(200)
     const restarted = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!restarted || restarted.phase !== 'ready' || restarted.score !== 0 || restarted.timeRemaining !== 60) {
+    if (!restarted || restarted.phase !== 'ready' || restarted.score !== 0 || restarted.timeRemaining !== 90) {
       throw new Error(`Restart failed: ${JSON.stringify(restarted)}`)
     }
   }
@@ -236,6 +236,47 @@ async function verifyBasketCounterRule(page) {
   }
 }
 
+async function verifyTimerLevels(page) {
+  await page.setViewportSize({ width: 820, height: 1600 })
+  await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
+  await page.locator('canvas').waitFor({ state: 'visible' })
+  await page.waitForTimeout(1000)
+
+  const checkpoints = [
+    { elapsed: 0, level: 1, basePoints: 2 },
+    { elapsed: 29.9, level: 1, basePoints: 2 },
+    { elapsed: 30.1, level: 2, basePoints: 2 },
+    { elapsed: 59.9, level: 2, basePoints: 2 },
+    { elapsed: 60.1, level: 3, basePoints: 3 },
+    { elapsed: 89, level: 3, basePoints: 3 },
+  ]
+
+  for (const checkpoint of checkpoints) {
+    await page.evaluate((elapsed) => window.__FLAMETHROW_TEST__?.setElapsedSeconds(elapsed), checkpoint.elapsed)
+    await page.waitForTimeout(50)
+    const state = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if (!state || state.level !== checkpoint.level || state.basePoints !== checkpoint.basePoints) {
+      throw new Error(`Timer level checkpoint failed: expected=${JSON.stringify(checkpoint)} actual=${JSON.stringify(state)}`)
+    }
+  }
+
+  await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
+  await page.locator('canvas').waitFor({ state: 'visible' })
+  await page.waitForTimeout(1000)
+  await page.evaluate(() => window.__FLAMETHROW_TEST__?.setElapsedSeconds(60.1))
+  const before = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+  await page.evaluate(() => window.__FLAMETHROW_TEST__?.dropThroughHoop())
+  let after
+  for (let index = 0; index < 30; index += 1) {
+    await page.waitForTimeout(100)
+    after = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if ((after?.score ?? 0) > (before?.score ?? 0)) break
+  }
+  if (!after || after.score - (before?.score ?? 0) !== 3) {
+    throw new Error(`Level 3 make did not score 3 base points: before=${JSON.stringify(before)} after=${JSON.stringify(after)}`)
+  }
+}
+
 let browser
 try {
   await waitForServer()
@@ -244,6 +285,7 @@ try {
   await verifyViewport(page, { width: 1440, height: 900 }, 'desktop')
   await verifyViewport(page, { width: 390, height: 844 }, 'mobile')
   await verifyBasketCounterRule(page)
+  await verifyTimerLevels(page)
   await page.close()
   console.log('Smoke test passed: desktop and mobile canvases rendered, controls worked, tiers progressed, and restart succeeded.')
 } finally {

@@ -35,7 +35,7 @@ export class Hud {
         </div>
         <div class="stats" aria-live="polite">
           <div><span>Score</span><strong id="score">0</strong></div>
-          <div><span>Time</span><strong id="timer">60.0</strong></div>
+          <div><span>Time</span><strong id="timer">90.0</strong></div>
           <div><span>Streak</span><strong id="streak">0</strong></div>
           <div><span>Multi</span><strong id="multiplier">x1</strong></div>
           <div><span>Best</span><strong id="best">0</strong></div>
@@ -47,7 +47,7 @@ export class Hud {
           <button class="mode active" type="button" data-mode="pullback">Pullback</button>
           <button class="mode" type="button" data-mode="flick">Flick</button>
         </div>
-        <p id="status">Drag the ball back or switch to flick. First launch starts the 60 second run.</p>
+        <p id="status">Drag the ball back or switch to flick. First launch starts the 90 second run.</p>
       </div>
       <div class="round-over hidden" id="round-over">
         <div class="result-panel">
@@ -96,7 +96,7 @@ export class Hud {
     this.root.dataset.tier = String(state.tier.threshold)
 
     if (phase === 'ready') {
-      this.status.textContent = 'Drag the ball back or switch to flick. First launch starts the 60 second run.'
+      this.status.textContent = 'Drag the ball back or switch to flick. First launch starts the 90 second run.'
     } else if (phase === 'shotInFlight') {
       this.status.textContent = 'Shot in flight.'
     } else if (phase === 'roundOver') {

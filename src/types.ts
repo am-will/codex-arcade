@@ -15,10 +15,11 @@ export type ObstacleConfig = {
 export type LevelConfig = {
   id: number
   label: string
+  startsAtSeconds: number
   hoopDistance: number
   hoopSpeed: number
   hoopRange: number
-  scoreTarget: number
+  basePoints: number
   obstacleConfigs: ObstacleConfig[]
 }
 

@@ -34,6 +34,7 @@ export class ScoringSystem {
     ballPosition: THREE.Vector3,
     ballVelocity: THREE.Vector3,
     hoopPosition: THREE.Vector3,
+    basePoints = 2,
   ): ShotResult {
     const wasAboveRim = tracker.lastBallPosition.y > RIM_HEIGHT + 0.16
     const falling = ballVelocity.y < -0.5
@@ -61,7 +62,7 @@ export class ScoringSystem {
 
       if (tracker.enteredHoopOpening && falling && moreThanHalfwayThrough && stillInsideNet) {
         tracker.scored = true
-        this.registerMake()
+        this.registerMake(basePoints)
         tracker.lastBallPosition.copy(ballPosition)
         return 'made'
       }
@@ -95,12 +96,12 @@ export class ScoringSystem {
     this.state.tier = getTierForStreak(0)
   }
 
-  registerMake(): void {
+  registerMake(basePoints = 2): void {
     this.state.streak += 1
     this.state.bestStreak = Math.max(this.state.bestStreak, this.state.streak)
     this.state.tier = getTierForStreak(this.state.streak)
     this.state.multiplier = this.state.tier.multiplier
-    this.state.score += 2 * this.state.multiplier
+    this.state.score += basePoints * this.state.multiplier
     this.state.madeShots += 1
   }
 }

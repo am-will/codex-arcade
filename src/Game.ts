@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
 import { CourtScene, type ShotVisual } from './CourtScene'
-import { getLevelForMadeShots, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
+import { getLevelForElapsedSeconds, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
 import { Hud } from './Hud'
 import { PhysicsWorld } from './PhysicsWorld'
 import { ScoringSystem, type ShotScoreTracker } from './ScoringSystem'
@@ -26,6 +26,7 @@ declare global {
       forceRoundOver: () => void
       dropThroughHoop: () => void
       dropAtBackboard: () => void
+      setElapsedSeconds: (elapsedSeconds: number) => void
       snapshot: () => {
         phase: GamePhase
         score: number
@@ -34,6 +35,8 @@ declare global {
         bestStreak: number
         madeShots: number
         level: number
+        basePoints: number
+        elapsedSeconds: number
         timeRemaining: number
         activeShots: number
         readyBallAvailable: boolean
@@ -51,7 +54,7 @@ export class Game {
   private scoring = new ScoringSystem()
   private phase: GamePhase = 'ready'
   private shotMode: ShotMode = 'pullback'
-  private activeLevel: LevelConfig = getLevelForMadeShots(0)
+  private activeLevel: LevelConfig = getLevelForElapsedSeconds(0)
   private timeRemaining = SHOT_CLOCK_SECONDS
   private running = false
   private lastFrame = 0
@@ -96,7 +99,7 @@ export class Game {
       this.court.setAim(this.court.ballMesh.position, velocity)
     }
     this.shotController.mode = this.shotMode
-    this.applyLevel(getLevelForMadeShots(0))
+    this.applyLevel(getLevelForElapsedSeconds(0))
     this.resetBall()
     this.installTestHooks()
     this.bindResize()
@@ -125,7 +128,7 @@ export class Game {
       }
     }
 
-    const level = getLevelForMadeShots(this.scoring.state.madeShots)
+    const level = getLevelForElapsedSeconds(this.getGameElapsedSeconds())
     if (level !== this.activeLevel) {
       this.applyLevel(level)
     }
@@ -170,7 +173,13 @@ export class Game {
       this.physics.getBodyVelocity(shot.body, shot.velocity)
       this.court.updateShotVisual(shot.visual, shot.position, shot.rotation)
 
-      const result = this.scoring.checkShot(shot.tracker, shot.position, shot.velocity, hoopPosition)
+      const result = this.scoring.checkShot(
+        shot.tracker,
+        shot.position,
+        shot.velocity,
+        hoopPosition,
+        this.activeLevel.basePoints,
+      )
       if (result === 'made') {
         this.hud.showMake(this.scoring.state)
         this.court.celebrateMake(this.scoring.state.tier)
@@ -199,7 +208,7 @@ export class Game {
     this.timeRemaining = SHOT_CLOCK_SECONDS
     this.phase = 'ready'
     this.elapsed = 0
-    this.applyLevel(getLevelForMadeShots(0))
+    this.applyLevel(getLevelForElapsedSeconds(0))
     this.hud.hideRoundOver()
     this.resetBall()
   }
@@ -222,10 +231,9 @@ export class Game {
     window.__FLAMETHROW_TEST__ = {
       forceMake: (count = 1) => {
         for (let index = 0; index < count; index += 1) {
-          this.scoring.registerMake()
+          this.scoring.registerMake(this.activeLevel.basePoints)
         }
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
-        this.applyLevel(getLevelForMadeShots(this.scoring.state.madeShots))
         this.court.celebrateMake(this.scoring.state.tier)
         this.hud.showMake(this.scoring.state)
       },
@@ -246,6 +254,11 @@ export class Game {
         this.spawnActiveShot(new THREE.Vector3(0, -1.2, 0), position)
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
       },
+      setElapsedSeconds: (elapsedSeconds) => {
+        this.phase = 'playing'
+        this.timeRemaining = Math.max(0, SHOT_CLOCK_SECONDS - elapsedSeconds)
+        this.applyLevel(getLevelForElapsedSeconds(this.getGameElapsedSeconds()))
+      },
       snapshot: () => ({
         phase: this.phase,
         score: this.scoring.state.score,
@@ -254,6 +267,8 @@ export class Game {
         bestStreak: this.scoring.state.bestStreak,
         madeShots: this.scoring.state.madeShots,
         level: this.activeLevel.id,
+        basePoints: this.activeLevel.basePoints,
+        elapsedSeconds: this.getGameElapsedSeconds(),
         timeRemaining: this.timeRemaining,
         activeShots: this.activeShots.length,
         readyBallAvailable: this.readyBallAvailable,
@@ -310,6 +325,10 @@ export class Game {
       this.removeActiveShot(shot)
     }
     this.activeShots = []
+  }
+
+  private getGameElapsedSeconds(): number {
+    return SHOT_CLOCK_SECONDS - this.timeRemaining
   }
 
   private updateHoop(): void {
