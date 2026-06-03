@@ -95,8 +95,8 @@ export class ShotController {
     const pullDistance = Math.hypot(dx, dy)
     const pull = THREE.MathUtils.smoothstep(Math.min(1, pullDistance / 430), 0.06, 1)
     const verticalIntent = THREE.MathUtils.clamp(dy / 360, -0.18, 1)
-    const forward = THREE.MathUtils.clamp(7.7 + pull * 3.95 + verticalIntent * 2.05, 7.6, 13.45)
-    const upward = THREE.MathUtils.clamp(6.65 + pull * 3.15 + verticalIntent * 1.7, 6.35, 11.05)
+    const forward = THREE.MathUtils.clamp(8.45 + pull * 4.35 + verticalIntent * 2.25, 8.3, 14.65)
+    const upward = THREE.MathUtils.clamp(6.95 + pull * 3.35 + verticalIntent * 1.82, 6.65, 11.55)
     const lateral = THREE.MathUtils.clamp(-dx * 0.026, -4.15, 4.15)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),
@@ -113,8 +113,8 @@ export class ShotController {
     const rawPower = Math.min(1, speed / 2450)
     const power = THREE.MathUtils.smoothstep(rawPower, 0.08, 1)
     const liftIntent = THREE.MathUtils.clamp(-vy / 1850, 0, 1)
-    const forward = THREE.MathUtils.clamp(7.75 + power * 3.7 + liftIntent * 2.15, 7.45, 13.55)
-    const upward = THREE.MathUtils.clamp(6.55 + power * 3 + liftIntent * 1.85, 6.25, 10.95)
+    const forward = THREE.MathUtils.clamp(8.5 + power * 4.05 + liftIntent * 2.3, 8.25, 14.75)
+    const upward = THREE.MathUtils.clamp(6.85 + power * 3.18 + liftIntent * 1.98, 6.55, 11.45)
     const lateral = THREE.MathUtils.clamp(vx * 0.0039, -4.25, 4.25)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),

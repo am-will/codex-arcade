@@ -151,7 +151,7 @@ async function verifyViewport(page, viewport, label) {
     await page.mouse.down()
     await page.mouse.move(box.x + box.width * 0.46, box.y + box.height * 0.82, { steps: 8 })
     await page.mouse.up()
-    await page.waitForTimeout(350)
+    await page.waitForTimeout(500)
     const afterPull = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if (!afterPull || afterPull.timeRemaining >= 60 || afterPull.phase === 'ready') {
       throw new Error('Pullback shot did not start the timed run.')
