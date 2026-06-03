@@ -8,6 +8,7 @@ type HudCallbacks = {
 export class Hud {
   private readonly modeButtons: HTMLButtonElement[]
   private readonly restartButton: HTMLButtonElement
+  private readonly quickRestartButton: HTMLButtonElement
   private readonly score: HTMLElement
   private readonly timer: HTMLElement
   private readonly streak: HTMLElement
@@ -46,6 +47,7 @@ export class Hud {
         <div class="mode-toggle" role="group" aria-label="Shot mode">
           <button class="mode active" type="button" data-mode="pullback">Pullback</button>
           <button class="mode" type="button" data-mode="flick">Flick</button>
+          <button class="mode restart-mode" id="quick-restart" type="button">Restart</button>
         </div>
         <p id="status">Drag the ball back or switch to flick. First launch starts the 90 second run.</p>
       </div>
@@ -57,8 +59,9 @@ export class Hud {
         </div>
       </div>
     `
-    this.modeButtons = [...root.querySelectorAll<HTMLButtonElement>('.mode')]
+    this.modeButtons = [...root.querySelectorAll<HTMLButtonElement>('.mode[data-mode]')]
     this.restartButton = root.querySelector<HTMLButtonElement>('#restart')!
+    this.quickRestartButton = root.querySelector<HTMLButtonElement>('#quick-restart')!
     this.score = root.querySelector<HTMLElement>('#score')!
     this.timer = root.querySelector<HTMLElement>('#timer')!
     this.streak = root.querySelector<HTMLElement>('#streak')!
@@ -77,11 +80,12 @@ export class Hud {
       })
     }
     this.restartButton.addEventListener('click', () => this.callbacks.onRestart())
+    this.quickRestartButton.addEventListener('click', () => this.callbacks.onRestart())
   }
 
   setMode(mode: ShotMode): void {
     for (const button of this.modeButtons) {
-      button.classList.toggle('active', button.dataset.mode === mode)
+      button.classList.toggle('active', button.dataset.mode === mode && button.dataset.mode !== undefined)
     }
   }
 

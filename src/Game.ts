@@ -36,6 +36,7 @@ declare global {
         madeShots: number
         level: number
         basePoints: number
+        hoopDistance: number
         elapsedSeconds: number
         timeRemaining: number
         activeShots: number
@@ -268,6 +269,7 @@ export class Game {
         madeShots: this.scoring.state.madeShots,
         level: this.activeLevel.id,
         basePoints: this.activeLevel.basePoints,
+        hoopDistance: this.activeLevel.hoopDistance,
         elapsedSeconds: this.getGameElapsedSeconds(),
         timeRemaining: this.timeRemaining,
         activeShots: this.activeShots.length,

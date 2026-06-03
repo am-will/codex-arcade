@@ -217,6 +217,11 @@ h1 {
   box-shadow: 0 0 24px rgba(0, 240, 255, 0.46);
 }
 
+.restart-mode {
+  color: var(--ember);
+  background: rgba(255, 216, 90, 0.08);
+}
+
 #status {
   max-width: min(34rem, 62vw);
   padding: 0.7rem 0.9rem;

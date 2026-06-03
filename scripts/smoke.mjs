@@ -174,6 +174,9 @@ async function verifyViewport(page, viewport, label) {
     if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.score <= 0) {
       throw new Error(`Multiplier progression failed: ${JSON.stringify(inferno)}`)
     }
+    if (inferno.level !== 1 || inferno.hoopDistance !== -7.5) {
+      throw new Error(`Made baskets changed hoop depth before the timer gate: ${JSON.stringify(inferno)}`)
+    }
 
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMiss())
     await page.waitForTimeout(100)
@@ -189,6 +192,13 @@ async function verifyViewport(page, viewport, label) {
     const restarted = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if (!restarted || restarted.phase !== 'ready' || restarted.score !== 0 || restarted.timeRemaining !== 90) {
       throw new Error(`Restart failed: ${JSON.stringify(restarted)}`)
+    }
+
+    await page.getByRole('button', { name: 'Restart', exact: true }).click()
+    await page.waitForTimeout(200)
+    const quickRestarted = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if (!quickRestarted || quickRestarted.phase !== 'ready' || quickRestarted.score !== 0 || quickRestarted.timeRemaining !== 90) {
+      throw new Error(`Persistent restart failed: ${JSON.stringify(quickRestarted)}`)
     }
   }
 
