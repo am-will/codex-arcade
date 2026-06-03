@@ -92,13 +92,15 @@ export class ShotController {
   private computePullback(current: PointerSample): LaunchVector {
     const dx = current.x - this.start!.x
     const dy = current.y - this.start!.y
-    const pull = Math.min(1, Math.hypot(dx, dy) / 320)
-    const forward = THREE.MathUtils.clamp(dy * 0.055 + pull * 6.5, 7.5, 18.5)
-    const upward = THREE.MathUtils.clamp(5.8 + dy * 0.025 + pull * 5.5, 6.1, 13.4)
-    const lateral = THREE.MathUtils.clamp(-dx * 0.035, -5.8, 5.8)
+    const pullDistance = Math.hypot(dx, dy)
+    const pull = THREE.MathUtils.smoothstep(Math.min(1, pullDistance / 430), 0.06, 1)
+    const verticalIntent = THREE.MathUtils.clamp(dy / 360, -0.18, 1)
+    const forward = THREE.MathUtils.clamp(8.7 + pull * 4.9 + verticalIntent * 2.6, 8.6, 15.2)
+    const upward = THREE.MathUtils.clamp(5.55 + pull * 3.25 + verticalIntent * 2.1, 5.4, 10.4)
+    const lateral = THREE.MathUtils.clamp(-dx * 0.026, -4.15, 4.15)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),
-      power: pull,
+      power: Math.min(1, pullDistance / 430),
     }
   }
 
@@ -108,13 +110,15 @@ export class ShotController {
     const vx = ((current.x - recent.x) / dt) * 1000
     const vy = ((current.y - recent.y) / dt) * 1000
     const speed = Math.hypot(vx, vy)
-    const power = Math.min(1, speed / 1800)
-    const forward = THREE.MathUtils.clamp(-vy * 0.0085 + power * 5.2, 7.5, 19)
-    const upward = THREE.MathUtils.clamp(5.8 + -vy * 0.0046 + power * 4.2, 6, 13.1)
-    const lateral = THREE.MathUtils.clamp(vx * 0.0054, -6.2, 6.2)
+    const rawPower = Math.min(1, speed / 2450)
+    const power = THREE.MathUtils.smoothstep(rawPower, 0.08, 1)
+    const liftIntent = THREE.MathUtils.clamp(-vy / 1850, 0, 1)
+    const forward = THREE.MathUtils.clamp(8.8 + power * 4.2 + liftIntent * 2.7, 8.4, 15.4)
+    const upward = THREE.MathUtils.clamp(5.45 + power * 3.1 + liftIntent * 2.3, 5.3, 10.3)
+    const lateral = THREE.MathUtils.clamp(vx * 0.0039, -4.25, 4.25)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),
-      power,
+      power: rawPower,
     }
   }
 }

@@ -22,15 +22,16 @@ export class ScoringSystem {
   }
 
   checkShot(ballPosition: THREE.Vector3, ballVelocity: THREE.Vector3, hoopPosition: THREE.Vector3): ShotResult {
+    const wasAboveRim = this.lastBallPosition.y > RIM_HEIGHT + 0.16
+    const falling = ballVelocity.y < -0.5
+
     if (!this.scoredThisShot) {
-      const wasAbove = this.lastBallPosition.y > RIM_HEIGHT + 0.16
       const isAtRim = ballPosition.y <= RIM_HEIGHT + 0.08 && ballPosition.y >= RIM_HEIGHT - 0.54
-      const falling = ballVelocity.y < -0.5
       const dx = ballPosition.x - hoopPosition.x
       const dz = ballPosition.z - hoopPosition.z
       const insideCylinder = Math.hypot(dx, dz) < RIM_RADIUS * 0.64
 
-      if (wasAbove && isAtRim && falling && insideCylinder) {
+      if (wasAboveRim && isAtRim && falling && insideCylinder) {
         this.scoredThisShot = true
         this.registerMake()
         this.lastBallPosition.copy(ballPosition)
@@ -39,7 +40,12 @@ export class ScoringSystem {
     }
 
     this.lastBallPosition.copy(ballPosition)
-    if (ballPosition.y < -1.3 || ballPosition.z < hoopPosition.z - 4.4 || Math.abs(ballPosition.x) > 7) {
+    if (
+      (wasAboveRim && falling && ballPosition.y < RIM_HEIGHT - 0.34) ||
+      ballPosition.y < -1.3 ||
+      ballPosition.z < hoopPosition.z - 4.4 ||
+      Math.abs(ballPosition.x) > 7
+    ) {
       this.registerMiss()
       return 'miss'
     }
