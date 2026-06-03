@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
 import { CourtScene, type ShotVisual } from './CourtScene'
-import { getLevelForMadeShots, LAUNCH_POSITION, SHOT_CLOCK_SECONDS } from './config'
+import { getLevelForMadeShots, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
 import { Hud } from './Hud'
 import { PhysicsWorld } from './PhysicsWorld'
 import { ScoringSystem, type ShotScoreTracker } from './ScoringSystem'
@@ -24,6 +24,8 @@ declare global {
       forceMake: (count?: number) => void
       forceMiss: () => void
       forceRoundOver: () => void
+      dropThroughHoop: () => void
+      dropAtBackboard: () => void
       snapshot: () => {
         phase: GamePhase
         score: number
@@ -35,6 +37,7 @@ declare global {
         timeRemaining: number
         activeShots: number
         readyBallAvailable: boolean
+        shots: Array<{ x: number; y: number; z: number; vy: number; enteredHoopOpening: boolean }>
       }
     }
   }
@@ -151,20 +154,7 @@ export class Game {
     if (this.phase === 'roundOver' || !this.readyBallAvailable) return
     if (this.phase === 'ready') this.phase = 'playing'
     this.court.clearAim()
-    const body = this.physics.createShotBody(velocity)
-    const position = this.physics.getBodyPosition(body, new THREE.Vector3())
-    const rotation = this.physics.getBodyRotation(body, new THREE.Quaternion())
-    const visual = this.court.createShotVisual(position, rotation)
-    this.activeShots.push({
-      id: this.nextShotId,
-      body,
-      visual,
-      tracker: this.scoring.beginShot(position),
-      position,
-      rotation,
-      velocity: new THREE.Vector3(),
-    })
-    this.nextShotId += 1
+    this.spawnActiveShot(velocity)
     this.readyBallAvailable = false
     this.readyBallDelay = 0.24
     this.court.setLaunchBallVisible(false)
@@ -244,6 +234,18 @@ export class Game {
         this.hud.showMiss()
       },
       forceRoundOver: () => this.endRound(),
+      dropThroughHoop: () => {
+        const hoop = this.court.getHoopPosition()
+        const position = new THREE.Vector3(hoop.x, RIM_HEIGHT + 0.92, hoop.z)
+        this.spawnActiveShot(new THREE.Vector3(0, -1.2, 0), position)
+        this.phase = this.phase === 'ready' ? 'playing' : this.phase
+      },
+      dropAtBackboard: () => {
+        const hoop = this.court.getHoopPosition()
+        const position = new THREE.Vector3(hoop.x, RIM_HEIGHT + 0.92, hoop.z - 0.72)
+        this.spawnActiveShot(new THREE.Vector3(0, -1.2, 0), position)
+        this.phase = this.phase === 'ready' ? 'playing' : this.phase
+      },
       snapshot: () => ({
         phase: this.phase,
         score: this.scoring.state.score,
@@ -255,6 +257,13 @@ export class Game {
         timeRemaining: this.timeRemaining,
         activeShots: this.activeShots.length,
         readyBallAvailable: this.readyBallAvailable,
+        shots: this.activeShots.map((shot) => ({
+          x: shot.position.x,
+          y: shot.position.y,
+          z: shot.position.z,
+          vy: shot.velocity.y,
+          enteredHoopOpening: shot.tracker.enteredHoopOpening,
+        })),
       }),
     }
   }
@@ -277,6 +286,23 @@ export class Game {
   private removeActiveShot(shot: ActiveShot): void {
     this.physics.removeShotBody(shot.body)
     this.court.removeShotVisual(shot.visual)
+  }
+
+  private spawnActiveShot(velocity: THREE.Vector3, position = LAUNCH_POSITION): void {
+    const body = this.physics.createShotBody(velocity, position)
+    const shotPosition = this.physics.getBodyPosition(body, new THREE.Vector3())
+    const rotation = this.physics.getBodyRotation(body, new THREE.Quaternion())
+    const visual = this.court.createShotVisual(shotPosition, rotation)
+    this.activeShots.push({
+      id: this.nextShotId,
+      body,
+      visual,
+      tracker: this.scoring.beginShot(shotPosition),
+      position: shotPosition,
+      rotation,
+      velocity: new THREE.Vector3(),
+    })
+    this.nextShotId += 1
   }
 
   private clearActiveShots(): void {

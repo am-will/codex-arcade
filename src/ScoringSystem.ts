@@ -1,11 +1,13 @@
 import * as THREE from 'three'
-import { RIM_HEIGHT, RIM_RADIUS } from './config'
+import { BALL_RADIUS, RIM_HEIGHT, RIM_RADIUS } from './config'
 import { getTierForStreak, STREAK_TIERS } from './config'
 import type { ScoreState, ShotResult } from './types'
 
 export type ShotScoreTracker = {
   lastBallPosition: THREE.Vector3
   scored: boolean
+  enteredHoopOpening: boolean
+  entryHoopPosition: THREE.Vector3 | null
 }
 
 export class ScoringSystem {
@@ -22,6 +24,8 @@ export class ScoringSystem {
     return {
       lastBallPosition: ballPosition.clone(),
       scored: false,
+      enteredHoopOpening: false,
+      entryHoopPosition: null,
     }
   }
 
@@ -35,12 +39,27 @@ export class ScoringSystem {
     const falling = ballVelocity.y < -0.5
 
     if (!tracker.scored) {
-      const isAtRim = ballPosition.y <= RIM_HEIGHT + 0.08 && ballPosition.y >= RIM_HEIGHT - 0.54
-      const dx = ballPosition.x - hoopPosition.x
-      const dz = ballPosition.z - hoopPosition.z
-      const insideCylinder = Math.hypot(dx, dz) < RIM_RADIUS * 0.64
+      const currentDx = ballPosition.x - hoopPosition.x
+      const currentDz = ballPosition.z - hoopPosition.z
+      const openingDistance = Math.hypot(currentDx, currentDz)
+      const isEnteringFromTop =
+        falling &&
+        ballPosition.y >= RIM_HEIGHT + BALL_RADIUS * 0.15 &&
+        ballPosition.y <= RIM_HEIGHT + BALL_RADIUS * 2.9 &&
+        openingDistance < RIM_RADIUS * 0.92
 
-      if (wasAboveRim && isAtRim && falling && insideCylinder) {
+      if (isEnteringFromTop) {
+        tracker.enteredHoopOpening = true
+        tracker.entryHoopPosition = hoopPosition.clone()
+      }
+
+      const scoreHoopPosition = tracker.entryHoopPosition ?? hoopPosition
+      const netDx = ballPosition.x - scoreHoopPosition.x
+      const netDz = ballPosition.z - scoreHoopPosition.z
+      const moreThanHalfwayThrough = ballPosition.y <= RIM_HEIGHT - BALL_RADIUS * 0.08
+      const stillInsideNet = Math.hypot(netDx, netDz) < RIM_RADIUS * 0.82
+
+      if (tracker.enteredHoopOpening && falling && moreThanHalfwayThrough && stillInsideNet) {
         tracker.scored = true
         this.registerMake()
         tracker.lastBallPosition.copy(ballPosition)

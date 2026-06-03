@@ -33,10 +33,10 @@ export class PhysicsWorld {
     this.world.step()
   }
 
-  createShotBody(velocity: THREE.Vector3): RigidBody {
+  createShotBody(velocity: THREE.Vector3, position = LAUNCH_POSITION): RigidBody {
     const body = this.world.createRigidBody(
       RAPIER.RigidBodyDesc.dynamic()
-        .setTranslation(LAUNCH_POSITION.x, LAUNCH_POSITION.y, LAUNCH_POSITION.z)
+        .setTranslation(position.x, position.y, position.z)
         .setCanSleep(false)
         .setLinearDamping(0.05)
         .setAngularDamping(0.04),

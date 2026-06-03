@@ -35,6 +35,9 @@ export class CourtScene {
   private readonly flameTexture = createFlameTexture()
   private readonly cyanGlow = createGlowTexture('rgba(0, 240, 255, 0.82)')
   private readonly magentaGlow = createGlowTexture('rgba(255, 61, 133, 0.82)')
+  private backboardMaterial!: THREE.MeshStandardMaterial
+  private backboardFlashLight!: THREE.PointLight
+  private backboardFlash = 0
   private spawnAccumulator = 0
   private lastTierThreshold = 0
   private screenPulse = 0
@@ -252,6 +255,16 @@ export class CourtScene {
       material.emissiveIntensity = 1.2 + Math.sin(time * 3 + index * 1.7) * 0.38
     })
 
+    if (this.backboardMaterial && this.backboardFlashLight) {
+      this.backboardFlash = Math.max(0, this.backboardFlash - dt * 2.8)
+      const flash = this.backboardFlash
+      this.backboardMaterial.emissive.setHex(flash > 0 ? tier.primaryColor : 0x00f0ff)
+      this.backboardMaterial.emissiveIntensity = 0.7 + flash * 4.6
+      this.backboardMaterial.opacity = 0.74 + flash * 0.2
+      this.backboardFlashLight.color.setHex(tier.primaryColor)
+      this.backboardFlashLight.intensity = flash * 8
+    }
+
     if (this.screenPulse > 0) {
       this.screenPulse = Math.max(0, this.screenPulse - dt * 1.7)
       const pulse = 1 + this.screenPulse * 0.06
@@ -263,6 +276,7 @@ export class CourtScene {
 
   celebrateMake(tier: StreakTier): void {
     this.screenPulse = 1
+    this.backboardFlash = 1
     for (let i = 0; i < 18 + tier.flameIntensity * 30; i += 1) {
       this.spawnFlame(tier, true)
     }
@@ -365,9 +379,7 @@ export class CourtScene {
     rim.castShadow = true
     this.hoopGroup.add(rim)
 
-    const backboard = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 1.42, 0.12),
-      new THREE.MeshStandardMaterial({
+    this.backboardMaterial = new THREE.MeshStandardMaterial({
         color: 0x13243a,
         transparent: true,
         opacity: 0.74,
@@ -375,11 +387,18 @@ export class CourtScene {
         emissiveIntensity: 0.7,
         roughness: 0.18,
         metalness: 0.4,
-      }),
+      })
+    const backboard = new THREE.Mesh(
+      new THREE.BoxGeometry(2.6, 1.42, 0.12),
+      this.backboardMaterial,
     )
     backboard.position.set(0, 0.58, -0.62)
     backboard.castShadow = true
     this.hoopGroup.add(backboard)
+
+    this.backboardFlashLight = new THREE.PointLight(0xffd85a, 0, 4.8)
+    this.backboardFlashLight.position.set(0, 0.5, 0.1)
+    this.hoopGroup.add(this.backboardFlashLight)
 
     const boardFrame = new THREE.LineSegments(
       new THREE.EdgesGeometry(backboard.geometry),

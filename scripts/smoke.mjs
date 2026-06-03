@@ -171,7 +171,7 @@ async function verifyViewport(page, viewport, label) {
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(20))
     await page.waitForTimeout(200)
     const inferno = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.level !== 5) {
+    if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.level !== 5 || inferno.score <= 0) {
       throw new Error(`Multiplier/level progression failed: ${JSON.stringify(inferno)}`)
     }
 
@@ -198,6 +198,44 @@ async function verifyViewport(page, viewport, label) {
   }
 }
 
+async function verifyBasketCounterRule(page) {
+  await page.setViewportSize({ width: 820, height: 1600 })
+  await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
+  await page.locator('canvas').waitFor({ state: 'visible' })
+  await page.waitForTimeout(1000)
+
+  const before = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+  await page.evaluate(() => window.__FLAMETHROW_TEST__?.dropThroughHoop())
+
+  let made
+  for (let index = 0; index < 30; index += 1) {
+    await page.waitForTimeout(100)
+    made = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if ((made?.score ?? 0) > (before?.score ?? 0)) break
+  }
+
+  if (!made || made.score <= (before?.score ?? 0) || made.streak < 1) {
+    throw new Error(`Top-to-bottom hoop drop did not increment score: before=${JSON.stringify(before)} after=${JSON.stringify(made)}`)
+  }
+
+  await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
+  await page.locator('canvas').waitFor({ state: 'visible' })
+  await page.waitForTimeout(1000)
+
+  const boardBefore = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+  await page.evaluate(() => window.__FLAMETHROW_TEST__?.dropAtBackboard())
+  let boardAfter
+  for (let index = 0; index < 30; index += 1) {
+    await page.waitForTimeout(100)
+    boardAfter = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if ((boardAfter?.activeShots ?? 0) === 0) break
+  }
+
+  if ((boardAfter?.score ?? 0) > (boardBefore?.score ?? 0)) {
+    throw new Error(`Backboard-side drop incorrectly scored: before=${JSON.stringify(boardBefore)} after=${JSON.stringify(boardAfter)}`)
+  }
+}
+
 let browser
 try {
   await waitForServer()
@@ -205,6 +243,7 @@ try {
   const page = await browser.newPage()
   await verifyViewport(page, { width: 1440, height: 900 }, 'desktop')
   await verifyViewport(page, { width: 390, height: 844 }, 'mobile')
+  await verifyBasketCounterRule(page)
   await page.close()
   console.log('Smoke test passed: desktop and mobile canvases rendered, controls worked, tiers progressed, and restart succeeded.')
 } finally {
