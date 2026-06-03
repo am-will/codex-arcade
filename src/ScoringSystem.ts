@@ -62,7 +62,7 @@ export class ScoringSystem {
     this.scoredThisShot = false
   }
 
-  private registerMake(): void {
+  registerMake(): void {
     this.state.streak += 1
     this.state.bestStreak = Math.max(this.state.bestStreak, this.state.streak)
     this.state.tier = getTierForStreak(this.state.streak)

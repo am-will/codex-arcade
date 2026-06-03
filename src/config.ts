@@ -134,7 +134,7 @@ export const LEVELS: LevelConfig[] = [
     hoopDistance: -14.8,
     hoopSpeed: 1.8,
     hoopRange: 2.45,
-    scoreTarget: 28,
+    scoreTarget: 20,
     obstacleConfigs: [
       {
         id: 'inferno-low',

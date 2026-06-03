@@ -7,6 +7,26 @@ import { ScoringSystem } from './ScoringSystem'
 import { ShotController } from './ShotController'
 import type { GamePhase, LevelConfig, ShotMode } from './types'
 
+declare global {
+  interface Window {
+    __FLAMETHROW_TEST__?: {
+      forceMake: (count?: number) => void
+      forceMiss: () => void
+      forceRoundOver: () => void
+      snapshot: () => {
+        phase: GamePhase
+        score: number
+        streak: number
+        multiplier: number
+        bestStreak: number
+        madeShots: number
+        level: number
+        timeRemaining: number
+      }
+    }
+  }
+}
+
 export class Game {
   private court!: CourtScene
   private physics!: PhysicsWorld
@@ -60,6 +80,7 @@ export class Game {
     this.shotController.mode = this.shotMode
     this.applyLevel(getLevelForMadeShots(0))
     this.resetBall()
+    this.installTestHooks()
     this.bindResize()
     this.running = true
     this.lastFrame = performance.now()
@@ -169,6 +190,37 @@ export class Game {
     this.court.clearAim()
     this.court.resetTrail()
     this.hud.showRoundOver(this.scoring.state)
+  }
+
+  private installTestHooks(): void {
+    const params = new URLSearchParams(window.location.search)
+    if (!params.has('test')) return
+    window.__FLAMETHROW_TEST__ = {
+      forceMake: (count = 1) => {
+        for (let index = 0; index < count; index += 1) {
+          this.scoring.registerMake()
+        }
+        this.phase = this.phase === 'ready' ? 'playing' : this.phase
+        this.applyLevel(getLevelForMadeShots(this.scoring.state.madeShots))
+        this.court.celebrateMake(this.scoring.state.tier)
+        this.hud.showMake(this.scoring.state)
+      },
+      forceMiss: () => {
+        this.scoring.registerMiss()
+        this.hud.showMiss()
+      },
+      forceRoundOver: () => this.endRound(),
+      snapshot: () => ({
+        phase: this.phase,
+        score: this.scoring.state.score,
+        streak: this.scoring.state.streak,
+        multiplier: this.scoring.state.multiplier,
+        bestStreak: this.scoring.state.bestStreak,
+        madeShots: this.scoring.state.madeShots,
+        level: this.activeLevel.id,
+        timeRemaining: this.timeRemaining,
+      }),
+    }
   }
 
   private syncBall(isFlying: boolean): void {
