@@ -151,14 +151,17 @@ async function verifyViewport(page, viewport, label) {
     await page.mouse.down()
     await page.mouse.move(box.x + box.width * 0.46, box.y + box.height * 0.82, { steps: 8 })
     await page.mouse.up()
-    await page.waitForTimeout(700)
+    await page.waitForTimeout(350)
     const afterPull = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if (!afterPull || afterPull.timeRemaining >= 60 || afterPull.phase === 'ready') {
       throw new Error('Pullback shot did not start the timed run.')
     }
+    if (!afterPull.readyBallAvailable || afterPull.activeShots < 1) {
+      throw new Error(`Ready ball did not respawn while the first shot was still active: ${JSON.stringify(afterPull)}`)
+    }
 
     await page.getByRole('button', { name: 'Flick' }).click()
-    await page.waitForTimeout(700)
+    await page.waitForTimeout(150)
     await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.68)
     await page.mouse.down()
     await page.mouse.move(box.x + box.width * 0.55, box.y + box.height * 0.38, { steps: 4 })

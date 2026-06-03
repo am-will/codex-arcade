@@ -10,6 +10,13 @@ type FlameParticle = {
   maxLife: number
 }
 
+export type ShotVisual = {
+  mesh: THREE.Mesh
+  light: THREE.PointLight
+  trail: THREE.Line
+  trailPositions: THREE.Vector3[]
+}
+
 export class CourtScene {
   readonly scene = new THREE.Scene()
   readonly camera = new THREE.PerspectiveCamera(56, 1, 0.1, 80)
@@ -18,6 +25,8 @@ export class CourtScene {
   readonly ballLight: THREE.PointLight
   readonly aimLine: THREE.Line
 
+  private readonly ballGeometry: THREE.SphereGeometry
+  private readonly ballMaterial: THREE.MeshStandardMaterial
   private readonly hoopGroup = new THREE.Group()
   private readonly obstacleGroup = new THREE.Group()
   private readonly flameParticles: FlameParticle[] = []
@@ -50,15 +59,15 @@ export class CourtScene {
     this.addCourt()
     this.addHoop()
 
-    const ballGeometry = new THREE.SphereGeometry(BALL_RADIUS, 48, 32)
-    const ballMaterial = new THREE.MeshStandardMaterial({
+    this.ballGeometry = new THREE.SphereGeometry(BALL_RADIUS, 48, 32)
+    this.ballMaterial = new THREE.MeshStandardMaterial({
       map: createBallTexture(),
       roughness: 0.36,
       metalness: 0.05,
       emissive: new THREE.Color(0x441200),
       emissiveIntensity: 0.45,
     })
-    this.ballMesh = new THREE.Mesh(ballGeometry, ballMaterial)
+    this.ballMesh = new THREE.Mesh(this.ballGeometry, this.ballMaterial)
     this.ballMesh.castShadow = true
     this.ballMesh.position.set(LAUNCH_POSITION.x, LAUNCH_POSITION.y, LAUNCH_POSITION.z)
     this.scene.add(this.ballMesh)
@@ -147,6 +156,11 @@ export class CourtScene {
     this.aimLine.visible = false
   }
 
+  setLaunchBallVisible(visible: boolean): void {
+    this.ballMesh.visible = visible
+    this.ballLight.visible = visible
+  }
+
   resetTrail(): void {
     this.trailPositions.length = 0
     this.shotTrail.geometry.setFromPoints([])
@@ -161,6 +175,45 @@ export class CourtScene {
       while (this.trailPositions.length > 34) this.trailPositions.shift()
       this.shotTrail.geometry.setFromPoints(this.trailPositions)
     }
+  }
+
+  createShotVisual(position: THREE.Vector3, rotation: THREE.Quaternion): ShotVisual {
+    const mesh = new THREE.Mesh(this.ballGeometry, this.ballMaterial)
+    mesh.castShadow = true
+    mesh.position.copy(position)
+    mesh.quaternion.copy(rotation)
+    this.scene.add(mesh)
+
+    const light = new THREE.PointLight(this.ballLight.color, this.ballLight.intensity, 5.6)
+    light.position.copy(position)
+    this.scene.add(light)
+
+    const trail = new THREE.Line(
+      new THREE.BufferGeometry(),
+      new THREE.LineBasicMaterial({
+        color: 0xffd85a,
+        transparent: true,
+        opacity: 0.76,
+        blending: THREE.AdditiveBlending,
+      }),
+    )
+    this.scene.add(trail)
+
+    return { mesh, light, trail, trailPositions: [] }
+  }
+
+  updateShotVisual(visual: ShotVisual, position: THREE.Vector3, rotation: THREE.Quaternion): void {
+    visual.mesh.position.copy(position)
+    visual.mesh.quaternion.copy(rotation)
+    visual.light.position.copy(position)
+    visual.trailPositions.push(position.clone())
+    while (visual.trailPositions.length > 28) visual.trailPositions.shift()
+    visual.trail.geometry.setFromPoints(visual.trailPositions)
+  }
+
+  removeShotVisual(visual: ShotVisual): void {
+    this.scene.remove(visual.mesh, visual.light, visual.trail)
+    visual.trail.geometry.dispose()
   }
 
   updateEffects(dt: number, time: number, tier: StreakTier): void {

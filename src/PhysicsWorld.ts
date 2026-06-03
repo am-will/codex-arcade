@@ -5,15 +5,13 @@ import type { LevelConfig } from './types'
 
 export class PhysicsWorld {
   readonly world: World
-  readonly ballBody: RigidBody
 
   private readonly hoopBody: RigidBody
   private obstacleBodies: RigidBody[] = []
   private readonly tmpVector = new THREE.Vector3()
 
-  private constructor(world: World, ballBody: RigidBody, hoopBody: RigidBody) {
+  private constructor(world: World, hoopBody: RigidBody) {
     this.world = world
-    this.ballBody = ballBody
     this.hoopBody = hoopBody
   }
 
@@ -24,22 +22,10 @@ export class PhysicsWorld {
     const floorBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, -0.06, -4.6))
     world.createCollider(RAPIER.ColliderDesc.cuboid(4.5, 0.06, 12).setFriction(0.86).setRestitution(0.42), floorBody)
 
-    const ballBody = world.createRigidBody(
-      RAPIER.RigidBodyDesc.dynamic()
-        .setTranslation(LAUNCH_POSITION.x, LAUNCH_POSITION.y, LAUNCH_POSITION.z)
-        .setCanSleep(false)
-        .setLinearDamping(0.05)
-        .setAngularDamping(0.04),
-    )
-    world.createCollider(
-      RAPIER.ColliderDesc.ball(BALL_RADIUS).setDensity(0.9).setFriction(0.62).setRestitution(0.55),
-      ballBody,
-    )
-
     const hoopBody = world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(0, 3.05, -7.5))
     PhysicsWorld.createHoopColliders(world, hoopBody)
 
-    return new PhysicsWorld(world, ballBody, hoopBody)
+    return new PhysicsWorld(world, hoopBody)
   }
 
   step(dt: number): void {
@@ -47,29 +33,39 @@ export class PhysicsWorld {
     this.world.step()
   }
 
-  resetBall(position = LAUNCH_POSITION): void {
-    this.ballBody.setTranslation(position, true)
-    this.ballBody.setLinvel({ x: 0, y: 0, z: 0 }, true)
-    this.ballBody.setAngvel({ x: 0, y: 0, z: 0 }, true)
+  createShotBody(velocity: THREE.Vector3): RigidBody {
+    const body = this.world.createRigidBody(
+      RAPIER.RigidBodyDesc.dynamic()
+        .setTranslation(LAUNCH_POSITION.x, LAUNCH_POSITION.y, LAUNCH_POSITION.z)
+        .setCanSleep(false)
+        .setLinearDamping(0.05)
+        .setAngularDamping(0.04),
+    )
+    this.world.createCollider(
+      RAPIER.ColliderDesc.ball(BALL_RADIUS).setDensity(0.9).setFriction(0.62).setRestitution(0.55),
+      body,
+    )
+    body.setLinvel({ x: velocity.x, y: velocity.y, z: velocity.z }, true)
+    body.setAngvel({ x: velocity.z * -1.7, y: velocity.x * 1.1, z: velocity.x * -0.8 }, true)
+    return body
   }
 
-  launchBall(velocity: THREE.Vector3): void {
-    this.ballBody.setLinvel({ x: velocity.x, y: velocity.y, z: velocity.z }, true)
-    this.ballBody.setAngvel({ x: velocity.z * -1.7, y: velocity.x * 1.1, z: velocity.x * -0.8 }, true)
+  removeShotBody(body: RigidBody): void {
+    this.world.removeRigidBody(body)
   }
 
-  getBallPosition(target = new THREE.Vector3()): THREE.Vector3 {
-    const translation = this.ballBody.translation()
+  getBodyPosition(body: RigidBody, target = new THREE.Vector3()): THREE.Vector3 {
+    const translation = body.translation()
     return target.set(translation.x, translation.y, translation.z)
   }
 
-  getBallRotation(target = new THREE.Quaternion()): THREE.Quaternion {
-    const rotation = this.ballBody.rotation()
+  getBodyRotation(body: RigidBody, target = new THREE.Quaternion()): THREE.Quaternion {
+    const rotation = body.rotation()
     return target.set(rotation.x, rotation.y, rotation.z, rotation.w)
   }
 
-  getBallVelocity(target = new THREE.Vector3()): THREE.Vector3 {
-    const velocity = this.ballBody.linvel()
+  getBodyVelocity(body: RigidBody, target = new THREE.Vector3()): THREE.Vector3 {
+    const velocity = body.linvel()
     return target.set(velocity.x, velocity.y, velocity.z)
   }
 

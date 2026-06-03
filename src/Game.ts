@@ -1,11 +1,22 @@
 import * as THREE from 'three'
-import { CourtScene } from './CourtScene'
+import type { RigidBody } from '@dimforge/rapier3d-compat'
+import { CourtScene, type ShotVisual } from './CourtScene'
 import { getLevelForMadeShots, LAUNCH_POSITION, SHOT_CLOCK_SECONDS } from './config'
 import { Hud } from './Hud'
 import { PhysicsWorld } from './PhysicsWorld'
-import { ScoringSystem } from './ScoringSystem'
+import { ScoringSystem, type ShotScoreTracker } from './ScoringSystem'
 import { ShotController } from './ShotController'
 import type { GamePhase, LevelConfig, ShotMode } from './types'
+
+type ActiveShot = {
+  id: number
+  body: RigidBody
+  visual: ShotVisual
+  tracker: ShotScoreTracker
+  position: THREE.Vector3
+  rotation: THREE.Quaternion
+  velocity: THREE.Vector3
+}
 
 declare global {
   interface Window {
@@ -22,6 +33,8 @@ declare global {
         madeShots: number
         level: number
         timeRemaining: number
+        activeShots: number
+        readyBallAvailable: boolean
       }
     }
   }
@@ -40,11 +53,13 @@ export class Game {
   private running = false
   private lastFrame = 0
   private elapsed = 0
-  private resetDelay = 0
+  private readyBallDelay = 0
+  private readyBallAvailable = true
   private animationFrame = 0
+  private nextShotId = 1
+  private activeShots: ActiveShot[] = []
   private readonly ballPosition = new THREE.Vector3()
   private readonly ballRotation = new THREE.Quaternion()
-  private readonly ballVelocity = new THREE.Vector3()
   private readonly app: HTMLElement
 
   constructor(app: HTMLElement) {
@@ -113,22 +128,19 @@ export class Game {
     }
 
     this.updateHoop()
-    if (this.phase === 'shotInFlight') {
+    if (this.activeShots.length > 0) {
       this.physics.step(dt)
-      this.syncBall(true)
-      this.evaluateShot()
-    } else {
-      this.syncBall(false)
+      this.updateActiveShots()
     }
 
-    if (this.resetDelay > 0) {
-      this.resetDelay -= dt
-      if (this.resetDelay <= 0 && this.phase !== 'roundOver') {
-        this.resetBall()
+    if (!this.readyBallAvailable && this.phase !== 'roundOver') {
+      this.readyBallDelay -= dt
+      if (this.readyBallDelay <= 0) {
+        this.respawnReadyBall()
       }
     }
 
-    this.shotController.setCanShoot(this.phase === 'ready' || this.phase === 'playing')
+    this.shotController.setCanShoot((this.phase === 'ready' || this.phase === 'playing') && this.readyBallAvailable)
     this.court.updateEffects(dt, this.elapsed, this.scoring.state.tier)
     this.hud.update(this.scoring.state, this.timeRemaining, this.phase, this.activeLevel.label, this.activeLevel.id)
     this.court.render()
@@ -136,44 +148,64 @@ export class Game {
   }
 
   private launch(velocity: THREE.Vector3): void {
-    if (this.phase === 'roundOver' || this.phase === 'shotInFlight') return
+    if (this.phase === 'roundOver' || !this.readyBallAvailable) return
     if (this.phase === 'ready') this.phase = 'playing'
-    this.phase = 'shotInFlight'
     this.court.clearAim()
-    this.court.resetTrail()
-    this.physics.resetBall()
-    this.physics.launchBall(velocity)
-    this.scoring.beginShot(this.physics.getBallPosition(this.ballPosition))
+    const body = this.physics.createShotBody(velocity)
+    const position = this.physics.getBodyPosition(body, new THREE.Vector3())
+    const rotation = this.physics.getBodyRotation(body, new THREE.Quaternion())
+    const visual = this.court.createShotVisual(position, rotation)
+    this.activeShots.push({
+      id: this.nextShotId,
+      body,
+      visual,
+      tracker: this.scoring.beginShot(position),
+      position,
+      rotation,
+      velocity: new THREE.Vector3(),
+    })
+    this.nextShotId += 1
+    this.readyBallAvailable = false
+    this.readyBallDelay = 0.24
+    this.court.setLaunchBallVisible(false)
   }
 
-  private evaluateShot(): void {
-    const result = this.scoring.checkShot(
-      this.physics.getBallPosition(this.ballPosition),
-      this.physics.getBallVelocity(this.ballVelocity),
-      this.court.getHoopPosition(),
-    )
-    if (result === 'made') {
-      this.hud.showMake(this.scoring.state)
-      this.court.celebrateMake(this.scoring.state.tier)
-      this.phase = 'playing'
-      this.resetDelay = 0.58
-    } else if (result === 'miss') {
-      this.hud.showMiss()
-      this.phase = 'playing'
-      this.resetDelay = 0.28
+  private updateActiveShots(): void {
+    const hoopPosition = this.court.getHoopPosition()
+    const remainingShots: ActiveShot[] = []
+
+    for (const shot of this.activeShots) {
+      this.physics.getBodyPosition(shot.body, shot.position)
+      this.physics.getBodyRotation(shot.body, shot.rotation)
+      this.physics.getBodyVelocity(shot.body, shot.velocity)
+      this.court.updateShotVisual(shot.visual, shot.position, shot.rotation)
+
+      const result = this.scoring.checkShot(shot.tracker, shot.position, shot.velocity, hoopPosition)
+      if (result === 'made') {
+        this.hud.showMake(this.scoring.state)
+        this.court.celebrateMake(this.scoring.state.tier)
+        this.removeActiveShot(shot)
+      } else if (result === 'miss') {
+        this.hud.showMiss()
+        this.removeActiveShot(shot)
+      } else {
+        remainingShots.push(shot)
+      }
     }
+    this.activeShots = remainingShots
   }
 
   private resetBall(): void {
     this.phase = this.phase === 'roundOver' ? 'roundOver' : this.phase === 'ready' ? 'ready' : 'playing'
-    this.resetDelay = 0
-    this.physics.resetBall(LAUNCH_POSITION)
-    this.court.resetTrail()
+    this.readyBallDelay = 0
+    this.readyBallAvailable = this.phase !== 'roundOver'
+    this.court.setLaunchBallVisible(this.readyBallAvailable)
     this.syncBall(false)
   }
 
   private restart(): void {
     this.scoring.reset()
+    this.clearActiveShots()
     this.timeRemaining = SHOT_CLOCK_SECONDS
     this.phase = 'ready'
     this.elapsed = 0
@@ -185,8 +217,10 @@ export class Game {
   private endRound(): void {
     this.timeRemaining = 0
     this.phase = 'roundOver'
-    this.resetDelay = 0
-    this.physics.resetBall(LAUNCH_POSITION)
+    this.readyBallDelay = 0
+    this.readyBallAvailable = false
+    this.clearActiveShots()
+    this.court.setLaunchBallVisible(false)
     this.court.clearAim()
     this.court.resetTrail()
     this.hud.showRoundOver(this.scoring.state)
@@ -219,16 +253,37 @@ export class Game {
         madeShots: this.scoring.state.madeShots,
         level: this.activeLevel.id,
         timeRemaining: this.timeRemaining,
+        activeShots: this.activeShots.length,
+        readyBallAvailable: this.readyBallAvailable,
       }),
     }
   }
 
   private syncBall(isFlying: boolean): void {
     this.court.updateBall(
-      this.physics.getBallPosition(this.ballPosition),
-      this.physics.getBallRotation(this.ballRotation),
+      this.ballPosition.set(LAUNCH_POSITION.x, LAUNCH_POSITION.y, LAUNCH_POSITION.z),
+      this.ballRotation.identity(),
       isFlying,
     )
+  }
+
+  private respawnReadyBall(): void {
+    this.readyBallAvailable = true
+    this.readyBallDelay = 0
+    this.court.setLaunchBallVisible(true)
+    this.syncBall(false)
+  }
+
+  private removeActiveShot(shot: ActiveShot): void {
+    this.physics.removeShotBody(shot.body)
+    this.court.removeShotVisual(shot.visual)
+  }
+
+  private clearActiveShots(): void {
+    for (const shot of this.activeShots) {
+      this.removeActiveShot(shot)
+    }
+    this.activeShots = []
   }
 
   private updateHoop(): void {

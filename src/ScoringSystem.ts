@@ -3,6 +3,11 @@ import { RIM_HEIGHT, RIM_RADIUS } from './config'
 import { getTierForStreak, STREAK_TIERS } from './config'
 import type { ScoreState, ShotResult } from './types'
 
+export type ShotScoreTracker = {
+  lastBallPosition: THREE.Vector3
+  scored: boolean
+}
+
 export class ScoringSystem {
   readonly state: ScoreState = {
     score: 0,
@@ -13,33 +18,37 @@ export class ScoringSystem {
     tier: STREAK_TIERS[0],
   }
 
-  private lastBallPosition = new THREE.Vector3()
-  private scoredThisShot = false
-
-  beginShot(ballPosition: THREE.Vector3): void {
-    this.lastBallPosition.copy(ballPosition)
-    this.scoredThisShot = false
+  beginShot(ballPosition: THREE.Vector3): ShotScoreTracker {
+    return {
+      lastBallPosition: ballPosition.clone(),
+      scored: false,
+    }
   }
 
-  checkShot(ballPosition: THREE.Vector3, ballVelocity: THREE.Vector3, hoopPosition: THREE.Vector3): ShotResult {
-    const wasAboveRim = this.lastBallPosition.y > RIM_HEIGHT + 0.16
+  checkShot(
+    tracker: ShotScoreTracker,
+    ballPosition: THREE.Vector3,
+    ballVelocity: THREE.Vector3,
+    hoopPosition: THREE.Vector3,
+  ): ShotResult {
+    const wasAboveRim = tracker.lastBallPosition.y > RIM_HEIGHT + 0.16
     const falling = ballVelocity.y < -0.5
 
-    if (!this.scoredThisShot) {
+    if (!tracker.scored) {
       const isAtRim = ballPosition.y <= RIM_HEIGHT + 0.08 && ballPosition.y >= RIM_HEIGHT - 0.54
       const dx = ballPosition.x - hoopPosition.x
       const dz = ballPosition.z - hoopPosition.z
       const insideCylinder = Math.hypot(dx, dz) < RIM_RADIUS * 0.64
 
       if (wasAboveRim && isAtRim && falling && insideCylinder) {
-        this.scoredThisShot = true
+        tracker.scored = true
         this.registerMake()
-        this.lastBallPosition.copy(ballPosition)
+        tracker.lastBallPosition.copy(ballPosition)
         return 'made'
       }
     }
 
-    this.lastBallPosition.copy(ballPosition)
+    tracker.lastBallPosition.copy(ballPosition)
     if (
       (wasAboveRim && falling && ballPosition.y < RIM_HEIGHT - 0.34) ||
       ballPosition.y < -1.3 ||
@@ -65,7 +74,6 @@ export class ScoringSystem {
     this.state.bestStreak = 0
     this.state.multiplier = 1
     this.state.tier = getTierForStreak(0)
-    this.scoredThisShot = false
   }
 
   registerMake(): void {
