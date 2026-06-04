@@ -257,19 +257,25 @@ async function verifyTimerLevels(page) {
   await page.waitForTimeout(1000)
 
   const checkpoints = [
-    { elapsed: 0, level: 1, basePoints: 2 },
-    { elapsed: 29.9, level: 1, basePoints: 2 },
-    { elapsed: 30.1, level: 2, basePoints: 2 },
-    { elapsed: 59.9, level: 2, basePoints: 2 },
-    { elapsed: 60.1, level: 3, basePoints: 5 },
-    { elapsed: 89, level: 3, basePoints: 5 },
+    { elapsed: 0, level: 1, basePoints: 2, hoopDistance: -6, hoopSpeed: 0.42 },
+    { elapsed: 29.9, level: 1, basePoints: 2, hoopDistance: -6, hoopSpeed: 0.42 },
+    { elapsed: 30.1, level: 2, basePoints: 2, hoopDistance: -6.86, hoopSpeed: 0.44 },
+    { elapsed: 59.9, level: 2, basePoints: 2, hoopDistance: -6.86, hoopSpeed: 0.44 },
+    { elapsed: 60.1, level: 3, basePoints: 5, hoopDistance: -8.03, hoopSpeed: 0.47 },
+    { elapsed: 89, level: 3, basePoints: 5, hoopDistance: -8.03, hoopSpeed: 0.47 },
   ]
 
   for (const checkpoint of checkpoints) {
     await page.evaluate((elapsed) => window.__FLAMETHROW_TEST__?.setElapsedSeconds(elapsed), checkpoint.elapsed)
     await page.waitForTimeout(50)
     const state = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!state || state.level !== checkpoint.level || state.basePoints !== checkpoint.basePoints) {
+    if (
+      !state ||
+      state.level !== checkpoint.level ||
+      state.basePoints !== checkpoint.basePoints ||
+      state.hoopDistance !== checkpoint.hoopDistance ||
+      state.hoopSpeed !== checkpoint.hoopSpeed
+    ) {
       throw new Error(`Timer level checkpoint failed: expected=${JSON.stringify(checkpoint)} actual=${JSON.stringify(state)}`)
     }
   }

@@ -37,6 +37,7 @@ declare global {
         level: number
         basePoints: number
         hoopDistance: number
+        hoopSpeed: number
         elapsedSeconds: number
         timeRemaining: number
         activeShots: number
@@ -231,6 +232,7 @@ export class Game {
     if (!params.has('test')) return
     window.__FLAMETHROW_TEST__ = {
       forceMake: (count = 1) => {
+        this.clearActiveShots()
         for (let index = 0; index < count; index += 1) {
           this.scoring.registerMake(this.activeLevel.basePoints)
         }
@@ -270,6 +272,7 @@ export class Game {
         level: this.activeLevel.id,
         basePoints: this.activeLevel.basePoints,
         hoopDistance: this.activeLevel.hoopDistance,
+        hoopSpeed: this.activeLevel.hoopSpeed,
         elapsedSeconds: this.getGameElapsedSeconds(),
         timeRemaining: this.timeRemaining,
         activeShots: this.activeShots.length,
