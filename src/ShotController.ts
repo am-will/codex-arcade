@@ -111,12 +111,18 @@ export class ShotController {
     const vx = ((current.x - recent.x) / dt) * 1000
     const vy = ((current.y - recent.y) / dt) * 1000
     const speed = Math.hypot(vx, vy)
-    const rawPower = Math.min(1, speed / 4300)
-    const power = THREE.MathUtils.smoothstep(rawPower, 0.18, 1)
-    const liftIntent = THREE.MathUtils.clamp(-vy / 3000, 0, 1)
-    const forward = THREE.MathUtils.clamp(5.35 + power * 5.25 + liftIntent * 1.45, 5.1, 13.25)
-    const upward = THREE.MathUtils.clamp(4.62 + power * 4.05 + liftIntent * 1.32, 4.4, 10.75)
-    const lateral = THREE.MathUtils.clamp(vx * 0.00265, -3.05, 3.05)
+    const totalDx = current.x - this.start!.x
+    const totalDy = current.y - this.start!.y
+    const flickDistance = Math.hypot(totalDx, totalDy)
+    const speedPower = Math.min(1, speed / 5200)
+    const distancePower = Math.min(1, flickDistance / 360)
+    const distanceGate = THREE.MathUtils.smoothstep(distancePower, 0.08, 0.82)
+    const rawPower = Math.min(1, speedPower * 0.3 + distancePower * 0.7)
+    const power = THREE.MathUtils.smoothstep(rawPower, 0.22, 1)
+    const liftIntent = THREE.MathUtils.clamp(-vy / 3600, 0, 1) * distanceGate
+    const forward = THREE.MathUtils.clamp(4.45 + power * 5.7 + liftIntent * 1.2, 4.25, 12.65)
+    const upward = THREE.MathUtils.clamp(3.75 + power * 4.55 + liftIntent * 1.18, 3.55, 10.35)
+    const lateral = THREE.MathUtils.clamp(vx * 0.0023 * (0.45 + distanceGate * 0.55), -2.75, 2.75)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),
       power: rawPower,
