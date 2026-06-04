@@ -402,21 +402,6 @@ export class CourtScene {
     rim.castShadow = true
     this.hoopGroup.add(rim)
 
-    const rearRim = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.048, 0.048, RIM_RADIUS * 1.62, 18),
-      new THREE.MeshBasicMaterial({
-        color: 0xff3d85,
-        transparent: true,
-        opacity: 1,
-        depthTest: false,
-        depthWrite: false,
-      }),
-    )
-    rearRim.rotation.z = Math.PI / 2
-    rearRim.position.set(0, 0.012, -0.34)
-    rearRim.renderOrder = 12
-    this.hoopGroup.add(rearRim)
-
     this.backboardMaterial = new THREE.MeshStandardMaterial({
         color: 0x13243a,
         transparent: true,
