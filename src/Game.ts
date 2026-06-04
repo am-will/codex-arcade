@@ -104,7 +104,7 @@ export class Game {
     this.shotController = new ShotController(this.court.renderer.domElement)
     this.shotController.onLaunch = ({ velocity }) => this.launch(velocity)
     this.shotController.onAim = (velocity) => {
-      this.court.setAim(this.court.ballMesh.position, velocity)
+      this.court.setAim(this.court.ballMesh.position, velocity ? this.applyAimAssist(velocity) : null)
     }
     this.shotController.mode = this.shotMode
     this.applyLevel(getLevelForElapsedSeconds(0))
@@ -166,7 +166,7 @@ export class Game {
     if (this.phase === 'roundOver' || !this.readyBallAvailable) return
     if (this.phase === 'ready') this.phase = 'playing'
     this.court.clearAim()
-    this.spawnActiveShot(velocity)
+    this.spawnActiveShot(this.applyAimAssist(velocity))
     this.readyBallAvailable = false
     this.readyBallDelay = 0.24
     this.court.setLaunchBallVisible(false)
@@ -358,6 +358,18 @@ export class Game {
     const x = Math.sin(this.elapsed * this.activeLevel.hoopSpeed) * this.activeLevel.hoopRange
     this.court.setHoopPosition(x, this.activeLevel.hoopDistance)
     this.physics.setHoopPosition(x, this.activeLevel.hoopDistance)
+  }
+
+  private applyAimAssist(velocity: THREE.Vector3): THREE.Vector3 {
+    const assisted = velocity.clone()
+    const hoopPosition = this.court.getHoopPosition()
+    const timeToRim = Math.abs((hoopPosition.z - LAUNCH_POSITION.z) / Math.min(-0.1, velocity.z))
+    if (!Number.isFinite(timeToRim) || timeToRim <= 0) return assisted
+
+    const idealLateral = (hoopPosition.x - LAUNCH_POSITION.x) / timeToRim
+    const nudge = THREE.MathUtils.clamp((idealLateral - velocity.x) * 0.14, -0.32, 0.32)
+    assisted.x += nudge
+    return assisted
   }
 
   private applyLevel(level: LevelConfig): void {
