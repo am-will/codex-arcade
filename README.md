@@ -16,7 +16,7 @@ Open `http://127.0.0.1:5173/`.
 - `Pullback`: drag backward from the ball, then release to launch.
 - `Flick`: switch modes, then flick forward/up to shoot.
 - The run lasts 90 seconds, with hoop depth changing at 30 and 60 seconds.
-- Level 3 makes are worth 3 base points before streak multipliers.
+- Level 3 makes are worth 5 base points before streak multipliers.
 - Make shots to build streak tiers at 3, 5, 10, and 20 in a row.
 - Misses reset the streak and multiplier, but the score remains.
 

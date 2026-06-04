@@ -3,7 +3,7 @@ import type { LevelConfig, StreakTier } from './types'
 export const BALL_RADIUS = 0.34
 export const LAUNCH_POSITION = { x: 0, y: 1.32, z: 1.85 }
 export const RIM_HEIGHT = 3.05
-export const RIM_RADIUS = 0.64
+export const RIM_RADIUS = 0.7
 export const SHOT_CLOCK_SECONDS = 90
 
 export const STREAK_TIERS: StreakTier[] = [
@@ -59,9 +59,9 @@ export const LEVELS: LevelConfig[] = [
     id: 1,
     label: 'Neon Warmup',
     startsAtSeconds: 0,
-    hoopDistance: -7.5,
-    hoopSpeed: 0.75,
-    hoopRange: 1.05,
+    hoopDistance: -6,
+    hoopSpeed: 0.56,
+    hoopRange: 0.9,
     basePoints: 2,
     obstacleConfigs: [],
   },
@@ -69,9 +69,9 @@ export const LEVELS: LevelConfig[] = [
     id: 2,
     label: 'Sideline Heat',
     startsAtSeconds: 30,
-    hoopDistance: -8.7,
-    hoopSpeed: 1,
-    hoopRange: 1.35,
+    hoopDistance: -9.75,
+    hoopSpeed: 0.74,
+    hoopRange: 1.15,
     basePoints: 2,
     obstacleConfigs: [],
   },
@@ -79,10 +79,10 @@ export const LEVELS: LevelConfig[] = [
     id: 3,
     label: 'Crossfire',
     startsAtSeconds: 60,
-    hoopDistance: -10.2,
-    hoopSpeed: 1.2,
-    hoopRange: 1.65,
-    basePoints: 3,
+    hoopDistance: -15,
+    hoopSpeed: 0.92,
+    hoopRange: 1.38,
+    basePoints: 5,
     obstacleConfigs: [],
   },
 ]

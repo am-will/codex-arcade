@@ -151,8 +151,12 @@ async function verifyViewport(page, viewport, label) {
     await page.mouse.down()
     await page.mouse.move(box.x + box.width * 0.46, box.y + box.height * 0.82, { steps: 8 })
     await page.mouse.up()
-    await page.waitForTimeout(500)
-    const afterPull = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    let afterPull
+    for (let index = 0; index < 16; index += 1) {
+      await page.waitForTimeout(100)
+      afterPull = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+      if (afterPull?.readyBallAvailable) break
+    }
     if (!afterPull || afterPull.timeRemaining >= 90 || afterPull.phase === 'ready') {
       throw new Error('Pullback shot did not start the timed run.')
     }
@@ -174,7 +178,7 @@ async function verifyViewport(page, viewport, label) {
     if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.score <= 0) {
       throw new Error(`Multiplier progression failed: ${JSON.stringify(inferno)}`)
     }
-    if (inferno.level !== 1 || inferno.hoopDistance !== -7.5) {
+    if (inferno.level !== 1 || inferno.hoopDistance !== -6) {
       throw new Error(`Made baskets changed hoop depth before the timer gate: ${JSON.stringify(inferno)}`)
     }
 
@@ -257,8 +261,8 @@ async function verifyTimerLevels(page) {
     { elapsed: 29.9, level: 1, basePoints: 2 },
     { elapsed: 30.1, level: 2, basePoints: 2 },
     { elapsed: 59.9, level: 2, basePoints: 2 },
-    { elapsed: 60.1, level: 3, basePoints: 3 },
-    { elapsed: 89, level: 3, basePoints: 3 },
+    { elapsed: 60.1, level: 3, basePoints: 5 },
+    { elapsed: 89, level: 3, basePoints: 5 },
   ]
 
   for (const checkpoint of checkpoints) {
@@ -282,8 +286,8 @@ async function verifyTimerLevels(page) {
     after = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if ((after?.score ?? 0) > (before?.score ?? 0)) break
   }
-  if (!after || after.score - (before?.score ?? 0) !== 3) {
-    throw new Error(`Level 3 make did not score 3 base points: before=${JSON.stringify(before)} after=${JSON.stringify(after)}`)
+  if (!after || after.score - (before?.score ?? 0) !== 5) {
+    throw new Error(`Level 3 make did not score 5 base points: before=${JSON.stringify(before)} after=${JSON.stringify(after)}`)
   }
 }
 
