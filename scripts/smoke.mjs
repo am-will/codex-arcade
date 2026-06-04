@@ -188,7 +188,7 @@ async function verifyViewport(page, viewport, label) {
       redTier.state.highScore !== redTier.state.score ||
       redTier.hudTier !== '3'
     ) {
-      throw new Error(`Three-make red tier failed: ${JSON.stringify(redTier)}`)
+      throw new Error(`Three-make multiplier start failed: ${JSON.stringify(redTier)}`)
     }
 
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(2))
@@ -204,7 +204,7 @@ async function verifyViewport(page, viewport, label) {
       flameTier.state.highScore !== flameTier.state.score ||
       flameTier.hudTier !== '5'
     ) {
-      throw new Error(`Five-make flame tier failed: ${JSON.stringify(flameTier)}`)
+      throw new Error(`Five-make x3 multiplier tier failed: ${JSON.stringify(flameTier)}`)
     }
 
     await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(15))
