@@ -62,7 +62,7 @@ export class ShotController {
     this.samples.push(sample)
     const launch = this.computeLaunch(sample)
     this.cancel()
-    if (!launch || launch.power < 0.14) return
+    if (!launch || launch.power < 0.025) return
     this.onLaunch?.(launch)
   }
 
@@ -93,14 +93,15 @@ export class ShotController {
     const dx = current.x - this.start!.x
     const dy = current.y - this.start!.y
     const pullDistance = Math.hypot(dx, dy)
-    const pull = THREE.MathUtils.smoothstep(Math.min(1, pullDistance / 430), 0.06, 1)
+    const rawPower = Math.min(1, pullDistance / 430)
+    const pull = THREE.MathUtils.smoothstep(rawPower, 0.025, 1)
     const verticalIntent = THREE.MathUtils.clamp(dy / 360, -0.18, 1)
-    const forward = THREE.MathUtils.clamp(8.45 + pull * 4.35 + verticalIntent * 2.25, 8.3, 14.65)
-    const upward = THREE.MathUtils.clamp(6.95 + pull * 3.35 + verticalIntent * 1.82, 6.65, 11.55)
+    const forward = THREE.MathUtils.clamp(6.25 + pull * 6 + verticalIntent * 2.1, 6, 14.65)
+    const upward = THREE.MathUtils.clamp(5.15 + pull * 4.65 + verticalIntent * 1.7, 5, 11.55)
     const lateral = THREE.MathUtils.clamp(-dx * 0.026, -4.15, 4.15)
     return {
       velocity: new THREE.Vector3(lateral, upward, -forward),
-      power: Math.min(1, pullDistance / 430),
+      power: rawPower,
     }
   }
 
