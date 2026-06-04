@@ -11,10 +11,11 @@ const artifactsDir = resolve(root, '.test-artifacts')
 const host = '127.0.0.1'
 const port = 4173
 const baseUrl = `http://${host}:${port}`
+const viteCli = resolve(root, 'node_modules/vite/bin/vite.js')
 
 await mkdir(artifactsDir, { recursive: true })
 
-const server = spawn('npm', ['run', 'preview', '--', '--host', host, '--port', String(port), '--strictPort'], {
+const server = spawn(process.execPath, [viteCli, 'preview', '--host', host, '--port', String(port), '--strictPort'], {
   cwd: root,
   stdio: ['ignore', 'pipe', 'pipe'],
 })
