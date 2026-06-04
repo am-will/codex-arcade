@@ -45,7 +45,7 @@ export class CourtScene {
   private readonly sparkleTexture = createGlowTexture('rgba(255, 216, 90, 0.92)')
   private backboardMaterial!: THREE.MeshStandardMaterial
   private backboardFrameMaterial!: THREE.LineBasicMaterial
-  private backboardAimMaterial!: THREE.LineBasicMaterial
+  private backboardAimMaterial!: THREE.MeshBasicMaterial
   private backboardFlashLight!: THREE.PointLight
   private backboardFlash = 0
   private spawnAccumulator = 0
@@ -402,6 +402,21 @@ export class CourtScene {
     rim.castShadow = true
     this.hoopGroup.add(rim)
 
+    const rearRim = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.048, 0.048, RIM_RADIUS * 1.62, 18),
+      new THREE.MeshBasicMaterial({
+        color: 0xff3d85,
+        transparent: true,
+        opacity: 1,
+        depthTest: false,
+        depthWrite: false,
+      }),
+    )
+    rearRim.rotation.z = Math.PI / 2
+    rearRim.position.set(0, 0.012, -0.34)
+    rearRim.renderOrder = 12
+    this.hoopGroup.add(rearRim)
+
     this.backboardMaterial = new THREE.MeshStandardMaterial({
         color: 0x13243a,
         transparent: true,
@@ -431,19 +446,28 @@ export class CourtScene {
     boardFrame.position.copy(backboard.position)
     this.hoopGroup.add(boardFrame)
 
-    this.backboardAimMaterial = new THREE.LineBasicMaterial({
+    this.backboardAimMaterial = new THREE.MeshBasicMaterial({
       color: 0xffd85a,
       transparent: true,
       opacity: 0.9,
       blending: THREE.AdditiveBlending,
     })
-    const squarePoints = [
-      new THREE.Vector3(-0.44, 0.18, -0.535),
-      new THREE.Vector3(0.44, 0.18, -0.535),
-      new THREE.Vector3(0.44, 0.84, -0.535),
-      new THREE.Vector3(-0.44, 0.84, -0.535),
-    ]
-    const aimSquare = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(squarePoints), this.backboardAimMaterial)
+    const aimSquare = new THREE.Group()
+    const squareWidth = 0.94
+    const squareHeight = 0.72
+    const stroke = 0.058
+    const bottomY = 0.02
+    const centerY = bottomY + squareHeight / 2
+    const frontZ = -0.53
+    const horizontalGeometry = new THREE.BoxGeometry(squareWidth + stroke, stroke, 0.012)
+    const verticalGeometry = new THREE.BoxGeometry(stroke, squareHeight + stroke, 0.012)
+    const top = new THREE.Mesh(horizontalGeometry, this.backboardAimMaterial)
+    top.position.set(0, bottomY + squareHeight, frontZ)
+    const left = new THREE.Mesh(verticalGeometry, this.backboardAimMaterial)
+    left.position.set(-squareWidth / 2, centerY, frontZ)
+    const right = new THREE.Mesh(verticalGeometry, this.backboardAimMaterial)
+    right.position.set(squareWidth / 2, centerY, frontZ)
+    aimSquare.add(top, left, right)
     this.hoopGroup.add(aimSquare)
 
     const netMaterial = new THREE.LineBasicMaterial({

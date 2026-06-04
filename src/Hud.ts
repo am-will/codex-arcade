@@ -14,6 +14,7 @@ export class Hud {
   private readonly streak: HTMLElement
   private readonly multiplier: HTMLElement
   private readonly best: HTMLElement
+  private readonly highScore: HTMLElement
   private readonly level: HTMLElement
   private readonly tier: HTMLElement
   private readonly status: HTMLElement
@@ -40,6 +41,7 @@ export class Hud {
           <div><span>Streak</span><strong id="streak">0</strong></div>
           <div><span>Multi</span><strong id="multiplier">x1</strong></div>
           <div><span>Best</span><strong id="best">0</strong></div>
+          <div><span>High</span><strong id="high-score">0</strong></div>
           <div><span>Level</span><strong id="level">1</strong></div>
         </div>
       </div>
@@ -67,6 +69,7 @@ export class Hud {
     this.streak = root.querySelector<HTMLElement>('#streak')!
     this.multiplier = root.querySelector<HTMLElement>('#multiplier')!
     this.best = root.querySelector<HTMLElement>('#best')!
+    this.highScore = root.querySelector<HTMLElement>('#high-score')!
     this.level = root.querySelector<HTMLElement>('#level')!
     this.tier = root.querySelector<HTMLElement>('#tier')!
     this.status = root.querySelector<HTMLElement>('#status')!
@@ -89,12 +92,13 @@ export class Hud {
     }
   }
 
-  update(state: ScoreState, timeRemaining: number, phase: GamePhase, levelLabel: string, levelId: number): void {
+  update(state: ScoreState, timeRemaining: number, phase: GamePhase, levelLabel: string, levelId: number, highScore: number): void {
     this.score.textContent = String(state.score)
     this.timer.textContent = Math.max(0, timeRemaining).toFixed(1)
     this.streak.textContent = String(state.streak)
     this.multiplier.textContent = `x${state.multiplier}`
     this.best.textContent = String(state.bestStreak)
+    this.highScore.textContent = String(highScore)
     this.level.textContent = String(levelId)
     this.tier.textContent = `${state.tier.name} - ${levelLabel}`
     this.root.dataset.tier = String(state.tier.threshold)
@@ -110,8 +114,10 @@ export class Hud {
     }
   }
 
-  showMake(scoreState: ScoreState): void {
-    this.status.textContent = `Made shot. ${scoreState.tier.name} x${scoreState.multiplier}.`
+  showMake(scoreState: ScoreState, isHighScore = false): void {
+    this.status.textContent = isHighScore
+      ? `New high score. ${scoreState.tier.name} x${scoreState.multiplier}.`
+      : `Made shot. ${scoreState.tier.name} x${scoreState.multiplier}.`
     this.root.classList.remove('make-pop')
     window.setTimeout(() => this.root.classList.add('make-pop'), 0)
   }
@@ -120,8 +126,9 @@ export class Hud {
     this.status.textContent = 'Miss. Streak reset, timer still running.'
   }
 
-  showRoundOver(state: ScoreState): void {
-    this.finalStats.textContent = `Score ${state.score}. Made ${state.madeShots}. Best streak ${state.bestStreak}.`
+  showRoundOver(state: ScoreState, highScore: number, isHighScore: boolean): void {
+    const highScoreText = isHighScore ? ` New high score ${highScore}.` : ` High score ${highScore}.`
+    this.finalStats.textContent = `Score ${state.score}. Made ${state.madeShots}. Best streak ${state.bestStreak}.${highScoreText}`
     this.roundOver.classList.remove('hidden')
   }
 

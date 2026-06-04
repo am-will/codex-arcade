@@ -144,6 +144,8 @@ async function verifyViewport(page, viewport, label) {
   }
 
   if (label === 'desktop') {
+    await page.evaluate(() => window.__FLAMETHROW_TEST__?.resetHighScore())
+    await page.waitForTimeout(100)
     const box = await canvas.boundingBox()
     if (!box) throw new Error('Canvas missing bounding box.')
 
@@ -178,7 +180,13 @@ async function verifyViewport(page, viewport, label) {
       state: window.__FLAMETHROW_TEST__?.snapshot(),
       hudTier: document.querySelector('#hud-root')?.getAttribute('data-tier'),
     }))
-    if (!redTier.state || redTier.state.streak !== 3 || redTier.state.multiplier !== 2 || redTier.hudTier !== '3') {
+    if (
+      !redTier.state ||
+      redTier.state.streak !== 3 ||
+      redTier.state.multiplier !== 2 ||
+      redTier.state.highScore !== redTier.state.score ||
+      redTier.hudTier !== '3'
+    ) {
       throw new Error(`Three-make red tier failed: ${JSON.stringify(redTier)}`)
     }
 
@@ -188,7 +196,13 @@ async function verifyViewport(page, viewport, label) {
       state: window.__FLAMETHROW_TEST__?.snapshot(),
       hudTier: document.querySelector('#hud-root')?.getAttribute('data-tier'),
     }))
-    if (!flameTier.state || flameTier.state.streak !== 5 || flameTier.state.multiplier !== 3 || flameTier.hudTier !== '5') {
+    if (
+      !flameTier.state ||
+      flameTier.state.streak !== 5 ||
+      flameTier.state.multiplier !== 3 ||
+      flameTier.state.highScore !== flameTier.state.score ||
+      flameTier.hudTier !== '5'
+    ) {
       throw new Error(`Five-make flame tier failed: ${JSON.stringify(flameTier)}`)
     }
 
@@ -197,6 +211,9 @@ async function verifyViewport(page, viewport, label) {
     const inferno = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.score <= 0) {
       throw new Error(`Multiplier progression failed: ${JSON.stringify(inferno)}`)
+    }
+    if (inferno.highScore !== inferno.score) {
+      throw new Error(`High score did not track current best score: ${JSON.stringify(inferno)}`)
     }
     if (inferno.level !== 1 || inferno.hoopDistance !== -6) {
       throw new Error(`Made baskets changed hoop depth before the timer gate: ${JSON.stringify(inferno)}`)
@@ -214,14 +231,20 @@ async function verifyViewport(page, viewport, label) {
     await page.getByRole('button', { name: 'Restart Run' }).click()
     await page.waitForTimeout(200)
     const restarted = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!restarted || restarted.phase !== 'ready' || restarted.score !== 0 || restarted.timeRemaining !== 90) {
+    if (!restarted || restarted.phase !== 'ready' || restarted.score !== 0 || restarted.timeRemaining !== 90 || restarted.highScore !== inferno.highScore) {
       throw new Error(`Restart failed: ${JSON.stringify(restarted)}`)
     }
 
     await page.getByRole('button', { name: 'Restart', exact: true }).click()
     await page.waitForTimeout(200)
     const quickRestarted = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
-    if (!quickRestarted || quickRestarted.phase !== 'ready' || quickRestarted.score !== 0 || quickRestarted.timeRemaining !== 90) {
+    if (
+      !quickRestarted ||
+      quickRestarted.phase !== 'ready' ||
+      quickRestarted.score !== 0 ||
+      quickRestarted.timeRemaining !== 90 ||
+      quickRestarted.highScore !== inferno.highScore
+    ) {
       throw new Error(`Persistent restart failed: ${JSON.stringify(quickRestarted)}`)
     }
   }

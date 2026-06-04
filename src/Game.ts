@@ -18,12 +18,15 @@ type ActiveShot = {
   velocity: THREE.Vector3
 }
 
+const HIGH_SCORE_STORAGE_KEY = 'flamethrow.highScore'
+
 declare global {
   interface Window {
     __FLAMETHROW_TEST__?: {
       forceMake: (count?: number) => void
       forceMiss: () => void
       forceRoundOver: () => void
+      resetHighScore: () => void
       dropThroughHoop: () => void
       dropAtBackboard: () => void
       setElapsedSeconds: (elapsedSeconds: number) => void
@@ -33,6 +36,7 @@ declare global {
         streak: number
         multiplier: number
         bestStreak: number
+        highScore: number
         madeShots: number
         level: number
         basePoints: number
@@ -66,6 +70,7 @@ export class Game {
   private animationFrame = 0
   private nextShotId = 1
   private activeShots: ActiveShot[] = []
+  private highScore = 0
   private readonly ballPosition = new THREE.Vector3()
   private readonly ballRotation = new THREE.Quaternion()
   private readonly app: HTMLElement
@@ -86,6 +91,7 @@ export class Game {
     const threeHost = this.app.querySelector<HTMLElement>('#three-host')!
     const hudRoot = this.app.querySelector<HTMLElement>('#hud-root')!
 
+    this.highScore = this.readHighScore()
     this.court = new CourtScene(threeHost)
     this.physics = await PhysicsWorld.create()
     this.hud = new Hud(hudRoot, {
@@ -150,7 +156,7 @@ export class Game {
 
     this.shotController.setCanShoot((this.phase === 'ready' || this.phase === 'playing') && this.readyBallAvailable)
     this.court.updateEffects(dt, this.elapsed, this.scoring.state.tier)
-    this.hud.update(this.scoring.state, this.timeRemaining, this.phase, this.activeLevel.label, this.activeLevel.id)
+    this.hud.update(this.scoring.state, this.timeRemaining, this.phase, this.activeLevel.label, this.activeLevel.id, this.highScore)
     this.court.render()
     this.animationFrame = requestAnimationFrame(this.tick)
   }
@@ -183,7 +189,8 @@ export class Game {
         this.activeLevel.basePoints,
       )
       if (result === 'made') {
-        this.hud.showMake(this.scoring.state)
+        const isHighScore = this.updateHighScore()
+        this.hud.showMake(this.scoring.state, isHighScore)
         this.court.celebrateMake(this.scoring.state.tier)
         this.removeActiveShot(shot)
       } else if (result === 'miss') {
@@ -224,7 +231,8 @@ export class Game {
     this.court.setLaunchBallVisible(false)
     this.court.clearAim()
     this.court.resetTrail()
-    this.hud.showRoundOver(this.scoring.state)
+    const isHighScore = this.updateHighScore()
+    this.hud.showRoundOver(this.scoring.state, this.highScore, isHighScore)
   }
 
   private installTestHooks(): void {
@@ -236,15 +244,20 @@ export class Game {
         for (let index = 0; index < count; index += 1) {
           this.scoring.registerMake(this.activeLevel.basePoints)
         }
+        const isHighScore = this.updateHighScore()
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
         this.court.celebrateMake(this.scoring.state.tier)
-        this.hud.showMake(this.scoring.state)
+        this.hud.showMake(this.scoring.state, isHighScore)
       },
       forceMiss: () => {
         this.scoring.registerMiss()
         this.hud.showMiss()
       },
       forceRoundOver: () => this.endRound(),
+      resetHighScore: () => {
+        this.highScore = 0
+        window.localStorage.removeItem(HIGH_SCORE_STORAGE_KEY)
+      },
       dropThroughHoop: () => {
         const hoop = this.court.getHoopPosition()
         const position = new THREE.Vector3(hoop.x, RIM_HEIGHT + 0.92, hoop.z)
@@ -268,6 +281,7 @@ export class Game {
         streak: this.scoring.state.streak,
         multiplier: this.scoring.state.multiplier,
         bestStreak: this.scoring.state.bestStreak,
+        highScore: this.highScore,
         madeShots: this.scoring.state.madeShots,
         level: this.activeLevel.id,
         basePoints: this.activeLevel.basePoints,
@@ -352,5 +366,17 @@ export class Game {
     const observer = new ResizeObserver(() => this.court.resize())
     observer.observe(this.app)
     window.addEventListener('orientationchange', () => this.court.resize())
+  }
+
+  private readHighScore(): number {
+    const stored = Number(window.localStorage.getItem(HIGH_SCORE_STORAGE_KEY))
+    return Number.isFinite(stored) && stored > 0 ? Math.floor(stored) : 0
+  }
+
+  private updateHighScore(): boolean {
+    if (this.scoring.state.score <= this.highScore) return false
+    this.highScore = this.scoring.state.score
+    window.localStorage.setItem(HIGH_SCORE_STORAGE_KEY, String(this.highScore))
+    return true
   }
 }

@@ -170,7 +170,7 @@ h1 {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(6, minmax(4rem, 1fr));
+  grid-template-columns: repeat(7, minmax(3.65rem, 1fr));
   gap: 1px;
   overflow: hidden;
   background: rgba(80, 160, 190, 0.22);
@@ -330,7 +330,7 @@ h1 {
   }
 
   .stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .bottom-hud {
