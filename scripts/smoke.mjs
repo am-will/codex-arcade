@@ -172,7 +172,27 @@ async function verifyViewport(page, viewport, label) {
     await page.mouse.up()
     await page.waitForTimeout(500)
 
-    await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(20))
+    await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(3))
+    await page.waitForTimeout(200)
+    const redTier = await page.evaluate(() => ({
+      state: window.__FLAMETHROW_TEST__?.snapshot(),
+      hudTier: document.querySelector('#hud-root')?.getAttribute('data-tier'),
+    }))
+    if (!redTier.state || redTier.state.streak !== 3 || redTier.state.multiplier !== 2 || redTier.hudTier !== '3') {
+      throw new Error(`Three-make red tier failed: ${JSON.stringify(redTier)}`)
+    }
+
+    await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(2))
+    await page.waitForTimeout(200)
+    const flameTier = await page.evaluate(() => ({
+      state: window.__FLAMETHROW_TEST__?.snapshot(),
+      hudTier: document.querySelector('#hud-root')?.getAttribute('data-tier'),
+    }))
+    if (!flameTier.state || flameTier.state.streak !== 5 || flameTier.state.multiplier !== 3 || flameTier.hudTier !== '5') {
+      throw new Error(`Five-make flame tier failed: ${JSON.stringify(flameTier)}`)
+    }
+
+    await page.evaluate(() => window.__FLAMETHROW_TEST__?.forceMake(15))
     await page.waitForTimeout(200)
     const inferno = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
     if (!inferno || inferno.streak !== 20 || inferno.multiplier !== 10 || inferno.score <= 0) {

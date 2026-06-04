@@ -10,6 +10,13 @@ type FlameParticle = {
   maxLife: number
 }
 
+type BackboardSpark = {
+  sprite: THREE.Sprite
+  velocity: THREE.Vector3
+  life: number
+  maxLife: number
+}
+
 export type ShotVisual = {
   mesh: THREE.Mesh
   light: THREE.PointLight
@@ -30,12 +37,15 @@ export class CourtScene {
   private readonly hoopGroup = new THREE.Group()
   private readonly obstacleGroup = new THREE.Group()
   private readonly flameParticles: FlameParticle[] = []
+  private readonly backboardSparkles: BackboardSpark[] = []
   private readonly shotTrail: THREE.Line
   private readonly trailPositions: THREE.Vector3[] = []
   private readonly flameTexture = createFlameTexture()
   private readonly cyanGlow = createGlowTexture('rgba(0, 240, 255, 0.82)')
-  private readonly magentaGlow = createGlowTexture('rgba(255, 61, 133, 0.82)')
+  private readonly sparkleTexture = createGlowTexture('rgba(255, 216, 90, 0.92)')
   private backboardMaterial!: THREE.MeshStandardMaterial
+  private backboardFrameMaterial!: THREE.LineBasicMaterial
+  private backboardAimMaterial!: THREE.LineBasicMaterial
   private backboardFlashLight!: THREE.PointLight
   private backboardFlash = 0
   private spawnAccumulator = 0
@@ -96,6 +106,7 @@ export class CourtScene {
     this.scene.add(this.shotTrail)
 
     this.createFlameParticles()
+    this.createBackboardSparkles()
     this.resize()
   }
 
@@ -231,22 +242,38 @@ export class CourtScene {
     this.ballLight.color.setHex(tier.primaryColor)
     this.ballLight.intensity = 1.8 + tier.flameIntensity * 5.2
 
-    this.spawnAccumulator += dt * tier.particleRate
-    while (this.spawnAccumulator >= 1) {
-      this.spawnAccumulator -= 1
-      this.spawnFlame(tier)
+    const flameActive = tier.threshold >= 5
+    if (flameActive) {
+      this.spawnAccumulator += dt * tier.particleRate
+      while (this.spawnAccumulator >= 1) {
+        this.spawnAccumulator -= 1
+        this.spawnFlame(tier)
+      }
+    } else {
+      this.spawnAccumulator = 0
     }
 
     for (const particle of this.flameParticles) {
       if (particle.life <= 0) continue
       particle.life -= dt
       particle.sprite.position.addScaledVector(particle.velocity, dt)
-      particle.velocity.y += dt * 0.45
+      particle.velocity.y += dt * 0.16
       const t = Math.max(0, particle.life / particle.maxLife)
-      particle.sprite.material.opacity = t * (0.24 + tier.flameIntensity * 0.74)
-      const scale = (1 - t) * (0.36 + tier.flameIntensity * 0.42) + 0.14
+      particle.sprite.material.opacity = t * t * (0.38 + tier.flameIntensity * 0.66)
+      const scale = 0.08 + t * (0.22 + tier.flameIntensity * 0.36)
       particle.sprite.scale.setScalar(scale)
       particle.sprite.visible = particle.life > 0
+    }
+
+    for (const sparkle of this.backboardSparkles) {
+      if (sparkle.life <= 0) continue
+      sparkle.life -= dt
+      sparkle.sprite.position.addScaledVector(sparkle.velocity, dt)
+      sparkle.velocity.multiplyScalar(1 - dt * 1.8)
+      const t = Math.max(0, sparkle.life / sparkle.maxLife)
+      sparkle.sprite.material.opacity = t * 0.95
+      sparkle.sprite.scale.setScalar(0.05 + t * 0.16)
+      sparkle.sprite.visible = sparkle.life > 0
     }
 
     this.obstacleGroup.children.forEach((child, index) => {
@@ -257,28 +284,27 @@ export class CourtScene {
 
     if (this.backboardMaterial && this.backboardFlashLight) {
       this.backboardFlash = Math.max(0, this.backboardFlash - dt * 2.8)
-      const flash = this.backboardFlash
-      this.backboardMaterial.emissive.setHex(flash > 0 ? tier.primaryColor : 0x00f0ff)
-      this.backboardMaterial.emissiveIntensity = 0.7 + flash * 4.6
+      this.screenPulse = Math.max(0, this.screenPulse - dt * 3.4)
+      const flash = Math.max(this.backboardFlash, this.screenPulse * 0.72)
+      this.backboardMaterial.emissive.setHex(flash > 0 ? 0xffd85a : 0x00f0ff)
+      this.backboardMaterial.emissiveIntensity = 0.62 + flash * (3.2 + Math.sin(time * 24) * 0.45)
       this.backboardMaterial.opacity = 0.74 + flash * 0.2
-      this.backboardFlashLight.color.setHex(tier.primaryColor)
-      this.backboardFlashLight.intensity = flash * 8
-    }
-
-    if (this.screenPulse > 0) {
-      this.screenPulse = Math.max(0, this.screenPulse - dt * 1.7)
-      const pulse = 1 + this.screenPulse * 0.06
-      this.hoopGroup.scale.setScalar(pulse)
-    } else {
-      this.hoopGroup.scale.setScalar(1)
+      this.backboardFlashLight.color.setHex(flash > 0 ? 0xffd85a : 0x00f0ff)
+      this.backboardFlashLight.intensity = flash * 9
+      this.backboardFrameMaterial.opacity = 0.78 + flash * 0.22
+      this.backboardAimMaterial.opacity = 0.86 + flash * 0.14
+      this.backboardAimMaterial.color.setHex(flash > 0.18 ? 0xffffff : 0xffd85a)
     }
   }
 
   celebrateMake(tier: StreakTier): void {
     this.screenPulse = 1
     this.backboardFlash = 1
-    for (let i = 0; i < 18 + tier.flameIntensity * 30; i += 1) {
-      this.spawnFlame(tier, true)
+    this.spawnBackboardSparkles(tier)
+    if (tier.threshold >= 5) {
+      for (let i = 0; i < 18 + tier.flameIntensity * 30; i += 1) {
+        this.spawnFlame(tier, true)
+      }
     }
   }
 
@@ -341,10 +367,7 @@ export class CourtScene {
     ]
     this.scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(linePoints), laneMaterial))
 
-    const circles = [
-      { texture: this.cyanGlow, x: -3.9, z: 3.8, s: 2.3 },
-      { texture: this.magentaGlow, x: 3.7, z: -7.8, s: 2.7 },
-    ]
+    const circles = [{ texture: this.cyanGlow, x: -3.9, z: 3.8, s: 2.3 }]
     for (const circle of circles) {
       const sprite = new THREE.Sprite(
         new THREE.SpriteMaterial({
@@ -400,12 +423,28 @@ export class CourtScene {
     this.backboardFlashLight.position.set(0, 0.5, 0.1)
     this.hoopGroup.add(this.backboardFlashLight)
 
+    this.backboardFrameMaterial = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.95 })
     const boardFrame = new THREE.LineSegments(
       new THREE.EdgesGeometry(backboard.geometry),
-      new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.95 }),
+      this.backboardFrameMaterial,
     )
     boardFrame.position.copy(backboard.position)
     this.hoopGroup.add(boardFrame)
+
+    this.backboardAimMaterial = new THREE.LineBasicMaterial({
+      color: 0xffd85a,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+    })
+    const squarePoints = [
+      new THREE.Vector3(-0.44, 0.18, -0.535),
+      new THREE.Vector3(0.44, 0.18, -0.535),
+      new THREE.Vector3(0.44, 0.84, -0.535),
+      new THREE.Vector3(-0.44, 0.84, -0.535),
+    ]
+    const aimSquare = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(squarePoints), this.backboardAimMaterial)
+    this.hoopGroup.add(aimSquare)
 
     const netMaterial = new THREE.LineBasicMaterial({
       color: 0x9ff8ff,
@@ -447,25 +486,69 @@ export class CourtScene {
     }
   }
 
+  private createBackboardSparkles(): void {
+    for (let i = 0; i < 70; i += 1) {
+      const sprite = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map: this.sparkleTexture,
+          transparent: true,
+          opacity: 0,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      )
+      sprite.visible = false
+      this.hoopGroup.add(sprite)
+      this.backboardSparkles.push({
+        sprite,
+        velocity: new THREE.Vector3(),
+        life: 0,
+        maxLife: 1,
+      })
+    }
+  }
+
   private spawnFlame(tier: StreakTier, burst = false): void {
     const particle = this.flameParticles.find((candidate) => candidate.life <= 0)
     if (!particle) return
 
     const angle = Math.random() * Math.PI * 2
     const radius = BALL_RADIUS * (0.45 + Math.random() * 0.95)
-    particle.sprite.position
-      .copy(this.ballMesh.position)
-      .add(new THREE.Vector3(Math.cos(angle) * radius, Math.random() * 0.18, Math.sin(angle) * radius))
+    particle.sprite.position.copy(this.ballMesh.position).add(new THREE.Vector3(Math.cos(angle) * radius, Math.random() * 0.16, Math.sin(angle) * radius))
     particle.velocity.set(
-      Math.cos(angle) * (0.16 + Math.random() * 0.8),
-      0.35 + Math.random() * (burst ? 2.3 : 1.1),
-      Math.sin(angle) * (0.16 + Math.random() * 0.8),
+      Math.cos(angle) * (0.05 + Math.random() * 0.34),
+      0.6 + Math.random() * (burst ? 1.7 : 0.72),
+      Math.sin(angle) * (0.05 + Math.random() * 0.34),
     )
-    particle.maxLife = burst ? 0.7 + Math.random() * 0.35 : 0.46 + Math.random() * 0.42
+    particle.maxLife = burst ? 0.38 + Math.random() * 0.24 : 0.28 + Math.random() * 0.22
     particle.life = particle.maxLife
     particle.sprite.material.color.setHex(Math.random() > 0.45 ? tier.primaryColor : tier.secondaryColor)
-    particle.sprite.material.opacity = 0.3 + tier.flameIntensity * 0.65
-    particle.sprite.scale.setScalar(0.12 + Math.random() * (0.22 + tier.flameIntensity * 0.3))
+    particle.sprite.material.opacity = 0.42 + tier.flameIntensity * 0.58
+    particle.sprite.scale.setScalar(0.1 + Math.random() * (0.12 + tier.flameIntensity * 0.26))
     particle.sprite.visible = true
+  }
+
+  private spawnBackboardSparkles(tier: StreakTier): void {
+    const count = 22 + Math.floor(tier.flameIntensity * 18)
+    for (let i = 0; i < count; i += 1) {
+      const sparkle = this.backboardSparkles.find((candidate) => candidate.life <= 0)
+      if (!sparkle) return
+      const side = Math.random() > 0.5 ? 1 : -1
+      const fromHorizontalEdge = Math.random() > 0.48
+      const x = fromHorizontalEdge ? side * (1.18 + Math.random() * 0.12) : THREE.MathUtils.randFloatSpread(2.18)
+      const y = fromHorizontalEdge ? 0.58 + THREE.MathUtils.randFloatSpread(1.02) : 0.02 + Math.random() * 1.16
+      sparkle.sprite.position.set(x, y, -0.49)
+      sparkle.velocity.set(
+        THREE.MathUtils.randFloatSpread(0.82),
+        0.28 + Math.random() * 0.86,
+        0.06 + Math.random() * 0.18,
+      )
+      sparkle.maxLife = 0.36 + Math.random() * 0.34
+      sparkle.life = sparkle.maxLife
+      sparkle.sprite.material.color.setHex(Math.random() > 0.35 ? 0xffd85a : tier.secondaryColor)
+      sparkle.sprite.material.opacity = 0.95
+      sparkle.sprite.scale.setScalar(0.08 + Math.random() * 0.12)
+      sparkle.sprite.visible = true
+    }
   }
 }
