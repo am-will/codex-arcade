@@ -193,6 +193,7 @@ export class Game {
       if (result === 'made') {
         const isHighScore = this.updateHighScore()
         this.hud.showMake(this.scoring.state, isHighScore)
+        this.physics.swishNetForMake(shot.position, shot.velocity)
         this.court.celebrateMake(this.scoring.state.tier)
         this.removeActiveShot(shot)
       } else if (result === 'miss') {

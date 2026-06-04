@@ -3,15 +3,18 @@ import * as THREE from 'three'
 import { BACKBOARD_Z, BALL_RADIUS, LAUNCH_POSITION, RIM_RADIUS } from './config'
 import type { LevelConfig } from './types'
 
-const NET_STRANDS = 16
-const NET_ROWS = 4
-const NET_LENGTH = 0.88
+const NET_STRANDS = 18
+const NET_ROWS = 7
+const NET_LENGTH = 1.02
 const NET_TOP_RADIUS = RIM_RADIUS * 0.96
 const NET_BOTTOM_RADIUS = 0.34
-const NET_NODE_RADIUS = 0.032
-const NET_IMPACT_RADIUS = BALL_RADIUS + 0.2
-const NET_SEGMENT_FLOATS = NET_STRANDS * (1 + (NET_ROWS - 1) + NET_ROWS + (NET_ROWS - 1)) * 2 * 3
-const NET_MAX_DISPLACEMENT = [0.16, 0.34, 0.48, 0.58]
+const NET_GRAVITY = -9.4
+const NET_AIR_DRAG = 0.972
+const NET_CONSTRAINT_ITERATIONS = 7
+const NET_IMPACT_RADIUS = BALL_RADIUS + 0.18
+const NET_RENDER_SEGMENTS = NET_STRANDS * ((NET_ROWS - 1) * 3 + NET_ROWS)
+const NET_SEGMENT_FLOATS = NET_RENDER_SEGMENTS * 2 * 3
+const NET_MAX_DISPLACEMENT = [0, 0.22, 0.34, 0.48, 0.62, 0.72, 0.82]
 
 type NetHitKind = 'rim' | 'net' | 'through'
 
@@ -23,18 +26,36 @@ type NetImpactState = {
   lastThroughImpulseY: number
 }
 
+type NetParticle = {
+  position: THREE.Vector3
+  previous: THREE.Vector3
+  restLocal: THREE.Vector3
+  mass: number
+  pinned: boolean
+}
+
+type NetConstraint = {
+  a: NetParticle
+  b: NetParticle
+  restLength: number
+  stiffness: number
+}
+
 export class PhysicsWorld {
   readonly world: World
 
   private readonly hoopBody: RigidBody
-  private readonly netNodes: RigidBody[][] = []
-  private readonly netRestLocal: THREE.Vector3[][] = []
-  private readonly netSegments: Array<[number, number, number, number]> = []
+  private readonly hoopPosition = new THREE.Vector3(0, 3.05, -7.5)
+  private readonly previousHoopPosition = this.hoopPosition.clone()
+  private readonly netParticles: NetParticle[][] = []
+  private readonly netConstraints: NetConstraint[] = []
+  private readonly netRenderSegments: Array<[NetParticle, NetParticle]> = []
   private readonly netSegmentPositions = new Float32Array(NET_SEGMENT_FLOATS)
   private readonly netImpactStates = new Map<number, NetImpactState>()
   private obstacleBodies: RigidBody[] = []
   private readonly tmpVector = new THREE.Vector3()
   private readonly tmpNetVector = new THREE.Vector3()
+  private readonly tmpNetVectorB = new THREE.Vector3()
   private netExcitement = 0
 
   private constructor(world: World, hoopBody: RigidBody) {
@@ -58,10 +79,11 @@ export class PhysicsWorld {
   }
 
   step(dt: number): void {
-    this.world.timestep = Math.min(1 / 30, Math.max(1 / 120, dt))
+    const timestep = Math.min(1 / 30, Math.max(1 / 120, dt))
+    this.world.timestep = timestep
     this.world.step()
-    this.stabilizeNet()
-    this.netExcitement = Math.max(0, this.netExcitement - dt)
+    this.simulateNet(timestep)
+    this.netExcitement = Math.max(0, this.netExcitement - timestep)
   }
 
   createShotBody(velocity: THREE.Vector3, position = LAUNCH_POSITION): RigidBody {
@@ -101,17 +123,17 @@ export class PhysicsWorld {
   }
 
   setHoopPosition(x: number, z: number): void {
+    this.hoopPosition.set(x, 3.05, z)
     this.hoopBody.setNextKinematicTranslation({ x, y: 3.05, z })
   }
 
   updateNetForShot(id: number, position: THREE.Vector3, velocity: THREE.Vector3): void {
-    const hoop = this.hoopBody.translation()
-    const localX = position.x - hoop.x
-    const localY = position.y - hoop.y
-    const localZ = position.z - hoop.z
+    const localX = position.x - this.hoopPosition.x
+    const localY = position.y - this.hoopPosition.y
+    const localZ = position.z - this.hoopPosition.z
     const radialDistance = Math.hypot(localX, localZ)
     const speed = velocity.length()
-    const impactScale = THREE.MathUtils.clamp(speed / 9, 0.35, 1.8)
+    const impactScale = THREE.MathUtils.clamp(speed / 8, 0.35, 1.65)
 
     let state = this.netImpactStates.get(id)
     if (!state) {
@@ -127,28 +149,35 @@ export class PhysicsWorld {
 
     state.wasAboveRim ||= localY > 0.18
 
-    const nearRimHeight = Math.abs(localY) < BALL_RADIUS * 0.65
-    const nearRimTube = Math.abs(radialDistance - RIM_RADIUS) < BALL_RADIUS * 0.55
+    const nearRimHeight = Math.abs(localY) < BALL_RADIUS * 0.62
+    const nearRimTube = Math.abs(radialDistance - RIM_RADIUS) < BALL_RADIUS * 0.5
     if (!state.touchedRim && nearRimHeight && nearRimTube) {
       state.touchedRim = true
-      this.applyNetImpact(position, velocity, 'rim', 0.62 * impactScale)
+      this.applyNetImpact(position, velocity, 'rim', 0.55 * impactScale)
     }
 
-    const inNetHeight = localY < 0.08 && localY > -NET_LENGTH - BALL_RADIUS * 0.5
-    const netRadiusAtBall = THREE.MathUtils.lerp(NET_TOP_RADIUS, NET_BOTTOM_RADIUS, THREE.MathUtils.clamp(-localY / NET_LENGTH, 0, 1))
-    const brushesNet = inNetHeight && Math.abs(radialDistance - netRadiusAtBall) < NET_IMPACT_RADIUS
-    if (brushesNet) {
-      this.applyNetImpact(position, velocity, 'net', (state.touchedNet ? 0.05 : 0.3) * impactScale)
-      state.touchedNet = true
+    const inNetHeight = localY < 0.1 && localY > -NET_LENGTH - BALL_RADIUS * 0.55
+    if (inNetHeight) {
+      const contacted = this.collideNetWithBall(position, velocity)
+      if (contacted) {
+        this.netExcitement = Math.max(this.netExcitement, 1.2)
+        state.touchedNet = true
+      }
     }
 
     const movingDownThroughOpening = state.wasAboveRim && velocity.y < -0.2 && radialDistance < RIM_RADIUS * 0.72
-    if (!state.passedThrough && movingDownThroughOpening && localY < -BALL_RADIUS * 0.16) {
+    if (movingDownThroughOpening && localY < 0.22 && localY > -NET_LENGTH) {
+      this.applySwishPull(position, velocity, 0.19 * impactScale)
+    }
+    if (!state.passedThrough && movingDownThroughOpening && localY < -BALL_RADIUS * 0.14) {
       state.passedThrough = true
-      this.applyNetImpact(position, velocity, 'through', 0.75 * impactScale)
-    } else if (state.passedThrough && movingDownThroughOpening && localY < state.lastThroughImpulseY - 0.12 && localY > -NET_LENGTH) {
       state.lastThroughImpulseY = localY
-      this.applyNetImpact(position, velocity, 'through', 0.12 * impactScale)
+      this.applyNetImpact(position, velocity, 'through', 0.62 * impactScale)
+      this.applySwishPull(position, velocity, 0.85 * impactScale)
+    } else if (state.passedThrough && movingDownThroughOpening && localY < state.lastThroughImpulseY - 0.16 && localY > -NET_LENGTH) {
+      state.lastThroughImpulseY = localY
+      this.applyNetImpact(position, velocity, 'through', 0.1 * impactScale)
+      this.applySwishPull(position, velocity, 0.16 * impactScale)
     }
   }
 
@@ -156,39 +185,30 @@ export class PhysicsWorld {
     this.netImpactStates.delete(id)
   }
 
+  swishNetForMake(position: THREE.Vector3, velocity: THREE.Vector3): void {
+    this.applySwishPull(position, velocity, 1.85)
+  }
+
   getNetSegmentPositions(): Float32Array {
+    this.pinNetToHoop()
     let cursor = 0
-    const hoop = this.hoopBody.translation()
-
-    for (let strand = 0; strand < NET_STRANDS; strand += 1) {
-      const anchor = this.netRestLocal[0][strand]
-      cursor = this.writeNetSegmentPoint(cursor, hoop.x + anchor.x, hoop.y + anchor.y, hoop.z + anchor.z)
-      cursor = this.writeNetSegmentBody(cursor, this.netNodes[0][strand])
+    for (const [a, b] of this.netRenderSegments) {
+      cursor = this.writeNetSegmentPoint(cursor, a.position)
+      cursor = this.writeNetSegmentPoint(cursor, b.position)
     }
-
-    for (const [rowA, strandA, rowB, strandB] of this.netSegments) {
-      cursor = this.writeNetSegmentBody(cursor, this.netNodes[rowA][strandA])
-      cursor = this.writeNetSegmentBody(cursor, this.netNodes[rowB][strandB])
-    }
-
     return this.netSegmentPositions.subarray(0, cursor)
   }
 
   isNetActive(): boolean {
     if (this.netExcitement > 0) return true
-    const hoop = this.hoopBody.translation()
-    for (const row of this.netNodes) {
-      const rowIndex = this.netNodes.indexOf(row)
-      for (let strand = 0; strand < row.length; strand += 1) {
-        const node = row[strand]
-        const velocity = node.linvel()
-        if (velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z > 0.0008) return true
-        const position = node.translation()
-        const rest = this.netRestLocal[rowIndex][strand]
-        const dx = position.x - hoop.x - rest.x
-        const dy = position.y - hoop.y - rest.y
-        const dz = position.z - hoop.z - rest.z
-        if (dx * dx + dy * dy + dz * dz > 0.0009) return true
+    if (this.hoopPosition.distanceToSquared(this.previousHoopPosition) > 0.000001) return true
+    for (const row of this.netParticles) {
+      for (const particle of row) {
+        if (particle.pinned) continue
+        const speed = particle.position.distanceToSquared(particle.previous)
+        if (speed > 0.000006) return true
+        const rest = this.tmpNetVector.copy(this.hoopPosition).add(particle.restLocal)
+        if (particle.position.distanceToSquared(rest) > 0.0012) return true
       }
     }
     return false
@@ -250,11 +270,8 @@ export class PhysicsWorld {
   }
 
   private createNet(): void {
-    const hoop = this.hoopBody.translation()
-
     for (let row = 0; row < NET_ROWS; row += 1) {
-      const rowNodes: RigidBody[] = []
-      const rowRest: THREE.Vector3[] = []
+      const particles: NetParticle[] = []
       const rowT = row / (NET_ROWS - 1)
       const radius = THREE.MathUtils.lerp(NET_TOP_RADIUS, NET_BOTTOM_RADIUS, rowT)
       const y = -NET_LENGTH * rowT
@@ -262,158 +279,228 @@ export class PhysicsWorld {
 
       for (let strand = 0; strand < NET_STRANDS; strand += 1) {
         const angle = (strand / NET_STRANDS) * Math.PI * 2 + twist
-        const local = new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius)
-        const body = this.world.createRigidBody(
-          RAPIER.RigidBodyDesc.dynamic()
-            .setTranslation(hoop.x + local.x, hoop.y + local.y, hoop.z + local.z)
-            .setLinearDamping(3.8)
-            .setAngularDamping(8)
-            .setCanSleep(false)
-            .setGravityScale(0.36)
-            .setAdditionalSolverIterations(3),
-        )
-        this.world.createCollider(RAPIER.ColliderDesc.ball(NET_NODE_RADIUS).setDensity(0.08).setSensor(true), body)
-        rowNodes.push(body)
-        rowRest.push(local)
+        const restLocal = new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius)
+        const position = this.hoopPosition.clone().add(restLocal)
+        particles.push({
+          position,
+          previous: position.clone(),
+          restLocal,
+          mass: 0.46 + rowT * 0.34,
+          pinned: row === 0,
+        })
       }
-
-      this.netNodes.push(rowNodes)
-      this.netRestLocal.push(rowRest)
+      this.netParticles.push(particles)
     }
 
-    const zero = { x: 0, y: 0, z: 0 }
-    for (let strand = 0; strand < NET_STRANDS; strand += 1) {
-      const top = this.netRestLocal[0][strand]
-      this.world.createImpulseJoint(RAPIER.JointData.spring(0.02, 120, 9, top, zero), this.hoopBody, this.netNodes[0][strand], true)
-      this.world.createImpulseJoint(RAPIER.JointData.rope(0.08, top, zero), this.hoopBody, this.netNodes[0][strand], true)
-
-      for (let row = 0; row < NET_ROWS - 1; row += 1) {
-        const bodyA = this.netNodes[row][strand]
-        const bodyB = this.netNodes[row + 1][strand]
-        const rest = this.netRestLocal[row][strand].distanceTo(this.netRestLocal[row + 1][strand])
-        this.world.createImpulseJoint(RAPIER.JointData.spring(rest, 32, 3.6, zero, zero), bodyA, bodyB, true)
-        this.world.createImpulseJoint(RAPIER.JointData.rope(rest * 1.22, zero, zero), bodyA, bodyB, true)
-        this.netSegments.push([row, strand, row + 1, strand])
-      }
-
-      for (let row = 0; row < NET_ROWS; row += 1) {
+    for (let row = 0; row < NET_ROWS; row += 1) {
+      for (let strand = 0; strand < NET_STRANDS; strand += 1) {
         const next = (strand + 1) % NET_STRANDS
-        const bodyA = this.netNodes[row][strand]
-        const bodyB = this.netNodes[row][next]
-        const rest = this.netRestLocal[row][strand].distanceTo(this.netRestLocal[row][next])
-        this.world.createImpulseJoint(RAPIER.JointData.spring(rest, row === 0 ? 18 : 13, 2.2, zero, zero), bodyA, bodyB, true)
-        this.netSegments.push([row, strand, row, next])
-      }
+        this.addNetConstraint(row, strand, row, next, row === 0 ? 0.9 : 0.56, true)
 
-      for (let row = 0; row < NET_ROWS - 1; row += 1) {
-        const next = (strand + 1) % NET_STRANDS
-        const bodyA = this.netNodes[row][strand]
-        const bodyB = this.netNodes[row + 1][next]
-        const rest = this.netRestLocal[row][strand].distanceTo(this.netRestLocal[row + 1][next])
-        this.world.createImpulseJoint(RAPIER.JointData.spring(rest, 14, 2.4, zero, zero), bodyA, bodyB, true)
-        this.netSegments.push([row, strand, row + 1, next])
+        if (row < NET_ROWS - 1) {
+          this.addNetConstraint(row, strand, row + 1, strand, 0.86, true)
+          this.addNetConstraint(row, strand, row + 1, next, 0.48, true)
+          this.addNetConstraint(row, next, row + 1, strand, 0.38, true)
+        }
       }
     }
+
+    this.pinNetToHoop()
+  }
+
+  private addNetConstraint(rowA: number, strandA: number, rowB: number, strandB: number, stiffness: number, render: boolean): void {
+    const a = this.netParticles[rowA][strandA]
+    const b = this.netParticles[rowB][strandB]
+    this.netConstraints.push({
+      a,
+      b,
+      restLength: a.restLocal.distanceTo(b.restLocal),
+      stiffness,
+    })
+    if (render) this.netRenderSegments.push([a, b])
+  }
+
+  private simulateNet(dt: number): void {
+    const substeps = dt > 1 / 70 ? 2 : 1
+    const stepDt = dt / substeps
+
+    for (let substep = 0; substep < substeps; substep += 1) {
+      this.pinNetToHoop()
+      this.integrateNet(stepDt)
+      for (let iteration = 0; iteration < NET_CONSTRAINT_ITERATIONS; iteration += 1) {
+        this.pinNetToHoop()
+        this.solveNetConstraints()
+        this.limitNetDisplacement()
+      }
+      this.pinNetToHoop()
+    }
+
+    this.previousHoopPosition.copy(this.hoopPosition)
+  }
+
+  private pinNetToHoop(): void {
+    for (const particle of this.netParticles[0]) {
+      particle.position.copy(this.hoopPosition).add(particle.restLocal)
+      particle.previous.copy(particle.position)
+    }
+  }
+
+  private integrateNet(dt: number): void {
+    const gravityStep = NET_GRAVITY * dt * dt
+    const settleStrength = this.netExcitement > 0.25 ? 0.001 : 0.006
+
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      for (const particle of this.netParticles[row]) {
+        const velocity = this.tmpNetVector.copy(particle.position).sub(particle.previous).multiplyScalar(NET_AIR_DRAG)
+        particle.previous.copy(particle.position)
+        particle.position.add(velocity)
+        particle.position.y += gravityStep
+
+        const rest = this.tmpNetVectorB.copy(this.hoopPosition).add(particle.restLocal)
+        particle.position.x += (rest.x - particle.position.x) * settleStrength
+        particle.position.z += (rest.z - particle.position.z) * settleStrength
+        if (this.netExcitement < 0.08) particle.position.y += (rest.y - particle.position.y) * settleStrength * 0.35
+      }
+    }
+  }
+
+  private solveNetConstraints(): void {
+    for (const constraint of this.netConstraints) {
+      const delta = this.tmpNetVector.copy(constraint.b.position).sub(constraint.a.position)
+      const distance = delta.length()
+      if (distance <= 0.000001) continue
+
+      const invMassA = constraint.a.pinned ? 0 : 1 / constraint.a.mass
+      const invMassB = constraint.b.pinned ? 0 : 1 / constraint.b.mass
+      const invMassTotal = invMassA + invMassB
+      if (invMassTotal <= 0) continue
+
+      const correctionScale = ((distance - constraint.restLength) / distance) * constraint.stiffness
+      delta.multiplyScalar(correctionScale)
+      if (invMassA > 0) constraint.a.position.addScaledVector(delta, invMassA / invMassTotal)
+      if (invMassB > 0) constraint.b.position.addScaledVector(delta, -invMassB / invMassTotal)
+    }
+  }
+
+  private limitNetDisplacement(): void {
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      const maxDistance = NET_MAX_DISPLACEMENT[row]
+      for (const particle of this.netParticles[row]) {
+        const rest = this.tmpNetVector.copy(this.hoopPosition).add(particle.restLocal)
+        const offset = this.tmpNetVectorB.copy(particle.position).sub(rest)
+        const distance = offset.length()
+        if (distance <= maxDistance) continue
+
+        offset.multiplyScalar(maxDistance / distance)
+        const velocity = particle.position.clone().sub(particle.previous).multiplyScalar(0.35)
+        particle.position.copy(rest).add(offset)
+        particle.previous.copy(particle.position).sub(velocity)
+      }
+    }
+  }
+
+  private collideNetWithBall(position: THREE.Vector3, velocity: THREE.Vector3): boolean {
+    let contacted = false
+    const contactRadius = BALL_RADIUS + 0.05
+
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      for (const particle of this.netParticles[row]) {
+        const delta = this.tmpNetVector.copy(particle.position).sub(position)
+        let distance = delta.length()
+        if (distance >= contactRadius) continue
+        if (distance <= 0.000001) {
+          delta.set(particle.restLocal.x, -0.18, particle.restLocal.z).normalize()
+          distance = 0.000001
+        } else {
+          delta.multiplyScalar(1 / distance)
+        }
+
+        const penetration = contactRadius - distance
+        const rowInfluence = 0.45 + row / NET_ROWS
+        particle.position.addScaledVector(delta, penetration * rowInfluence)
+        this.applyNetVelocity(particle, velocity, 0.16 * rowInfluence)
+        contacted = true
+      }
+    }
+
+    return contacted
   }
 
   private applyNetImpact(position: THREE.Vector3, velocity: THREE.Vector3, kind: NetHitKind, strength: number): void {
-    const hoop = this.hoopBody.translation()
-    const radial = new THREE.Vector3(position.x - hoop.x, 0, position.z - hoop.z)
+    const radial = this.tmpNetVector.set(position.x - this.hoopPosition.x, 0, position.z - this.hoopPosition.z)
     if (radial.lengthSq() < 0.0001) radial.set(0, 0, 1)
     radial.normalize()
 
-    const impulse = this.tmpVector.copy(velocity).multiplyScalar(0.065 * strength)
+    const impulse = this.tmpVector.copy(velocity).multiplyScalar(0.11 * strength)
     if (kind === 'rim') {
-      impulse.addScaledVector(radial, strength * 0.45)
-      impulse.y -= 0.08 * strength
+      impulse.addScaledVector(radial, strength * 0.55)
+      impulse.y -= strength * 0.12
     } else if (kind === 'through') {
-      impulse.addScaledVector(radial, strength * 0.28)
-      impulse.y -= 0.4 * strength
+      impulse.addScaledVector(radial, strength * 0.24)
+      impulse.y -= strength * 0.52
     } else {
-      impulse.addScaledVector(radial, strength * 0.38)
-      impulse.y -= 0.16 * strength
+      impulse.addScaledVector(radial, strength * 0.34)
+      impulse.y -= strength * 0.18
     }
 
-    const maxDistance = kind === 'through' ? BALL_RADIUS + 0.52 : NET_IMPACT_RADIUS
-    for (let row = 0; row < NET_ROWS; row += 1) {
-      for (let strand = 0; strand < NET_STRANDS; strand += 1) {
-        const node = this.netNodes[row][strand]
-        const translation = node.translation()
-        const distance = Math.hypot(translation.x - position.x, translation.y - position.y, translation.z - position.z)
+    const maxDistance = kind === 'through' ? BALL_RADIUS + 0.58 : NET_IMPACT_RADIUS
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      for (const particle of this.netParticles[row]) {
+        const distance = particle.position.distanceTo(position)
         if (distance > maxDistance) continue
-        const falloff = 1 - distance / maxDistance
-        node.applyImpulse(
-          {
-            x: impulse.x * falloff,
-            y: impulse.y * falloff,
-            z: impulse.z * falloff,
-          },
-          true,
+        const falloff = (1 - distance / maxDistance) * (0.65 + row / NET_ROWS)
+        this.applyNetVelocity(particle, impulse, falloff)
+      }
+    }
+
+    this.netExcitement = Math.max(this.netExcitement, kind === 'through' ? 1.45 : 1.0)
+  }
+
+  private applySwishPull(position: THREE.Vector3, velocity: THREE.Vector3, strength: number): void {
+    const localY = position.y - this.hoopPosition.y
+    const ballRowT = THREE.MathUtils.clamp(-localY / NET_LENGTH, 0, 1)
+    const downwardSpeed = Math.max(1.2, -velocity.y)
+
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      const rowT = row / (NET_ROWS - 1)
+      const verticalFalloff = Math.exp(-Math.abs(rowT - ballRowT) * 3.2)
+      const rowFalloff = (0.34 + verticalFalloff) * (0.55 + rowT * 0.58) * strength
+
+      for (const particle of this.netParticles[row]) {
+        const radial = this.tmpNetVector.set(
+          particle.position.x - this.hoopPosition.x,
+          0,
+          particle.position.z - this.hoopPosition.z,
         )
+        if (radial.lengthSq() < 0.0001) continue
+        radial.normalize()
+
+        const inward = this.tmpNetVectorB.copy(radial).multiplyScalar(-1)
+        particle.position.addScaledVector(inward, 0.074 * rowFalloff)
+        particle.position.y -= 0.102 * rowFalloff
+
+        const swishVelocity = this.tmpVector
+          .copy(inward)
+          .multiplyScalar(0.92)
+          .addScaledVector(radial, rowT > 0.62 ? 0.34 : 0)
+          .addScaledVector(velocity, 0.045)
+        swishVelocity.y -= downwardSpeed * 0.56
+        this.applyNetVelocity(particle, swishVelocity, rowFalloff)
       }
     }
 
-    this.netExcitement = Math.max(this.netExcitement, kind === 'through' ? 1.4 : 0.9)
+    this.netExcitement = Math.max(this.netExcitement, 1.8)
   }
 
-  private stabilizeNet(): void {
-    const hoop = this.hoopBody.translation()
-    const settleAlpha = this.netExcitement <= 0 ? 0.1 : this.netExcitement < 0.35 ? 0.025 : 0
-
-    for (let row = 0; row < NET_ROWS; row += 1) {
-      for (let strand = 0; strand < NET_STRANDS; strand += 1) {
-        const node = this.netNodes[row][strand]
-        const rest = this.netRestLocal[row][strand]
-        const position = node.translation()
-        const restX = hoop.x + rest.x
-        const restY = hoop.y + rest.y
-        const restZ = hoop.z + rest.z
-        const displacement = this.tmpNetVector.set(position.x - restX, position.y - restY, position.z - restZ)
-        const distance = displacement.length()
-        const maxDistance = NET_MAX_DISPLACEMENT[row]
-
-        if (distance > maxDistance * 2.6) {
-          node.setTranslation({ x: restX, y: restY, z: restZ }, true)
-          node.setLinvel({ x: 0, y: 0, z: 0 }, true)
-          continue
-        }
-
-        if (distance > maxDistance) {
-          displacement.multiplyScalar(maxDistance / distance)
-          node.setTranslation({ x: restX + displacement.x, y: restY + displacement.y, z: restZ + displacement.z }, true)
-          const velocity = node.linvel()
-          node.setLinvel({ x: velocity.x * 0.32, y: velocity.y * 0.32, z: velocity.z * 0.32 }, true)
-        } else if (distance > 0.025) {
-          node.applyImpulse({ x: displacement.x * -0.0025, y: displacement.y * -0.0025, z: displacement.z * -0.0025 }, true)
-        }
-
-        if (settleAlpha > 0 && distance > 0.006) {
-          const nextPosition = node.translation()
-          const velocity = node.linvel()
-          node.setTranslation(
-            {
-              x: nextPosition.x + (restX - nextPosition.x) * settleAlpha,
-              y: nextPosition.y + (restY - nextPosition.y) * settleAlpha,
-              z: nextPosition.z + (restZ - nextPosition.z) * settleAlpha,
-            },
-            true,
-          )
-          const damping = this.netExcitement <= 0 ? 0.62 : 0.82
-          node.setLinvel({ x: velocity.x * damping, y: velocity.y * damping, z: velocity.z * damping }, true)
-        }
-      }
-    }
+  private applyNetVelocity(particle: NetParticle, velocity: THREE.Vector3, scale: number): void {
+    const massScale = scale / particle.mass
+    particle.previous.addScaledVector(velocity, -massScale / 60)
   }
 
-  private writeNetSegmentBody(cursor: number, body: RigidBody): number {
-    const position = body.translation()
-    return this.writeNetSegmentPoint(cursor, position.x, position.y, position.z)
-  }
-
-  private writeNetSegmentPoint(cursor: number, x: number, y: number, z: number): number {
-    this.netSegmentPositions[cursor] = x
-    this.netSegmentPositions[cursor + 1] = y
-    this.netSegmentPositions[cursor + 2] = z
+  private writeNetSegmentPoint(cursor: number, point: THREE.Vector3): number {
+    this.netSegmentPositions[cursor] = point.x
+    this.netSegmentPositions[cursor + 1] = point.y
+    this.netSegmentPositions[cursor + 2] = point.z
     return cursor + 3
   }
 
