@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { BALL_RADIUS, LAUNCH_POSITION, RIM_HEIGHT, RIM_RADIUS } from './config'
+import { BACKBOARD_Z, BALL_RADIUS, LAUNCH_POSITION, RIM_HEIGHT, RIM_RADIUS } from './config'
 import type { LevelConfig, StreakTier } from './types'
 import { createBallTexture, createFlameTexture, createGlowTexture } from './assets'
 
@@ -36,6 +36,7 @@ export class CourtScene {
   private readonly ballMaterial: THREE.MeshStandardMaterial
   private readonly hoopGroup = new THREE.Group()
   private readonly obstacleGroup = new THREE.Group()
+  private readonly netGeometry = new THREE.BufferGeometry()
   private readonly flameParticles: FlameParticle[] = []
   private readonly backboardSparkles: BackboardSpark[] = []
   private readonly shotTrail: THREE.Line
@@ -47,6 +48,7 @@ export class CourtScene {
   private backboardFrameMaterial!: THREE.LineBasicMaterial
   private backboardAimMaterial!: THREE.MeshBasicMaterial
   private backboardFlashLight!: THREE.PointLight
+  private netLine!: THREE.LineSegments
   private backboardFlash = 0
   private spawnAccumulator = 0
   private lastTierThreshold = 0
@@ -228,6 +230,23 @@ export class CourtScene {
   removeShotVisual(visual: ShotVisual): void {
     this.scene.remove(visual.mesh, visual.light, visual.trail)
     visual.trail.geometry.dispose()
+  }
+
+  updateNet(segmentPositions: Float32Array): void {
+    const attribute = this.netGeometry.getAttribute('position') as THREE.BufferAttribute | undefined
+    if (!attribute || attribute.array.length !== segmentPositions.length) {
+      this.netGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(segmentPositions), 3))
+      this.netGeometry.setAttribute('color', new THREE.BufferAttribute(this.createNetColors(segmentPositions), 3))
+      this.netGeometry.computeBoundingSphere()
+      return
+    }
+
+    attribute.array.set(segmentPositions)
+    attribute.needsUpdate = true
+    const colorAttribute = this.netGeometry.getAttribute('color') as THREE.BufferAttribute | undefined
+    colorAttribute?.array.set(this.createNetColors(segmentPositions))
+    if (colorAttribute) colorAttribute.needsUpdate = true
+    this.netGeometry.computeBoundingSphere()
   }
 
   updateEffects(dt: number, time: number, tier: StreakTier): void {
@@ -415,7 +434,7 @@ export class CourtScene {
       new THREE.BoxGeometry(2.6, 1.42, 0.12),
       this.backboardMaterial,
     )
-    backboard.position.set(0, 0.58, -0.62)
+    backboard.position.set(0, 0.58, BACKBOARD_Z)
     backboard.castShadow = true
     this.hoopGroup.add(backboard)
 
@@ -443,7 +462,7 @@ export class CourtScene {
     const stroke = 0.058
     const bottomY = 0.02
     const centerY = bottomY + squareHeight / 2
-    const frontZ = -0.53
+    const frontZ = BACKBOARD_Z + 0.07
     const horizontalGeometry = new THREE.BoxGeometry(squareWidth + stroke, stroke, 0.012)
     const verticalGeometry = new THREE.BoxGeometry(stroke, squareHeight + stroke, 0.012)
     const top = new THREE.Mesh(horizontalGeometry, this.backboardAimMaterial)
@@ -456,18 +475,14 @@ export class CourtScene {
     this.hoopGroup.add(aimSquare)
 
     const netMaterial = new THREE.LineBasicMaterial({
-      color: 0x9ff8ff,
       transparent: true,
-      opacity: 0.66,
+      opacity: 0.76,
       blending: THREE.AdditiveBlending,
+      vertexColors: true,
     })
-    for (let i = 0; i < 14; i += 1) {
-      const angle = (i / 14) * Math.PI * 2
-      const nextAngle = ((i + 1) / 14) * Math.PI * 2
-      const top = new THREE.Vector3(Math.cos(angle) * RIM_RADIUS, 0, Math.sin(angle) * RIM_RADIUS)
-      const bottom = new THREE.Vector3(Math.cos(nextAngle) * 0.34, -0.82, Math.sin(nextAngle) * 0.34)
-      this.hoopGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([top, bottom]), netMaterial))
-    }
+    this.netLine = new THREE.LineSegments(this.netGeometry, netMaterial)
+    this.netLine.frustumCulled = false
+    this.scene.add(this.netLine)
 
     this.hoopGroup.position.set(0, RIM_HEIGHT, -7.5)
     this.scene.add(this.hoopGroup)
@@ -517,6 +532,19 @@ export class CourtScene {
     }
   }
 
+  private createNetColors(segmentPositions: Float32Array): Float32Array {
+    const colors = new Float32Array(segmentPositions.length)
+    const rimPink = new THREE.Color(0xff3d85)
+    const netCyan = new THREE.Color(0x9ff8ff)
+    for (let index = 0; index < segmentPositions.length; index += 3) {
+      const color = segmentPositions[index + 1] >= RIM_HEIGHT - 0.07 ? rimPink : netCyan
+      colors[index] = color.r
+      colors[index + 1] = color.g
+      colors[index + 2] = color.b
+    }
+    return colors
+  }
+
   private spawnFlame(tier: StreakTier, burst = false): void {
     const particle = this.flameParticles.find((candidate) => candidate.life <= 0)
     if (!particle) return
@@ -546,7 +574,7 @@ export class CourtScene {
       const fromHorizontalEdge = Math.random() > 0.48
       const x = fromHorizontalEdge ? side * (1.18 + Math.random() * 0.12) : THREE.MathUtils.randFloatSpread(2.18)
       const y = fromHorizontalEdge ? 0.58 + THREE.MathUtils.randFloatSpread(1.02) : 0.02 + Math.random() * 1.16
-      sparkle.sprite.position.set(x, y, -0.49)
+      sparkle.sprite.position.set(x, y, BACKBOARD_Z + 0.11)
       sparkle.velocity.set(
         THREE.MathUtils.randFloatSpread(0.82),
         0.28 + Math.random() * 0.86,

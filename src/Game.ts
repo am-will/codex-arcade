@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
 import { CourtScene, type ShotVisual } from './CourtScene'
-import { getLevelForElapsedSeconds, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
+import { BACKBOARD_Z, getLevelForElapsedSeconds, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
 import { Hud } from './Hud'
 import { PhysicsWorld } from './PhysicsWorld'
 import { ScoringSystem, type ShotScoreTracker } from './ScoringSystem'
@@ -142,10 +142,11 @@ export class Game {
     }
 
     this.updateHoop()
-    if (this.activeShots.length > 0) {
+    if (this.activeShots.length > 0 || this.physics.isNetActive()) {
       this.physics.step(dt)
       this.updateActiveShots()
     }
+    this.court.updateNet(this.physics.getNetSegmentPositions())
 
     if (!this.readyBallAvailable && this.phase !== 'roundOver') {
       this.readyBallDelay -= dt
@@ -179,6 +180,7 @@ export class Game {
       this.physics.getBodyPosition(shot.body, shot.position)
       this.physics.getBodyRotation(shot.body, shot.rotation)
       this.physics.getBodyVelocity(shot.body, shot.velocity)
+      this.physics.updateNetForShot(shot.id, shot.position, shot.velocity)
       this.court.updateShotVisual(shot.visual, shot.position, shot.rotation)
 
       const result = this.scoring.checkShot(
@@ -266,7 +268,7 @@ export class Game {
       },
       dropAtBackboard: () => {
         const hoop = this.court.getHoopPosition()
-        const position = new THREE.Vector3(hoop.x, RIM_HEIGHT + 0.92, hoop.z - 0.72)
+        const position = new THREE.Vector3(hoop.x + 0.92, RIM_HEIGHT + 0.92, hoop.z + BACKBOARD_Z + 0.14)
         this.spawnActiveShot(new THREE.Vector3(0, -1.2, 0), position)
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
       },
@@ -318,6 +320,7 @@ export class Game {
   }
 
   private removeActiveShot(shot: ActiveShot): void {
+    this.physics.releaseNetShot(shot.id)
     this.physics.removeShotBody(shot.body)
     this.court.removeShotVisual(shot.visual)
   }

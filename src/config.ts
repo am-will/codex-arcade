@@ -4,6 +4,7 @@ export const BALL_RADIUS = 0.34
 export const LAUNCH_POSITION = { x: 0, y: 1.32, z: 1.85 }
 export const RIM_HEIGHT = 3.05
 export const RIM_RADIUS = 0.7
+export const BACKBOARD_Z = -0.86
 export const SHOT_CLOCK_SECONDS = 90
 
 export const STREAK_TIERS: StreakTier[] = [
