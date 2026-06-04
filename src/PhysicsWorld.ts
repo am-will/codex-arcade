@@ -8,13 +8,16 @@ const NET_ROWS = 7
 const NET_LENGTH = 1.02
 const NET_TOP_RADIUS = RIM_RADIUS * 0.96
 const NET_BOTTOM_RADIUS = 0.34
-const NET_GRAVITY = -9.4
-const NET_AIR_DRAG = 0.972
+const NET_GRAVITY = -13.6
+const NET_AIR_DRAG = 0.956
 const NET_CONSTRAINT_ITERATIONS = 7
 const NET_IMPACT_RADIUS = BALL_RADIUS + 0.18
 const NET_RENDER_SEGMENTS = NET_STRANDS * ((NET_ROWS - 1) * 3 + NET_ROWS)
 const NET_SEGMENT_FLOATS = NET_RENDER_SEGMENTS * 2 * 3
 const NET_MAX_DISPLACEMENT = [0, 0.22, 0.34, 0.48, 0.62, 0.72, 0.82]
+const NET_ROW_DROP = NET_LENGTH / (NET_ROWS - 1)
+const NET_MIN_ROW_DROP = NET_ROW_DROP * 0.52
+const NET_ALLOWED_UPWARD_DISPLACEMENT = [0, 0.018, 0.024, 0.032, 0.04, 0.048, 0.056]
 
 type NetHitKind = 'rim' | 'net' | 'through'
 
@@ -285,7 +288,7 @@ export class PhysicsWorld {
           position,
           previous: position.clone(),
           restLocal,
-          mass: 0.46 + rowT * 0.34,
+          mass: 0.82 + rowT * 0.58,
           pinned: row === 0,
         })
       }
@@ -331,7 +334,9 @@ export class PhysicsWorld {
         this.pinNetToHoop()
         this.solveNetConstraints()
         this.limitNetDisplacement()
+        this.enforceNetHangingShape()
       }
+      this.enforceNetHangingShape()
       this.pinNetToHoop()
     }
 
@@ -347,7 +352,7 @@ export class PhysicsWorld {
 
   private integrateNet(dt: number): void {
     const gravityStep = NET_GRAVITY * dt * dt
-    const settleStrength = this.netExcitement > 0.25 ? 0.001 : 0.006
+    const settleStrength = this.netExcitement > 0.25 ? 0.0015 : 0.008
 
     for (let row = 1; row < NET_ROWS; row += 1) {
       for (const particle of this.netParticles[row]) {
@@ -399,6 +404,28 @@ export class PhysicsWorld {
     }
   }
 
+  private enforceNetHangingShape(): void {
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      const allowedUp = NET_ALLOWED_UPWARD_DISPLACEMENT[row]
+      for (let strand = 0; strand < NET_STRANDS; strand += 1) {
+        const particle = this.netParticles[row][strand]
+        const parent = this.netParticles[row - 1][strand]
+        const restY = this.hoopPosition.y + particle.restLocal.y
+        const highestByRest = restY + allowedUp
+        const highestByParent = parent.position.y - NET_MIN_ROW_DROP
+        const highestAllowed = Math.min(highestByRest, highestByParent)
+
+        if (particle.position.y > highestAllowed) {
+          const upwardVelocity = Math.max(0, particle.position.y - particle.previous.y)
+          particle.position.y += (highestAllowed - particle.position.y) * 0.72
+          if (upwardVelocity > 0) {
+            particle.previous.y = particle.position.y - upwardVelocity * 0.16
+          }
+        }
+      }
+    }
+  }
+
   private collideNetWithBall(position: THREE.Vector3, velocity: THREE.Vector3): boolean {
     let contacted = false
     const contactRadius = BALL_RADIUS + 0.05
@@ -418,7 +445,7 @@ export class PhysicsWorld {
         const penetration = contactRadius - distance
         const rowInfluence = 0.45 + row / NET_ROWS
         particle.position.addScaledVector(delta, penetration * rowInfluence)
-        this.applyNetVelocity(particle, velocity, 0.16 * rowInfluence)
+        this.applyNetVelocity(particle, velocity, 0.12 * rowInfluence)
         contacted = true
       }
     }
