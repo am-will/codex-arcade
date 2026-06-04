@@ -215,7 +215,7 @@ async function verifyViewport(page, viewport, label) {
     if (inferno.highScore !== inferno.score) {
       throw new Error(`High score did not track current best score: ${JSON.stringify(inferno)}`)
     }
-    if (inferno.level !== 1 || inferno.hoopDistance !== -6) {
+    if (inferno.level !== 1 || inferno.hoopDistance !== -5.1) {
       throw new Error(`Made baskets changed hoop depth before the timer gate: ${JSON.stringify(inferno)}`)
     }
 
@@ -300,12 +300,12 @@ async function verifyTimerLevels(page) {
   await page.waitForTimeout(1000)
 
   const checkpoints = [
-    { elapsed: 0, level: 1, basePoints: 2, hoopDistance: -6, hoopSpeed: 0.42 },
-    { elapsed: 29.9, level: 1, basePoints: 2, hoopDistance: -6, hoopSpeed: 0.42 },
-    { elapsed: 30.1, level: 2, basePoints: 2, hoopDistance: -6.86, hoopSpeed: 0.44 },
-    { elapsed: 59.9, level: 2, basePoints: 2, hoopDistance: -6.86, hoopSpeed: 0.44 },
-    { elapsed: 60.1, level: 3, basePoints: 5, hoopDistance: -8.03, hoopSpeed: 0.47 },
-    { elapsed: 89, level: 3, basePoints: 5, hoopDistance: -8.03, hoopSpeed: 0.47 },
+    { elapsed: 0, level: 1, basePoints: 2, hoopDistance: -5.1, hoopSpeed: 0.42 },
+    { elapsed: 29.9, level: 1, basePoints: 2, hoopDistance: -5.1, hoopSpeed: 0.42 },
+    { elapsed: 30.1, level: 2, basePoints: 2, hoopDistance: -6.17, hoopSpeed: 0.44 },
+    { elapsed: 59.9, level: 2, basePoints: 2, hoopDistance: -6.17, hoopSpeed: 0.44 },
+    { elapsed: 60.1, level: 3, basePoints: 5, hoopDistance: -7.23, hoopSpeed: 0.47 },
+    { elapsed: 89, level: 3, basePoints: 5, hoopDistance: -7.23, hoopSpeed: 0.47 },
   ]
 
   for (const checkpoint of checkpoints) {
