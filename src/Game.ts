@@ -231,7 +231,8 @@ export class Game {
     this.readyBallDelay = 0
     this.readyBallAvailable = false
     this.clearActiveShots()
-    this.court.setLaunchBallVisible(false)
+    this.court.setLaunchBallVisible(true)
+    this.syncBall(false)
     this.court.clearAim()
     this.court.resetTrail()
     const isHighScore = this.updateHighScore()
