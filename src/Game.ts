@@ -367,7 +367,7 @@ export class Game {
     if (!Number.isFinite(timeToRim) || timeToRim <= 0) return assisted
 
     const idealLateral = (hoopPosition.x - LAUNCH_POSITION.x) / timeToRim
-    const nudge = THREE.MathUtils.clamp((idealLateral - velocity.x) * 0.14, -0.32, 0.32)
+    const nudge = THREE.MathUtils.clamp((idealLateral - velocity.x) * 0.18, -0.42, 0.42)
     assisted.x += nudge
     return assisted
   }
