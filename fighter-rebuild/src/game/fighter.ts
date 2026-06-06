@@ -510,7 +510,7 @@ function animationFrameInterval(animationName: string): number {
 function attackActionFrameInterval(kind: AttackKind): number {
   switch (kind) {
     case 'light':
-      return 3;
+      return 2;
     case 'heavy':
     case 'special':
       return 4;

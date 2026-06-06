@@ -23,7 +23,7 @@ describe('fighter combat core', () => {
   it('resolves a light hit with damage, hitstun, knockback, and meter gain', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterContact = runFrames(state, 4, { player: { light: true } });
+    const afterContact = runFrames(state, 3, { player: { light: true } });
 
     expect(afterContact.cpu.health).toBe(98);
     expect(afterContact.cpu.status).toBe('hitstun');
@@ -46,7 +46,7 @@ describe('fighter combat core', () => {
   it('uses guard-box overlap for blocked hits and applies block damage/blockstun', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterBlock = runFrames(state, 4, {
+    const afterBlock = runFrames(state, 3, {
       player: { light: true },
       cpu: { block: true },
     });
