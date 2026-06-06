@@ -1,11 +1,13 @@
 import {
   advanceFighterForFrame,
   anyRectOverlaps,
+  beginDefeatFall,
   clampHealth,
   clampMeter,
   createFighterState,
   faceToward,
   finalizeFighterFrame,
+  finalAnimationFrameFor,
   getWorldAttackBox,
   getWorldGuardBoxes,
   getWorldHurtBoxes,
@@ -226,19 +228,29 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
   const knockback = getHitKnockback(attack, windowIndex);
 
   if (defeated) {
-    return {
-      ...clampHealth(target, nextHealth),
-      status: 'knockdown',
-      animationFrame: 0,
-      animationTick: 0,
-      stunFrames: 0,
-      isFinished: true,
-      activeAttack: undefined,
-      velocity: {
-        x: direction * Math.max(Math.abs(attack.profile.knockbackX) * 1.45, 120),
-        y: Math.min(attack.profile.knockbackY * 2, -180),
-      },
-    };
+    if (isUninterruptibleSpecial(target)) {
+      return clampHealth(target, nextHealth);
+    }
+
+    if (attack.kind === 'special') {
+      return {
+        ...clampHealth(target, nextHealth),
+        status: 'hitstun',
+        animationFrame: 0,
+        animationTick: 0,
+        stunFrames: attack.profile.hitstunFrames,
+        activeAttack: undefined,
+        velocity: {
+          x: direction * knockback.x,
+          y: knockback.y,
+        },
+      };
+    }
+
+    return beginDefeatFall(target, attacker.position.x, {
+      x: direction * Math.max(Math.abs(attack.profile.knockbackX) * 1.45, 120),
+      y: Math.min(attack.profile.knockbackY * 2, -180),
+    });
   }
 
   if (isUninterruptibleSpecial(target)) {
@@ -287,7 +299,7 @@ function applyBlock(target: FighterState, attacker: FighterState, damage: number
   return {
     ...clampHealth(target, target.health - damage),
     status: 'blockstun',
-    animationFrame: 1,
+    animationFrame: finalAnimationFrameFor(target, 'block'),
     animationTick: 0,
     stunFrames: attack.profile.blockstunFrames,
     velocity: {

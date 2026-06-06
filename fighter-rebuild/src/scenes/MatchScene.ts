@@ -3,7 +3,9 @@ import { consumeFixedTimestep, createCombatState, stepCombat, toSimulationFrames
 import { createCpuController, type CpuController } from '../game/cpu';
 import {
   FIGHTER_FRAME_WIDTH,
+  beginDefeatFall,
   clampMeter,
+  finalAnimationFrameFor,
   fighterAnimationName,
   type AttackKind,
   type FighterInput,
@@ -257,7 +259,7 @@ export class MatchScene extends BaseScene {
     this.pendingSuperSlot = null;
     this.clearInputs();
     this.hud?.clearMatchOverlay();
-    this.hud?.showBanner(`SAMA v AMODI`, `Round ${this.roundIndex}`);
+    this.hud?.showBanner('MORTALCODEX', `Round ${this.roundIndex}`);
     this.syncSprites();
     this.updateCamera(true);
     this.updateHud();
@@ -279,6 +281,7 @@ export class MatchScene extends BaseScene {
     }
 
     if (this.phase === 'roundOver') {
+      this.advancePostRoundAnimation();
       this.phaseFramesRemaining -= 1;
 
       if (this.phaseFramesRemaining <= 0) {
@@ -443,6 +446,12 @@ export class MatchScene extends BaseScene {
       return;
     }
 
+    if (this.hasActiveSpecialCombo(this.combatState)) {
+      return;
+    }
+
+    this.combatState = this.markZeroHealthDefeats(this.combatState);
+
     const resolution = resolveRound({
       playerHealth: this.combatState.player.health,
       cpuHealth: this.combatState.cpu.health,
@@ -470,6 +479,36 @@ export class MatchScene extends BaseScene {
     };
     this.clearInputs();
     this.hud?.showBanner(formatRoundWinner(this.roundWinner), this.roundResultSubtitle(resolution));
+  }
+
+  private hasActiveSpecialCombo(state: CombatState): boolean {
+    return state.player.activeAttack?.kind === 'special' || state.cpu.activeAttack?.kind === 'special';
+  }
+
+  private markZeroHealthDefeats(state: CombatState): CombatState {
+    return {
+      ...state,
+      player:
+        state.player.health <= 0 && !state.player.isFinished
+          ? beginDefeatFall(state.player, state.cpu.position.x)
+          : state.player,
+      cpu:
+        state.cpu.health <= 0 && !state.cpu.isFinished
+          ? beginDefeatFall(state.cpu, state.player.position.x)
+          : state.cpu,
+    };
+  }
+
+  private advancePostRoundAnimation(): void {
+    if (!this.combatState) {
+      return;
+    }
+
+    const state = stepCombat(this.combatState);
+    this.combatState = {
+      ...state,
+      events: state.events.slice(-96),
+    };
   }
 
   private roundResultSubtitle(resolution: RoundResolution): string {
@@ -712,6 +751,7 @@ export class MatchScene extends BaseScene {
     const zone = this.add.zone(x, y, width, height).setOrigin(0.5).setInteractive().setDepth(112).setScrollFactor(0);
     const press = (): void => {
       this.heldInput[action] = true;
+      this.applyImmediateHeldPose(action);
       background.setFillStyle(0x21494d, 0.98);
     };
     const release = (): void => {
@@ -788,6 +828,9 @@ export class MatchScene extends BaseScene {
       },
       forceMeter: (characterId: string, meter: number) => {
         this.forceMeter(characterId, meter);
+      },
+      forceHealth: (characterId: string, health: number) => {
+        this.forceHealth(characterId, health);
       },
       resetMatch: (seed?: number) => {
         if (this.matchConfig) {
@@ -875,6 +918,7 @@ export class MatchScene extends BaseScene {
       this.pulseInput.add(action);
     } else {
       this.heldInput[action] = true;
+      this.applyImmediateHeldPose(action);
     }
 
     if (frames && frames > 0) {
@@ -890,6 +934,33 @@ export class MatchScene extends BaseScene {
 
     this.heldInput[action] = false;
     delete this.scriptedInputFrames[action];
+  }
+
+  private applyImmediateHeldPose(action: Exclude<TestHookInputAction, 'light' | 'heavy' | 'special' | 'pause'>): void {
+    if (action !== 'block' || !this.combatState || this.phase !== 'fighting') {
+      return;
+    }
+
+    const fighter = this.combatState.player;
+
+    if (fighter.isFinished || fighter.activeAttack || fighter.stunFrames > 0 || !fighter.isGrounded) {
+      return;
+    }
+
+    this.combatState = {
+      ...this.combatState,
+      player: {
+        ...fighter,
+        status: 'block',
+        animationFrame: finalAnimationFrameFor(fighter, 'block'),
+        animationTick: 0,
+        velocity: {
+          ...fighter.velocity,
+          x: 0,
+        },
+      },
+    };
+    this.syncSprites();
   }
 
   private forceMeter(characterId: string, meter: number): void {
@@ -908,6 +979,32 @@ export class MatchScene extends BaseScene {
       this.combatState = {
         ...this.combatState,
         cpu: clampMeter(this.combatState.cpu, meter),
+      };
+    }
+  }
+
+  private forceHealth(characterId: string, health: number): void {
+    if (!this.combatState) {
+      return;
+    }
+
+    if (this.combatState.player.character.id === characterId) {
+      this.combatState = {
+        ...this.combatState,
+        player: {
+          ...this.combatState.player,
+          health: Phaser.Math.Clamp(health, 0, this.combatState.player.tuning.maxHealth),
+        },
+      };
+    }
+
+    if (this.combatState.cpu.character.id === characterId) {
+      this.combatState = {
+        ...this.combatState,
+        cpu: {
+          ...this.combatState.cpu,
+          health: Phaser.Math.Clamp(health, 0, this.combatState.cpu.tuning.maxHealth),
+        },
       };
     }
   }
@@ -956,6 +1053,7 @@ export class MatchScene extends BaseScene {
     }
 
     this.heldInput[action] = true;
+    this.applyImmediateHeldPose(action);
   }
 
   private handleKeyUp(event: KeyboardEvent): void {

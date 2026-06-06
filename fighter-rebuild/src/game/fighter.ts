@@ -156,6 +156,29 @@ export function fighterAnimationName(fighter: FighterState): string {
   return 'idle';
 }
 
+export function finalAnimationFrameFor(fighter: FighterState, animationName: string): number {
+  const boxes = fighter.character.frameBoxes[animationName] ?? fighter.character.frameBoxes.idle;
+  return Math.max(0, (boxes?.length ?? 1) - 1);
+}
+
+export function beginDefeatFall(fighter: FighterState, sourceX: number, launch?: Vector2): FighterState {
+  const direction = sourceX <= fighter.position.x ? 1 : -1;
+
+  return {
+    ...clampHealth(fighter, 0),
+    status: 'knockdown',
+    animationFrame: 0,
+    animationTick: 0,
+    stunFrames: 0,
+    isFinished: true,
+    activeAttack: undefined,
+    velocity: launch ?? {
+      x: direction * 120,
+      y: -180,
+    },
+  };
+}
+
 export function getWorldHurtBoxes(fighter: FighterState): readonly Rect[] {
   return getResolvedFighterBoxes(fighter).hurt.map((box) => frameRectToWorld(fighter, box));
 }
@@ -229,6 +252,17 @@ export function advanceFighterForFrame(
       {
         ...attackingFighter,
         status: 'attack',
+      },
+      stage,
+      deltaSeconds,
+    );
+  }
+
+  if (fighter.health <= 0) {
+    return advancePhysics(
+      {
+        ...stopGroundedDrift(fighter),
+        status: fighter.isGrounded ? 'idle' : 'jump',
       },
       stage,
       deltaSeconds,
@@ -583,7 +617,7 @@ function applyStatus(fighter: FighterState, nextStatus: FighterStatus, previousS
     };
   }
 
-  const animationFrame = nextStatus === 'block' || nextStatus === 'blockstun' ? 1 : 0;
+  const animationFrame = nextStatus === 'block' || nextStatus === 'blockstun' ? finalAnimationFrameFor(fighter, 'block') : 0;
 
   return {
     ...fighter,

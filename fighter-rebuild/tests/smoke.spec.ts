@@ -115,13 +115,15 @@ test('test hooks drive deterministic damage, block, and special behavior', async
   await setCpuEnabled(page, false);
   await movePlayerIntoRange(page);
   await press(page, 'block');
+  const guardReady = await requireMatchState(page);
+  expect(guardReady.player.animation).toBe('block');
+  expect(guardReady.player.frame).toBeGreaterThanOrEqual(1);
   await setCpuEnabled(page, true);
 
   const beforeBlock = await requireMatchState(page);
   const blockedState = await waitForPlayerHealthBelow(page, beforeBlock.player.health, 360);
   expect(blockedState.player.health).toBeLessThan(beforeBlock.player.health);
   expect(blockedState.player.health).toBeGreaterThanOrEqual(beforeBlock.player.health - 6);
-  expect(blockedState.player.animation).toBe('block');
   await release(page, 'block');
   await setCpuEnabled(page, false);
 
@@ -130,13 +132,18 @@ test('test hooks drive deterministic damage, block, and special behavior', async
   await setCpuEnabled(page, false);
   await movePlayerIntoRange(page);
   await forceMeter(page, 'sama', 100);
+  await forceHealth(page, 'amodi', 15);
 
   const beforeSpecial = await requireMatchState(page);
   expect(beforeSpecial.player.meter).toBe(100);
   await press(page, 'special');
   const afterSpecial = await waitForCpuHealthBelow(page, beforeSpecial.cpu.health, 120);
   expect(afterSpecial.cpu.health).toBeLessThan(beforeSpecial.cpu.health);
+  expect(afterSpecial.cpu.health).toBe(0);
+  expect(afterSpecial.phase).toBe('fighting');
+  expect(afterSpecial.player.animation).toBe('special');
   expect(afterSpecial.player.meter).toBeLessThan(beforeSpecial.player.meter);
+  await waitForKnockdownBounce(page, 'cpu', afterSpecial.cpu.y);
 });
 
 test('timeout round-over reaches match-over and rematch resets state', async ({ page }) => {
@@ -298,6 +305,16 @@ async function forceMeter(page: Page, characterId: string, meter: number): Promi
   );
 }
 
+async function forceHealth(page: Page, characterId: string, health: number): Promise<void> {
+  await page.evaluate(
+    ({ key, characterId: nextCharacterId, health: nextHealth }) => {
+      const host = globalThis as unknown as Record<string, SamaAmodiTestHooks | undefined>;
+      host[key]?.forceHealth(nextCharacterId, nextHealth);
+    },
+    { key: TEST_HOOK_KEY, characterId, health },
+  );
+}
+
 async function forceRoundTimeout(page: Page): Promise<void> {
   await page.evaluate((key) => {
     const host = globalThis as unknown as Record<string, SamaAmodiTestHooks | undefined>;
@@ -335,6 +352,20 @@ async function waitForPlayerHealthBelow(page: Page, health: number, maxFrames: n
   }
 
   throw new Error(`Expected player health to drop below ${health}.`);
+}
+
+async function waitForKnockdownBounce(page: Page, slot: 'player' | 'cpu', groundY: number): Promise<TestHookMatchState> {
+  for (let frame = 0; frame < 240; frame += 1) {
+    await waitFrames(page, 1);
+    const state = await requireMatchState(page);
+    const fighter = state[slot];
+
+    if (state.phase === 'roundOver' && fighter.animation === 'knockdown' && fighter.y < groundY - 4) {
+      return state;
+    }
+  }
+
+  throw new Error(`Expected ${slot} to bounce into knockdown before landing.`);
 }
 
 async function waitFrames(page: Page, frames: number): Promise<void> {

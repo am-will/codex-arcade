@@ -69,6 +69,26 @@ describe('fighter combat core', () => {
     expect(afterSpecial.cpu.health).toBe(44);
   });
 
+  it('lets special combos continue after an early zero-health hit', () => {
+    const state = makeCombatState({ playerX: 220, cpuX: 330 });
+    const nearlyDone: CombatState = {
+      ...state,
+      cpu: {
+        ...state.cpu,
+        health: 15,
+      },
+    };
+
+    const afterFirstHit = runFrames(nearlyDone, 9, { player: { special: true } });
+    const afterCombo = runFrames(afterFirstHit, 25);
+    const specialHits = afterCombo.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
+
+    expect(afterFirstHit.cpu.health).toBe(0);
+    expect(afterFirstHit.cpu.isFinished).toBe(false);
+    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
+    expect(afterCombo.player.activeAttack?.kind).toBe('special');
+  });
+
   it('keeps early special combo hits in range before the final launch', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 345 });
 
@@ -212,7 +232,7 @@ describe('fighter combat core', () => {
     const released = runFrames(stillBlocking, 1);
 
     expect(immediateBlock.player.status).toBe('block');
-    expect(immediateBlock.player.animationFrame).toBe(1);
+    expect(immediateBlock.player.animationFrame).toBe(finalBlockFrame);
     expect(blocking.player.status).toBe('block');
     expect(blocking.player.animationFrame).toBe(finalBlockFrame);
     expect(stillBlocking.player.status).toBe('block');

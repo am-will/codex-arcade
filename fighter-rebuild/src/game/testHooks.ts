@@ -55,6 +55,7 @@ export interface SamaAmodiTestHooks {
   setDebugOverlay(enabled: boolean): void;
   forceRoundTimeout(): void;
   forceMeter(characterId: CharacterId, meter: number): void;
+  forceHealth(characterId: CharacterId, health: number): void;
   resetMatch(seed?: number): void;
 }
 
