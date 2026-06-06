@@ -110,6 +110,18 @@ describe('fighter combat core', () => {
     expect(crossed.cpu.facing).toBe('right');
   });
 
+  it('stops grounded walk drift when an attack starts', () => {
+    const state = makeCombatState({ playerX: 120, cpuX: 560 });
+    const moved = runFrames(state, 5, { player: { right: true } });
+    const xBeforeAttack = moved.player.position.x;
+
+    const attacking = runFrames(moved, 5, { player: { light: true } });
+
+    expect(attacking.player.status).toBe('attack');
+    expect(attacking.player.velocity.x).toBe(0);
+    expect(attacking.player.position.x).toBeCloseTo(xBeforeAttack, 3);
+  });
+
   it('is deterministic for the same seed and input transcript', () => {
     const transcript: readonly FighterInput[] = [
       { right: true },

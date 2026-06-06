@@ -224,9 +224,10 @@ export function advanceFighterForFrame(
   }
 
   if (fighter.activeAttack) {
+    const attackingFighter = stopGroundedDrift(fighter);
     return advancePhysics(
       {
-        ...fighter,
+        ...attackingFighter,
         status: 'attack',
       },
       stage,
@@ -237,13 +238,14 @@ export function advanceFighterForFrame(
   const attackKind = chooseAttackKind(input);
 
   if (attackKind) {
+    const attackingFighter = stopGroundedDrift(fighter);
     return advancePhysics(
       {
-        ...fighter,
+        ...attackingFighter,
         status: 'attack',
         animationFrame: 0,
         animationTick: 0,
-        activeAttack: createActiveAttack(attackKind, fighter.character),
+        activeAttack: createActiveAttack(attackKind, attackingFighter.character),
       },
       stage,
       deltaSeconds,
@@ -287,6 +289,20 @@ export function advanceFighterForFrame(
   }
 
   return advanceMobileFighter(fighter, input, stage, deltaSeconds);
+}
+
+function stopGroundedDrift(fighter: FighterState): FighterState {
+  if (!fighter.isGrounded || fighter.velocity.x === 0) {
+    return fighter;
+  }
+
+  return {
+    ...fighter,
+    velocity: {
+      ...fighter.velocity,
+      x: 0,
+    },
+  };
 }
 
 export function finalizeFighterFrame(fighter: FighterState): FighterState {
