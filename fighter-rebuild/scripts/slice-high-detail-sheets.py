@@ -316,31 +316,35 @@ def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str], animat
 
 
 def add_block_shield(pose: Image.Image, frame_index: int) -> Image.Image:
-    frame = pose.copy()
+    frame = remove_old_guard_effects(pose)
     shield = Image.new("RGBA", (FRAME_SIZE, FRAME_SIZE), (255, 255, 255, 0))
     draw = ImageDraw.Draw(shield, "RGBA")
-    pulse = 18 if frame_index % 2 else 0
-    body = [(194, 72), (246, 98), (258, 154), (235, 226), (194, 248), (154, 224), (142, 154), (154, 100)]
+    pulse = 12 if frame_index % 2 else 0
+    body = [(204, 34), (264, 78), (278, 160), (248, 272), (196, 296), (146, 260), (128, 162), (148, 78)]
 
-    draw.polygon(body, fill=(57, 224, 245, 44 + pulse // 2))
-    draw.line(body + [body[0]], fill=(210, 253, 255, 210), width=4)
-    draw.line([(194, 78), (235, 106), (246, 154), (224, 212), (194, 238)], fill=(92, 246, 255, 150), width=3)
-    draw.line([(194, 78), (164, 108), (154, 154), (166, 214), (194, 238)], fill=(111, 181, 255, 118), width=2)
-    draw.arc((136, 68, 270, 252), 252, 74, fill=(91, 245, 255, 152), width=3)
-    draw.arc((150, 88, 256, 232), 252, 74, fill=(255, 255, 255, 118), width=2)
-    draw.line([(176, 118), (238, 188)], fill=(255, 255, 255, 72), width=2)
-    draw.line([(168, 162), (232, 106)], fill=(91, 245, 255, 74), width=2)
-
-    for x, y, size, alpha in (
-        (178, 92, 5, 210),
-        (236, 126, 4, 175),
-        (154, 178, 4, 160),
-        (218, 228, 5, 190),
-        (248, 160, 3, 150),
-    ):
-        draw.rectangle((x, y, x + size, y + size), fill=(235, 255, 255, alpha))
+    draw.polygon(body, fill=(55, 224, 245, 74 + pulse))
+    draw.line(body + [body[0]], fill=(218, 255, 255, 228), width=5)
 
     frame.alpha_composite(shield)
+    return frame
+
+
+def remove_old_guard_effects(pose: Image.Image) -> Image.Image:
+    frame = pose.copy()
+    pixels = frame.load()
+
+    for y in range(42, 292):
+        for x in range(128, 282):
+            r, g, b, a = pixels[x, y]
+            if a == 0:
+                continue
+
+            in_forward_guard_zone = x >= 212 or (x >= 198 and y >= 112)
+            orange_arc = in_forward_guard_zone and r > 170 and g > 80 and b < 245 and r >= g - 8 and r > b + 6
+            cyan_arc = in_forward_guard_zone and g > 170 and b > 170 and r < 150
+            if orange_arc or cyan_arc:
+                pixels[x, y] = (255, 255, 255, 0)
+
     return frame
 
 
