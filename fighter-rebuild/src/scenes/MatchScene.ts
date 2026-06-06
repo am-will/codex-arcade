@@ -36,6 +36,7 @@ import type {
   AssetManifestAnimation,
   CharacterDefinition,
   GameConfig,
+  InputBindingConfig,
   MatchConfig,
   StageDefinition,
 } from '../game/types';
@@ -141,17 +142,7 @@ export class MatchScene extends BaseScene {
       stageId: sourceStage.id,
     };
     this.stageDefinition = createRuntimeStage(sourceStage, this.scale.width, this.scale.height);
-    this.inputByCode = {
-      [config.input.left]: 'left',
-      [config.input.right]: 'right',
-      [config.input.jump]: 'jump',
-      [config.input.crouch]: 'crouch',
-      [config.input.block]: 'block',
-      [config.input.light]: 'light',
-      [config.input.heavy]: 'heavy',
-      [config.input.special]: 'special',
-      [config.input.pause]: 'pause',
-    };
+    this.inputByCode = createInputCodeMap(config.input);
     this.cpuEnabled = config.settings.cpuDifficulty !== 'easy' || true;
     this.debugOverlay = config.settings.debugEnabled;
     this.cpuController = createCpuController({
@@ -689,10 +680,11 @@ export class MatchScene extends BaseScene {
     this.createHoldButton(40, y, 58, 38, 'Left', 'left');
     this.createHoldButton(106, y, 58, 38, 'Right', 'right');
     this.createHoldButton(172, y, 58, 38, 'Jump', 'jump');
-    this.createHoldButton(238, y, 58, 38, 'Guard', 'block');
-    this.createActionButton(390, y, 110, 38, ATTACK_LABELS.light, 'light');
-    this.createActionButton(518, y, 110, 38, ATTACK_LABELS.heavy, 'heavy');
-    this.createActionButton(660, y, 132, 38, ATTACK_LABELS.special, 'special');
+    this.createHoldButton(238, y, 58, 38, 'Duck', 'crouch');
+    this.createHoldButton(304, y, 58, 38, 'Guard', 'block');
+    this.createActionButton(430, y, 110, 38, ATTACK_LABELS.light, 'light');
+    this.createActionButton(558, y, 110, 38, ATTACK_LABELS.heavy, 'heavy');
+    this.createActionButton(700, y, 132, 38, ATTACK_LABELS.special, 'special');
   }
 
   private createHoldButton(
@@ -1005,6 +997,33 @@ function createRuntimeStage(source: StageDefinition, canvasWidth: number, canvas
     floorY: canvasHeight - 105,
     playerSpawnX: Phaser.Math.Clamp(source.playerSpawnX * xScale, FIGHTER_FRAME_WIDTH / 2, width - FIGHTER_FRAME_WIDTH / 2),
     cpuSpawnX: Phaser.Math.Clamp(source.cpuSpawnX * xScale, FIGHTER_FRAME_WIDTH / 2, width - FIGHTER_FRAME_WIDTH / 2),
+  };
+}
+
+function createInputCodeMap(input: InputBindingConfig): Partial<Record<string, TestHookInputAction>> {
+  return {
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+    ArrowUp: 'jump',
+    ArrowDown: 'crouch',
+    Space: 'jump',
+    KeyA: 'left',
+    KeyD: 'right',
+    KeyW: 'jump',
+    KeyS: 'crouch',
+    KeyE: 'block',
+    KeyJ: 'light',
+    KeyK: 'heavy',
+    KeyL: 'special',
+    [input.left]: 'left',
+    [input.right]: 'right',
+    [input.jump]: 'jump',
+    [input.crouch]: 'crouch',
+    [input.block]: 'block',
+    [input.light]: 'light',
+    [input.heavy]: 'heavy',
+    [input.special]: 'special',
+    [input.pause]: 'pause',
   };
 }
 

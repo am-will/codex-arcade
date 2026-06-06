@@ -47,6 +47,7 @@ export const REQUIRED_ANIMATIONS = [
   'idle',
   'walk',
   'jump',
+  'crouch',
   'block',
   'light',
   'heavy',
@@ -71,14 +72,14 @@ const DEFAULT_TUNING: FighterTuning = {
 };
 
 const DEFAULT_INPUT: InputBindingConfig = {
-  left: 'ArrowLeft',
-  right: 'ArrowRight',
-  jump: 'ArrowUp',
-  crouch: 'ArrowDown',
-  block: 'ShiftLeft',
-  light: 'KeyZ',
-  heavy: 'KeyX',
-  special: 'KeyC',
+  left: 'KeyA',
+  right: 'KeyD',
+  jump: 'KeyW',
+  crouch: 'KeyS',
+  block: 'KeyE',
+  light: 'KeyJ',
+  heavy: 'KeyK',
+  special: 'KeyL',
   pause: 'Enter',
 };
 

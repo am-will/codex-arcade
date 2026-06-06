@@ -83,7 +83,7 @@ describe('game config loading and normalization', () => {
     expect(config.tuning['sama-balanced']?.gravity).toBeGreaterThan(0);
     expect(config.tuning['sama-balanced']?.pushboxWidth).toBeGreaterThan(90);
     expect(config.match.stageId).toBe('byte-boardroom');
-    expect(config.input.light).toBe('KeyZ');
+    expect(config.input.light).toBe('KeyJ');
     expect(config.settings.roundsToWin).toBe(2);
   });
 

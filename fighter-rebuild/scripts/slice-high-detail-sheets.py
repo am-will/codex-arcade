@@ -67,6 +67,7 @@ ANIMATIONS = [
     {"name": "idle", "frames": ["idle", "idle", "idle", "idle"], "fps": 5, "loop": True},
     {"name": "walk", "frames": ["walk1", "walk2", "walk1", "idle", "walk2", "idle"], "fps": 8, "loop": True},
     {"name": "jump", "frames": ["idle", "jump", "jump", "idle"], "fps": 8, "loop": False},
+    {"name": "crouch", "frames": ["crouch", "crouch", "crouch", "crouch"], "fps": 8, "loop": False},
     {"name": "block", "frames": ["idle", "block", "block"], "fps": 8, "loop": False},
     {"name": "light", "frames": ["idle", "light", "light", "idle"], "fps": 12, "loop": False},
     {"name": "heavy", "frames": ["idle", "heavy", "heavy", "heavy", "idle"], "fps": 10, "loop": False},
@@ -240,11 +241,28 @@ def expand_bbox(bbox: tuple[int, int, int, int], size: tuple[int, int], pad: int
 
 
 def build_strip(cells: list[Image.Image], pose_names: Iterable[str]) -> Image.Image:
-    poses = [cells[POSE_INDEX[name]] for name in pose_names]
+    poses = [build_crouch_pose(cells[POSE_INDEX["idle"]]) if name == "crouch" else cells[POSE_INDEX[name]] for name in pose_names]
     strip = Image.new("RGBA", (FRAME_SIZE * len(poses), FRAME_SIZE), (255, 255, 255, 0))
     for index, pose in enumerate(poses):
         strip.alpha_composite(pose, (index * FRAME_SIZE, 0))
     return strip
+
+
+def build_crouch_pose(idle: Image.Image) -> Image.Image:
+    alpha = idle.getchannel("A")
+    bbox = alpha.getbbox()
+    if bbox is None:
+        return Image.new("RGBA", (FRAME_SIZE, FRAME_SIZE), (255, 255, 255, 0))
+
+    figure = idle.crop(expand_bbox(bbox, idle.size, 4))
+    target_width = min(FRAME_SIZE - 12, round(figure.width * 1.08))
+    target_height = min(FRAME_SIZE - 18, round(figure.height * 0.74))
+    crouch = figure.resize((target_width, target_height), Image.Resampling.LANCZOS)
+    frame = Image.new("RGBA", (FRAME_SIZE, FRAME_SIZE), (255, 255, 255, 0))
+    x = (FRAME_SIZE - target_width) // 2
+    y = FRAME_SIZE - target_height - 10
+    frame.alpha_composite(crouch, (x, y))
+    return frame
 
 
 def build_portrait(idle: Image.Image) -> Image.Image:

@@ -13,7 +13,7 @@ import {
   createFighterState,
 } from '../game/fighter';
 import type { AttackKind, FighterInput, FighterState } from '../game/fighter';
-import type { AssetManifestAnimation, CharacterDefinition, GameConfig, Rect, StageDefinition } from '../game/types';
+import type { AssetManifestAnimation, CharacterDefinition, GameConfig, InputBindingConfig, Rect, StageDefinition } from '../game/types';
 import {
   type DebugPanelMount,
   type FighterPlaygroundOverlayKey,
@@ -132,16 +132,7 @@ export class FighterPlaygroundScene extends BaseScene {
 
     this.gameConfig = config;
     this.stageDefinition = stage;
-    this.inputByCode = {
-      [config.input.left]: 'left',
-      [config.input.right]: 'right',
-      [config.input.jump]: 'jump',
-      [config.input.crouch]: 'crouch',
-      [config.input.block]: 'block',
-      [config.input.light]: 'light',
-      [config.input.heavy]: 'heavy',
-      [config.input.special]: 'special',
-    };
+    this.inputByCode = createInputCodeMap(config.input);
 
     this.combatState = createCombatState({
       seed: config.settings.seed,
@@ -264,10 +255,11 @@ export class FighterPlaygroundScene extends BaseScene {
     this.createHoldButton(40, y, 58, 42, 'Left', 'left');
     this.createHoldButton(106, y, 58, 42, 'Right', 'right');
     this.createHoldButton(172, y, 58, 42, 'Jump', 'jump');
-    this.createHoldButton(238, y, 58, 42, 'Guard', 'block');
-    this.createActionButton(392, y, 112, 42, ATTACK_LABELS.light, 'light');
-    this.createActionButton(520, y, 112, 42, ATTACK_LABELS.heavy, 'heavy');
-    this.createActionButton(662, y, 128, 42, ATTACK_LABELS.special, 'special');
+    this.createHoldButton(238, y, 58, 42, 'Duck', 'crouch');
+    this.createHoldButton(304, y, 58, 42, 'Guard', 'block');
+    this.createActionButton(430, y, 112, 42, ATTACK_LABELS.light, 'light');
+    this.createActionButton(558, y, 112, 42, ATTACK_LABELS.heavy, 'heavy');
+    this.createActionButton(700, y, 128, 42, ATTACK_LABELS.special, 'special');
     this.createActionButton(818, y, 96, 42, 'Reset Dummy', 'reset');
   }
 
@@ -638,7 +630,7 @@ export class FighterPlaygroundScene extends BaseScene {
       [
         `Player ${player.health}/${player.tuning.maxHealth} HP  ${player.meter}/${player.tuning.meterMax} meter  ${player.status}`,
         `Dummy  ${dummy.health}/${dummy.tuning.maxHealth} HP  ${dummy.meter}/${dummy.tuning.meterMax} meter  ${dummy.status}${this.state.dummyGuard ? ' guarding' : ''}`,
-        `Keys: arrows move, Shift guard, Z ${ATTACK_LABELS.light}, X ${ATTACK_LABELS.heavy}, C ${ATTACK_LABELS.special}, Esc menu`,
+        `Keys: A/D move, W or Space jump, S duck, E guard, J/K/L attacks, Esc menu`,
       ].join('\n'),
     );
     this.tuningText?.setText(
@@ -843,6 +835,32 @@ function fighterSnapshot(fighter: FighterState): {
     frame: fighter.animationFrame,
     x: Math.round(fighter.position.x * 100) / 100,
     y: Math.round(fighter.position.y * 100) / 100,
+  };
+}
+
+function createInputCodeMap(input: InputBindingConfig): Partial<Record<string, keyof FighterInput>> {
+  return {
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+    ArrowUp: 'jump',
+    ArrowDown: 'crouch',
+    Space: 'jump',
+    KeyA: 'left',
+    KeyD: 'right',
+    KeyW: 'jump',
+    KeyS: 'crouch',
+    KeyE: 'block',
+    KeyJ: 'light',
+    KeyK: 'heavy',
+    KeyL: 'special',
+    [input.left]: 'left',
+    [input.right]: 'right',
+    [input.jump]: 'jump',
+    [input.crouch]: 'crouch',
+    [input.block]: 'block',
+    [input.light]: 'light',
+    [input.heavy]: 'heavy',
+    [input.special]: 'special',
   };
 }
 

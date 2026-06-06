@@ -16,6 +16,7 @@ export type AnimationName =
   | 'idle'
   | 'walk'
   | 'jump'
+  | 'crouch'
   | 'block'
   | 'light'
   | 'heavy'

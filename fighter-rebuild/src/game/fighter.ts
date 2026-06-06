@@ -7,7 +7,7 @@ export const FIGHTER_FRAME_HEIGHT = 320;
 export type FighterSlot = 'player' | 'cpu';
 export type Facing = 'left' | 'right';
 export type AttackKind = 'light' | 'heavy' | 'special';
-export type FighterStatus = 'idle' | 'walk' | 'jump' | 'block' | 'attack' | 'hitstun' | 'blockstun' | 'knockdown';
+export type FighterStatus = 'idle' | 'walk' | 'jump' | 'crouch' | 'block' | 'attack' | 'hitstun' | 'blockstun' | 'knockdown';
 
 export interface FighterInput {
   readonly left?: boolean;
@@ -135,6 +135,10 @@ export function fighterAnimationName(fighter: FighterState): string {
     return 'block';
   }
 
+  if (fighter.status === 'crouch') {
+    return 'crouch';
+  }
+
   if (fighter.status === 'knockdown') {
     return 'knockdown';
   }
@@ -258,6 +262,24 @@ export function advanceFighterForFrame(
         deltaSeconds,
       ),
       'block',
+      fighter.status,
+    );
+  }
+
+  if (input.crouch && fighter.isGrounded) {
+    return applyStatus(
+      advancePhysics(
+        {
+          ...fighter,
+          velocity: {
+            x: fighter.velocity.x * fighter.tuning.groundFriction,
+            y: fighter.velocity.y,
+          },
+        },
+        stage,
+        deltaSeconds,
+      ),
+      'crouch',
       fighter.status,
     );
   }
@@ -460,6 +482,7 @@ function animationFrameInterval(animationName: string): number {
     case 'walk':
       return 8;
     case 'jump':
+    case 'crouch':
     case 'block':
     case 'knockdown':
       return 8;

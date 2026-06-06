@@ -53,6 +53,18 @@
           "loop": false
         },
         {
+          "name": "crouch",
+          "key": "sama-crouch",
+          "path": "/assets/characters/sama/crouch.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
           "name": "block",
           "key": "sama-block",
           "path": "/assets/characters/sama/block.png",
@@ -154,6 +166,18 @@
           "name": "jump",
           "key": "amodi-jump",
           "path": "/assets/characters/amodi/jump.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "crouch",
+          "key": "amodi-crouch",
+          "path": "/assets/characters/amodi/crouch.png",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
