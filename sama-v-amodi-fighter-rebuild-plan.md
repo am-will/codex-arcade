@@ -74,9 +74,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/scenes/CharacterGymScene.ts`, `fighter-rebuild/src/shell/debugPanel.ts`
 - **description**: Add Character Gym for animation/frame-box preview, frame stepping, bounds overlays, and JSON export text. Keep editing UI keyboard-safe.
 - **validation**: Browser can navigate to the gym in dev; toggles show visual/collision/hurt/attack/guard boxes from config.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a dev Character Gym scene with fighter/animation selection, play/pause, frame stepping, native 320x320 sprite preview, visual/collision/hurt/attack/guard overlays sourced from character config and attack windows, readonly JSON export text, and keyboard-safe DOM controls. Added debug-panel navigation to the gym and minimal scene registry wiring. Validation passed: `npm run typecheck`, `npm run build`, and Browser verification at `http://127.0.0.1:5173/` confirmed gym navigation, checked overlay toggles, special-combo attack export, block guard export, and textarea-focused ArrowRight does not step frames.
+- **files edited/created**: `fighter-rebuild/src/scenes/CharacterGymScene.ts`, `fighter-rebuild/src/shell/debugPanel.ts`, `fighter-rebuild/src/main.ts`, `fighter-rebuild/src/scenes/sceneKeys.ts`, `fighter-rebuild/src/scenes/sceneRegistry.ts`, `fighter-rebuild/src/scenes/sceneKeys.test.ts`
 
 ### T6: Menu Flow for 1vCPU Only
 - **depends_on**: [T3, T4]

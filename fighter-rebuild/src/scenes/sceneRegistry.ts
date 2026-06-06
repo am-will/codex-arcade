@@ -1,4 +1,5 @@
 import { BootScene } from './BootScene';
+import { CharacterGymScene } from './CharacterGymScene';
 import { CharacterSelectScene } from './CharacterSelectScene';
 import { MainMenuScene } from './MainMenuScene';
 import { PlaceholderScene } from './PlaceholderScene';
@@ -11,5 +12,6 @@ export const SCENE_REGISTRY = [
   StageSelectScene,
   CharacterSelectScene,
   SettingsScene,
+  CharacterGymScene,
   PlaceholderScene,
 ];

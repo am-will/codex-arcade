@@ -9,6 +9,7 @@ describe('scene key scaffold', () => {
       'StageSelect',
       'CharacterSelect',
       'Settings',
+      'CharacterGym',
       'Placeholder',
     ]);
   });

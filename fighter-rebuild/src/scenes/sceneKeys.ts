@@ -4,6 +4,7 @@ export const SceneKey = {
   StageSelect: 'StageSelect',
   CharacterSelect: 'CharacterSelect',
   Settings: 'Settings',
+  CharacterGym: 'CharacterGym',
   Placeholder: 'Placeholder',
 } as const;
 
