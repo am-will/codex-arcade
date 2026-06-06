@@ -92,9 +92,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/game/fighter.ts`, `fighter-rebuild/src/game/combat.ts`, `fighter-rebuild/src/game/combat.test.ts`
 - **description**: Implement deterministic fighter state machine, fixed simulation timestep helpers, seedable RNG, movement, gravity, facing, per-frame attack-vs-hurt overlap, independent guard-box blocking, damage/block damage, hitstun, knockback, meter gain, multi-hit special windows, and finisher behavior. Combat/CPU must not call `Math.random()` directly.
 - **validation**: Unit tests prove hits, whiffs, blocked hits, meter gain, multi-hit specials, finisher launch behavior, and same seed/input transcript produces the same result.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a pure TypeScript fighter actor and deterministic combat core with 60 Hz fixed-step helpers, seeded LCG RNG, bottom-center world anchors for 320x320 frame-space boxes, movement/gravity/jump/facing, frame-indexed attack-vs-hurt resolution, independent guard-box blocking, damage/block damage, hitstun/blockstun, knockback, meter gain, multi-hit special windows, and finisher knockdown launch behavior. TDD RED captured missing combat module, then GREEN passed `npm run test -- combat`. Validation also passed `npm run build`; `npm run typecheck` is currently blocked by unrelated `src/scenes/SettingsScene.ts` errors outside T7 ownership.
+- **files edited/created**: `fighter-rebuild/src/game/fighter.ts`, `fighter-rebuild/src/game/combat.ts`, `fighter-rebuild/src/game/combat.test.ts`
 
 ### T7a: Fighter Playground
 - **depends_on**: [T5, T7]
