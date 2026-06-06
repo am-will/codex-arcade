@@ -16,7 +16,7 @@ export class MainMenuScene extends BaseScene {
     const stage = config.stagesById[data?.stageId ?? config.settings.defaultStageId] ?? config.stages[0];
     const characters = config.characters.slice(0, 2);
     this.drawBackdrop(stage);
-    this.addTitle('Sama v Amodi', 'Play vs CPU');
+    this.addTitle('MortalCodex', 'Play vs CPU', 'brand');
 
     this.add
       .text(52, 126, 'Pick a fighter, the CPU takes the other side.', {

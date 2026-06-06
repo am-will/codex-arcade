@@ -3,6 +3,7 @@ import { loadGameConfig } from '../game/config';
 import type { CharacterId, GameConfig, MatchConfig, StageDefinition, StageId } from '../game/types';
 
 type ButtonTheme = 'primary' | 'secondary';
+type TitleVariant = 'standard' | 'brand';
 
 type MenuDebugState = {
   readonly scene: string;
@@ -122,7 +123,42 @@ export abstract class BaseScene extends Phaser.Scene {
     }
   }
 
-  protected addTitle(title: string, subtitle?: string): void {
+  protected addTitle(title: string, subtitle?: string, variant: TitleVariant = 'standard'): void {
+    if (variant === 'brand') {
+      this.add
+        .text(46, 38, title, {
+          color: '#f0b340',
+          fontFamily: 'Copperplate, "Copperplate Gothic Bold", Georgia, Times, serif',
+          fontSize: '58px',
+          fontStyle: 'bold',
+          stroke: '#050101',
+          strokeThickness: 9,
+        })
+        .setOrigin(0, 0.5);
+      this.add
+        .text(48, 34, title, {
+          color: '#b91618',
+          fontFamily: 'Copperplate, "Copperplate Gothic Bold", Georgia, Times, serif',
+          fontSize: '58px',
+          fontStyle: 'bold',
+          stroke: '#2a0707',
+          strokeThickness: 4,
+        })
+        .setOrigin(0, 0.5);
+      this.add.rectangle(50, 70, 362, 4, 0xf0b340, 0.82).setOrigin(0, 0.5);
+
+      if (subtitle) {
+        this.add
+          .text(51, 88, subtitle, {
+            color: '#96e1d4',
+            fontFamily: 'monospace',
+            fontSize: '16px',
+          })
+          .setOrigin(0, 0.5);
+      }
+      return;
+    }
+
     this.add
       .text(48, 34, title, {
         color: '#fff4d6',

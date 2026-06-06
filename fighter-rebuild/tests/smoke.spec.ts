@@ -32,7 +32,7 @@ type CanvasMetrics = {
 
 test('renders readable desktop/mobile canvas and launches Match through the Play vs CPU menu flow', async ({ page }, testInfo) => {
   await page.goto('/');
-  await expect(page).toHaveTitle('Sama v Amodi');
+  await expect(page).toHaveTitle('MortalCodex');
 
   const canvas = page.locator('canvas');
   await expect(canvas).toBeVisible();
