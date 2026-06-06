@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "stages": [
+    {
+      "id": "byte-boardroom",
+      "assetId": "byte-boardroom",
+      "displayName": "Byte Boardroom",
+      "width": 640,
+      "height": 360,
+      "floorY": 220,
+      "playerSpawnX": 220,
+      "cpuSpawnX": 420,
+      "layers": [
+        {
+          "id": "skyline",
+          "assetKey": "stage-byte-boardroom-skyline",
+          "parallax": 0.25
+        },
+        {
+          "id": "midground",
+          "assetKey": "stage-byte-boardroom-midground",
+          "parallax": 0.55
+        },
+        {
+          "id": "floor",
+          "assetKey": "stage-byte-boardroom-floor",
+          "parallax": 1
+        }
+      ]
+    }
+  ]
+}

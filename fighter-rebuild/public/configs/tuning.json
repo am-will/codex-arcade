@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "defaults": {
+    "maxHealth": 100,
+    "walkSpeed": 128,
+    "jumpVelocity": 330,
+    "gravity": 820,
+    "groundFriction": 0.82,
+    "airControl": 0.45,
+    "meterMax": 100,
+    "meterStart": 0,
+    "pushboxWidth": 100,
+    "pushboxHeight": 160
+  },
+  "fighters": [
+    {
+      "id": "sama-balanced",
+      "maxHealth": 100,
+      "walkSpeed": 134,
+      "jumpVelocity": 332,
+      "gravity": 820,
+      "groundFriction": 0.84,
+      "airControl": 0.48,
+      "meterMax": 100,
+      "meterStart": 0,
+      "pushboxWidth": 98,
+      "pushboxHeight": 158
+    },
+    {
+      "id": "amodi-balanced",
+      "maxHealth": 104,
+      "walkSpeed": 122,
+      "jumpVelocity": 318,
+      "gravity": 800,
+      "groundFriction": 0.8,
+      "airControl": 0.42,
+      "meterMax": 100,
+      "meterStart": 0,
+      "pushboxWidth": 108,
+      "pushboxHeight": 164
+    }
+  ]
+}

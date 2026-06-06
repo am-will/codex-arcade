@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "defaultStageId": "byte-boardroom",
+  "defaultPlayerId": "sama",
+  "defaultCpuId": "amodi",
+  "roundsToWin": 2,
+  "roundTimeSeconds": 60,
+  "cpuDifficulty": "normal",
+  "seed": 6102026,
+  "debugEnabled": true
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "keyboard": {
+    "left": "ArrowLeft",
+    "right": "ArrowRight",
+    "jump": "ArrowUp",
+    "crouch": "ArrowDown",
+    "block": "ShiftLeft",
+    "light": "KeyZ",
+    "heavy": "KeyX",
+    "special": "KeyC",
+    "pause": "Enter"
+  }
+}
