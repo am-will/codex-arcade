@@ -122,6 +122,23 @@ describe('fighter combat core', () => {
     expect(attacking.player.position.x).toBeCloseTo(xBeforeAttack, 3);
   });
 
+  it('holds the final block stance while guard input remains pressed', () => {
+    const state = makeCombatState({ playerX: 220, cpuX: 560 });
+    const blockFrames = state.player.character.frameBoxes.block ?? [];
+    const finalBlockFrame = blockFrames.length - 1;
+
+    const blocking = runFrames(state, 30, { player: { block: true } });
+    const stillBlocking = runFrames(blocking, 16, { player: { block: true } });
+    const released = runFrames(stillBlocking, 1);
+
+    expect(blocking.player.status).toBe('block');
+    expect(blocking.player.animationFrame).toBe(finalBlockFrame);
+    expect(stillBlocking.player.status).toBe('block');
+    expect(stillBlocking.player.animationFrame).toBe(finalBlockFrame);
+    expect(released.player.status).toBe('idle');
+    expect(released.player.animationFrame).toBe(0);
+  });
+
   it('is deterministic for the same seed and input transcript', () => {
     const transcript: readonly FighterInput[] = [
       { right: true },

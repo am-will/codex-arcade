@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +103,7 @@ def main() -> None:
 
         animations = []
         for animation in ANIMATIONS:
-            strip = build_strip(cells, animation["frames"])
+            strip = build_strip(cells, animation["frames"], animation["name"])
             path = fighter_dir / f"{animation['name']}.png"
             strip.save(path)
             animations.append(
@@ -306,12 +306,42 @@ def expand_bbox(bbox: tuple[int, int, int, int], size: tuple[int, int], pad: int
     return (max(0, left - pad), max(0, top - pad), min(width, right + pad), min(height, bottom + pad))
 
 
-def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str]) -> Image.Image:
+def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str], animation_name: str) -> Image.Image:
     poses = [cells[name] if name in cells else build_crouch_pose(cells["idle"]) for name in pose_names]
     strip = Image.new("RGBA", (FRAME_SIZE * len(poses), FRAME_SIZE), (255, 255, 255, 0))
     for index, pose in enumerate(poses):
-        strip.alpha_composite(pose, (index * FRAME_SIZE, 0))
+        frame = add_block_shield(pose, index) if animation_name == "block" and index > 0 else pose
+        strip.alpha_composite(frame, (index * FRAME_SIZE, 0))
     return strip
+
+
+def add_block_shield(pose: Image.Image, frame_index: int) -> Image.Image:
+    frame = pose.copy()
+    shield = Image.new("RGBA", (FRAME_SIZE, FRAME_SIZE), (255, 255, 255, 0))
+    draw = ImageDraw.Draw(shield, "RGBA")
+    pulse = 18 if frame_index % 2 else 0
+    body = [(194, 72), (246, 98), (258, 154), (235, 226), (194, 248), (154, 224), (142, 154), (154, 100)]
+
+    draw.polygon(body, fill=(57, 224, 245, 44 + pulse // 2))
+    draw.line(body + [body[0]], fill=(210, 253, 255, 210), width=4)
+    draw.line([(194, 78), (235, 106), (246, 154), (224, 212), (194, 238)], fill=(92, 246, 255, 150), width=3)
+    draw.line([(194, 78), (164, 108), (154, 154), (166, 214), (194, 238)], fill=(111, 181, 255, 118), width=2)
+    draw.arc((136, 68, 270, 252), 252, 74, fill=(91, 245, 255, 152), width=3)
+    draw.arc((150, 88, 256, 232), 252, 74, fill=(255, 255, 255, 118), width=2)
+    draw.line([(176, 118), (238, 188)], fill=(255, 255, 255, 72), width=2)
+    draw.line([(168, 162), (232, 106)], fill=(91, 245, 255, 74), width=2)
+
+    for x, y, size, alpha in (
+        (178, 92, 5, 210),
+        (236, 126, 4, 175),
+        (154, 178, 4, 160),
+        (218, 228, 5, 190),
+        (248, 160, 3, 150),
+    ):
+        draw.rectangle((x, y, x + size, y + size), fill=(235, 255, 255, alpha))
+
+    frame.alpha_composite(shield)
+    return frame
 
 
 def build_crouch_pose(idle: Image.Image) -> Image.Image:

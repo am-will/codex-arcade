@@ -479,11 +479,16 @@ function advancePhysics(
 }
 
 function nextAnimationFrame(fighter: FighterState): number {
-  const boxes = fighter.character.frameBoxes[fighterAnimationName(fighter)] ?? fighter.character.frameBoxes.idle;
+  const animationName = fighterAnimationName(fighter);
+  const boxes = fighter.character.frameBoxes[animationName] ?? fighter.character.frameBoxes.idle;
   const frameCount = Math.max(boxes?.length ?? 1, 1);
 
   if (fighter.activeAttack) {
     return Math.min(fighter.activeAttack.actionFrame, frameCount - 1);
+  }
+
+  if (animationName === 'block') {
+    return Math.min(fighter.animationFrame + 1, frameCount - 1);
   }
 
   return (fighter.animationFrame + 1) % frameCount;
