@@ -35,13 +35,25 @@ FIGHTERS = [
     FighterSource(
         fighter_id="sama",
         display_name="Sama",
-        source_name="sama-high-detail-sheet.png",
+        source_name="sama-high-detail-sheet-v2.png",
         portrait_key="sama-portrait",
         visual_cue="dark hair, navy bomber jacket, white shirt, orange tech-energy accents",
-        columns=5,
-        rows=2,
-        poses=("idle", "walk1", "walk2", "jump", "block", "light", "heavy", "special_charge", "special_finisher", "knockdown"),
-        legacy_row_bounds=True,
+        columns=4,
+        rows=3,
+        poses=(
+            "idle",
+            "walk1",
+            "walk2",
+            "crouch",
+            "jump",
+            "block",
+            "light",
+            "heavy",
+            "special_charge",
+            "special_finisher",
+            "knockdown",
+            "recovery",
+        ),
     ),
     FighterSource(
         fighter_id="amodi",
@@ -103,7 +115,7 @@ def main() -> None:
 
         animations = []
         for animation in ANIMATIONS:
-            strip = build_strip(cells, animation["frames"], animation["name"])
+            strip = build_strip(cells, animation["frames"], animation["name"], fighter.fighter_id)
             path = fighter_dir / f"{animation['name']}.png"
             strip.save(path)
             animations.append(
@@ -306,13 +318,22 @@ def expand_bbox(bbox: tuple[int, int, int, int], size: tuple[int, int], pad: int
     return (max(0, left - pad), max(0, top - pad), min(width, right + pad), min(height, bottom + pad))
 
 
-def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str], animation_name: str) -> Image.Image:
+def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str], animation_name: str, fighter_id: str) -> Image.Image:
     poses = [cells[name] if name in cells else build_crouch_pose(cells["idle"]) for name in pose_names]
     strip = Image.new("RGBA", (FRAME_SIZE * len(poses), FRAME_SIZE), (255, 255, 255, 0))
     for index, pose in enumerate(poses):
         frame = add_block_shield(pose, index) if animation_name == "block" and index > 0 else pose
+        frame = remove_small_components(frame.copy(), min_area=1200)
+        if fighter_id == "sama":
+            frame = shift_frame(frame, y_offset=-7)
         strip.alpha_composite(frame, (index * FRAME_SIZE, 0))
     return strip
+
+
+def shift_frame(image: Image.Image, x_offset: int = 0, y_offset: int = 0) -> Image.Image:
+    shifted = Image.new("RGBA", (FRAME_SIZE, FRAME_SIZE), (255, 255, 255, 0))
+    shifted.alpha_composite(image, (x_offset, y_offset))
+    return shifted
 
 
 def add_block_shield(pose: Image.Image, frame_index: int) -> Image.Image:

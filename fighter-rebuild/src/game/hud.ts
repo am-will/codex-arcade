@@ -88,6 +88,8 @@ export class MatchHud {
     this.cpuPortrait.setTexture(state.cpuPortraitKey);
     this.playerPortrait.setDisplaySize(MatchHud.PortraitSize, MatchHud.PortraitSize);
     this.cpuPortrait.setDisplaySize(MatchHud.PortraitSize, MatchHud.PortraitSize);
+    this.playerPortrait.setFlipX(false);
+    this.cpuPortrait.setFlipX(true);
     this.timerText.setText(String(Math.max(0, Math.ceil(state.timerSeconds))).padStart(2, '0'));
     this.drawBars(state);
     this.debugText
