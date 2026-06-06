@@ -583,10 +583,12 @@ function applyStatus(fighter: FighterState, nextStatus: FighterStatus, previousS
     };
   }
 
+  const animationFrame = nextStatus === 'block' || nextStatus === 'blockstun' ? 1 : 0;
+
   return {
     ...fighter,
     status: nextStatus,
-    animationFrame: 0,
+    animationFrame,
     animationTick: 0,
   };
 }

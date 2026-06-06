@@ -193,10 +193,13 @@ describe('fighter combat core', () => {
     const blockFrames = state.player.character.frameBoxes.block ?? [];
     const finalBlockFrame = blockFrames.length - 1;
 
-    const blocking = runFrames(state, 30, { player: { block: true } });
+    const immediateBlock = runFrames(state, 1, { player: { block: true } });
+    const blocking = runFrames(immediateBlock, 29, { player: { block: true } });
     const stillBlocking = runFrames(blocking, 16, { player: { block: true } });
     const released = runFrames(stillBlocking, 1);
 
+    expect(immediateBlock.player.status).toBe('block');
+    expect(immediateBlock.player.animationFrame).toBe(1);
     expect(blocking.player.status).toBe('block');
     expect(blocking.player.animationFrame).toBe(finalBlockFrame);
     expect(stillBlocking.player.status).toBe('block');

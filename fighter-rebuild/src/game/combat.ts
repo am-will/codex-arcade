@@ -268,7 +268,7 @@ function applyBlock(target: FighterState, attacker: FighterState, damage: number
   return {
     ...clampHealth(target, target.health - damage),
     status: 'blockstun',
-    animationFrame: 0,
+    animationFrame: 1,
     animationTick: 0,
     stunFrames: attack.profile.blockstunFrames,
     velocity: {
