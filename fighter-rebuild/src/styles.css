@@ -1,0 +1,116 @@
+:root {
+  color-scheme: dark;
+  background: #111111;
+  color: #f2f2ea;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-width: 20rem;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.game-shell {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: linear-gradient(135deg, #151516 0%, #1b1f25 45%, #141414 100%);
+}
+
+.game-root {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.75rem;
+}
+
+.game-root canvas {
+  display: block;
+  width: 100%;
+  max-width: min(100%, calc((100vh - 8.5rem) * 16 / 9));
+  max-width: min(100%, calc((100dvh - 8.5rem) * 16 / 9));
+  height: auto;
+  max-height: calc(100vh - 8.5rem);
+  max-height: calc(100dvh - 8.5rem);
+  aspect-ratio: 16 / 9;
+  image-rendering: pixelated;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+}
+
+.debug-sidebar {
+  display: none;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(9, 10, 12, 0.92);
+}
+
+.debug-sidebar[data-active="true"] {
+  display: block;
+}
+
+.debug-sidebar__title {
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.debug-sidebar__text {
+  margin: 0;
+  color: #b7c1c8;
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 1024px) and (orientation: landscape) {
+  .game-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .game-root {
+    padding: 1rem;
+  }
+
+  .game-root canvas {
+    max-width: min(100%, calc(100vh * 16 / 9));
+    max-width: min(100%, calc(100dvh * 16 / 9));
+    max-height: 100vh;
+    max-height: 100dvh;
+  }
+
+  .debug-sidebar {
+    border-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+  }
+}
