@@ -249,7 +249,7 @@ def build_strip(cells: list[Image.Image], pose_names: Iterable[str]) -> Image.Im
 
 def build_portrait(idle: Image.Image) -> Image.Image:
     crop = idle.crop((64, 12, 256, 204))
-    portrait = Image.new("RGBA", (192, 192), (10, 14, 22, 255))
+    portrait = Image.new("RGBA", (192, 192), (255, 255, 255, 0))
     portrait.alpha_composite(crop, (0, 0))
     return portrait
 

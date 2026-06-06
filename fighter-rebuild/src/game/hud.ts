@@ -18,6 +18,7 @@ export interface MatchHudState {
 }
 
 export class MatchHud {
+  private static readonly PortraitSize = 52;
   private readonly graphics: Phaser.GameObjects.Graphics;
   private readonly playerPortrait: Phaser.GameObjects.Image;
   private readonly cpuPortrait: Phaser.GameObjects.Image;
@@ -29,8 +30,8 @@ export class MatchHud {
 
   public constructor(private readonly scene: Phaser.Scene) {
     this.graphics = scene.add.graphics().setDepth(100).setScrollFactor(0);
-    this.playerPortrait = scene.add.image(42, 44, '').setDisplaySize(58, 58).setDepth(101).setScrollFactor(0);
-    this.cpuPortrait = scene.add.image(918, 44, '').setDisplaySize(58, 58).setDepth(101).setScrollFactor(0);
+    this.playerPortrait = scene.add.image(36, 44, '').setDepth(101).setScrollFactor(0);
+    this.cpuPortrait = scene.add.image(924, 44, '').setDepth(101).setScrollFactor(0);
     this.timerText = scene.add
       .text(480, 34, '60', {
         align: 'center',
@@ -85,6 +86,8 @@ export class MatchHud {
   public update(state: MatchHudState): void {
     this.playerPortrait.setTexture(state.playerPortraitKey);
     this.cpuPortrait.setTexture(state.cpuPortraitKey);
+    this.playerPortrait.setDisplaySize(MatchHud.PortraitSize, MatchHud.PortraitSize);
+    this.cpuPortrait.setDisplaySize(MatchHud.PortraitSize, MatchHud.PortraitSize);
     this.timerText.setText(String(Math.max(0, Math.ceil(state.timerSeconds))).padStart(2, '0'));
     this.drawBars(state);
     this.debugText
