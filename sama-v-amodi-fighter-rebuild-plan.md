@@ -119,9 +119,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/playwright.config.ts`, `fighter-rebuild/tests/smoke.spec.ts`, `fighter-rebuild/src/game/testHooks.ts`
 - **description**: Add Playwright smoke tests that use the T3/T8 runtime test hook contract for deterministic browser checks: desktop/mobile render, menu flow, no 1v1 option, character lock-in, match start, damage/block, special, timeout/round-over, and rematch.
 - **validation**: `npm run test:e2e` passes after `npm run build`; screenshots show nonblank game canvas and readable HUD.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Replaced placeholder-era Playwright expectations with MatchScene coverage across desktop and mobile-landscape. Added hook-driven smoke checks for menu launch, no 1v1 option, character lock-in, match state snapshots, CPU disable/enable control, player damage, guarded CPU block damage, forced-meter special, timeout round-over, match-over, rematch reset, and canvas screenshot pixel metrics for nonblank readable HUD output. Validation passed: `npm run typecheck`, `npm run build`, `npm run test`, and `npm run test:e2e`.
+- **files edited/created**: `fighter-rebuild/tests/smoke.spec.ts`, `sama-v-amodi-fighter-rebuild-plan.md`
 
 ### T10: Final Browser Verification and Polish
 - **depends_on**: [T8, T9]
