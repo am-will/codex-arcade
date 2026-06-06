@@ -47,9 +47,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/scripts/generate-assets.mjs`, `fighter-rebuild/public/assets/`, `fighter-rebuild/public/assets/manifest.json`, `fighter-rebuild/concepts/`
 - **description**: Generate all unique non-MortalCodex assets: 8-bit Sam Altman and Dario Amodei portraits, sprite sheets for idle/walk/jump/block/light/heavy/special/knockdown, stage layers, HUD pieces, hit spark, and simple SFX placeholders. Emit an asset manifest with character ids, asset keys, paths, frame dimensions, frame counts, animation names, stage ids, HUD keys, and audio keys. Make the art visually distinct from MortalCodex and visibly suggest the two public figures without using copied source images.
 - **validation**: Asset files and `public/assets/manifest.json` exist, sprite sheets match manifest frame grids, prompt/process notes are saved, and visual inspection confirms readable 8-bit characters and original style.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a dependency-free Node asset generator that writes original hard-edged 8-bit Sama/Amodi portraits, per-animation sprite sheets, Byte Boardroom stage layers, HUD pieces, hit spark VFX, synthetic WAV SFX placeholders, generated notes, and `/assets/manifest.json`. Built-in validation passed via `node fighter-rebuild/scripts/generate-assets.mjs`; visual inspection passed on `public/assets/concepts/contact-sheet.png`, `characters/sama/special.png`, and `characters/amodi/portrait.png`.
+- **files edited/created**: `fighter-rebuild/scripts/generate-assets.mjs`, `fighter-rebuild/public/assets/**`, `fighter-rebuild/concepts/asset-generation-notes.md`, `fighter-rebuild/concepts/asset-contract.md`
 
 ### T3: Data Model and Config Loading
 - **depends_on**: [T1, T2]

@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-06T07:02:05.385Z",
+  "title": "Sama v Amodi",
+  "style": "Original hard-edged 8-bit caricature pixel art generated from code; no copied source images or legacy game assets.",
+  "characters": [
+    {
+      "id": "sama",
+      "displayName": "Sama",
+      "description": "Sam Altman inspired original 8-bit caricature",
+      "visualCue": "compact founder silhouette, dark hair, navy jacket, bright white shirt, ember accent",
+      "portrait": {
+        "key": "sama-portrait",
+        "path": "/assets/characters/sama/portrait.png",
+        "width": 96,
+        "height": 96
+      },
+      "animations": [
+        {
+          "name": "idle",
+          "key": "sama-idle",
+          "path": "/assets/characters/sama/idle.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 5,
+          "loop": true
+        },
+        {
+          "name": "walk",
+          "key": "sama-walk",
+          "path": "/assets/characters/sama/walk.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "name": "jump",
+          "key": "sama-jump",
+          "path": "/assets/characters/sama/jump.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "block",
+          "key": "sama-block",
+          "path": "/assets/characters/sama/block.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 3,
+          "columns": 3,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "light",
+          "key": "sama-light",
+          "path": "/assets/characters/sama/light.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "heavy",
+          "key": "sama-heavy",
+          "path": "/assets/characters/sama/heavy.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 10,
+          "loop": false
+        },
+        {
+          "name": "special",
+          "key": "sama-special",
+          "path": "/assets/characters/sama/special.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "knockdown",
+          "key": "sama-knockdown",
+          "path": "/assets/characters/sama/knockdown.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "amodi",
+      "displayName": "Amodi",
+      "description": "Dario Amodei inspired original 8-bit caricature",
+      "visualCue": "glasses, beard pixels, tall stance, purple jacket, teal research-note accents",
+      "portrait": {
+        "key": "amodi-portrait",
+        "path": "/assets/characters/amodi/portrait.png",
+        "width": 96,
+        "height": 96
+      },
+      "animations": [
+        {
+          "name": "idle",
+          "key": "amodi-idle",
+          "path": "/assets/characters/amodi/idle.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 5,
+          "loop": true
+        },
+        {
+          "name": "walk",
+          "key": "amodi-walk",
+          "path": "/assets/characters/amodi/walk.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 10,
+          "loop": true
+        },
+        {
+          "name": "jump",
+          "key": "amodi-jump",
+          "path": "/assets/characters/amodi/jump.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "block",
+          "key": "amodi-block",
+          "path": "/assets/characters/amodi/block.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 3,
+          "columns": 3,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "light",
+          "key": "amodi-light",
+          "path": "/assets/characters/amodi/light.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "heavy",
+          "key": "amodi-heavy",
+          "path": "/assets/characters/amodi/heavy.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 10,
+          "loop": false
+        },
+        {
+          "name": "special",
+          "key": "amodi-special",
+          "path": "/assets/characters/amodi/special.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "knockdown",
+          "key": "amodi-knockdown",
+          "path": "/assets/characters/amodi/knockdown.png",
+          "frameWidth": 64,
+          "frameHeight": 64,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        }
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "id": "byte-boardroom",
+      "displayName": "Byte Boardroom",
+      "width": 640,
+      "height": 360,
+      "floorY": 220,
+      "spawn": {
+        "playerX": 220,
+        "cpuX": 420
+      },
+      "layers": [
+        {
+          "id": "skyline",
+          "key": "stage-byte-boardroom-skyline",
+          "path": "/assets/stages/byte-boardroom/skyline.png",
+          "parallax": 0.25,
+          "width": 640,
+          "height": 360
+        },
+        {
+          "id": "midground",
+          "key": "stage-byte-boardroom-midground",
+          "path": "/assets/stages/byte-boardroom/midground.png",
+          "parallax": 0.55,
+          "width": 640,
+          "height": 360
+        },
+        {
+          "id": "floor",
+          "key": "stage-byte-boardroom-floor",
+          "path": "/assets/stages/byte-boardroom/floor.png",
+          "parallax": 1,
+          "width": 640,
+          "height": 360
+        }
+      ]
+    }
+  ],
+  "hud": [
+    {
+      "key": "hud-health-bar",
+      "path": "/assets/hud/health-bar.png",
+      "width": 224,
+      "height": 22
+    },
+    {
+      "key": "hud-meter-bar",
+      "path": "/assets/hud/meter-bar.png",
+      "width": 160,
+      "height": 14
+    },
+    {
+      "key": "hud-round-pip",
+      "path": "/assets/hud/round-pip.png",
+      "width": 18,
+      "height": 18
+    },
+    {
+      "key": "hud-timer-plaque",
+      "path": "/assets/hud/timer-plaque.png",
+      "width": 92,
+      "height": 38
+    },
+    {
+      "key": "hud-portrait-frame",
+      "path": "/assets/hud/portrait-frame.png",
+      "width": 104,
+      "height": 104
+    }
+  ],
+  "vfx": [
+    {
+      "key": "vfx-hit-spark",
+      "path": "/assets/vfx/hit-spark.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "frameCount": 6,
+      "columns": 6,
+      "rows": 1,
+      "animationName": "hit-spark-burst",
+      "fps": 18,
+      "loop": false
+    }
+  ],
+  "audio": [
+    {
+      "key": "sfx-light",
+      "path": "/assets/audio/light.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 110
+    },
+    {
+      "key": "sfx-heavy",
+      "path": "/assets/audio/heavy.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 190
+    },
+    {
+      "key": "sfx-block",
+      "path": "/assets/audio/block.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 160
+    },
+    {
+      "key": "sfx-special",
+      "path": "/assets/audio/special.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 360
+    },
+    {
+      "key": "sfx-hit",
+      "path": "/assets/audio/hit.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 150
+    },
+    {
+      "key": "sfx-round",
+      "path": "/assets/audio/round.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 420
+    }
+  ]
+}
