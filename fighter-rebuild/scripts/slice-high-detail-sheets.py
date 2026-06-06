@@ -46,7 +46,7 @@ FIGHTERS = [
     FighterSource(
         fighter_id="amodi",
         display_name="Amodi",
-        source_name="amodi-dario-v2-sheet.png",
+        source_name="amodi-high-detail-sheet.png",
         portrait_key="amodi-portrait",
         visual_cue="Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
         columns=4,
