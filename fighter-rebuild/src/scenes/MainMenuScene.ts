@@ -29,7 +29,7 @@ export class MainMenuScene extends BaseScene {
     for (const [index, character] of characters.entries()) {
       const x = 625 + index * 132;
       this.add.rectangle(x, 168, 108, 108, 0x0a0b0f, 0.72).setStrokeStyle(2, index === 0 ? 0xf0a83a : 0x70e2db, 0.78);
-      this.add.image(x, 168, character.portraitKey).setDisplaySize(94, 94);
+      this.add.image(x, 168, character.portraitKey).setDisplaySize(94, 94).setFlipX(index === 1);
       this.add
         .text(x, 236, character.displayName, {
           align: 'center',

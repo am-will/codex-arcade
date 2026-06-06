@@ -24,7 +24,7 @@ export class CharacterSelectScene extends BaseScene {
     this.addTitle('Character Select', 'CPU automatically takes the other fighter');
 
     const cards = config.characters.map((character, index) =>
-      this.createCharacterCard(character, 300 + index * 360, 286, () => {
+      this.createCharacterCard(character, 300 + index * 360, 286, index % 2 === 1, () => {
         selectedIndex = index;
         this.launchMatch(config, {
           ...data,
@@ -45,13 +45,13 @@ export class CharacterSelectScene extends BaseScene {
     });
   }
 
-  private createCharacterCard(character: CharacterDefinition, x: number, y: number, onPress: () => void): SelectableItem {
+  private createCharacterCard(character: CharacterDefinition, x: number, y: number, flipPortrait: boolean, onPress: () => void): SelectableItem {
     const width = 260;
     const height = 314;
     const container = this.add.container(x, y);
     const frame = this.add.rectangle(0, 0, width, height, 0x10141a, 0.94).setStrokeStyle(2, 0x5bd7cb, 0.5);
     const portraitFrame = this.add.rectangle(0, -48, 182, 182, 0x06070a, 0.96).setStrokeStyle(2, 0xffffff, 0.12);
-    const portrait = this.add.image(0, -48, character.portraitKey).setDisplaySize(166, 166);
+    const portrait = this.add.image(0, -48, character.portraitKey).setDisplaySize(166, 166).setFlipX(flipPortrait);
     const name = this.add
       .text(0, 78, character.displayName, {
         align: 'center',
