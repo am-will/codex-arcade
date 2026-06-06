@@ -5,6 +5,7 @@ export const SceneKey = {
   CharacterSelect: 'CharacterSelect',
   Settings: 'Settings',
   CharacterGym: 'CharacterGym',
+  FighterPlayground: 'FighterPlayground',
   Placeholder: 'Placeholder',
 } as const;
 

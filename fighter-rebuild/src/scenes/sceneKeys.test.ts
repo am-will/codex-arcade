@@ -10,6 +10,7 @@ describe('scene key scaffold', () => {
       'CharacterSelect',
       'Settings',
       'CharacterGym',
+      'FighterPlayground',
       'Placeholder',
     ]);
   });

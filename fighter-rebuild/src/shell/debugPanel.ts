@@ -1,4 +1,5 @@
 export type CharacterGymOverlayKey = 'visual' | 'collision' | 'hurt' | 'attack' | 'guard';
+export type FighterPlaygroundOverlayKey = CharacterGymOverlayKey;
 
 export type SelectOption = {
   readonly value: string;
@@ -27,9 +28,32 @@ export type CharacterGymPanelHandlers = {
   readonly onOverlayChange: (overlay: CharacterGymOverlayKey, enabled: boolean) => void;
 };
 
-export type DebugPanelMount = {
-  readonly update: (state: CharacterGymPanelState) => void;
+export type DebugPanelMount<TState = CharacterGymPanelState> = {
+  readonly update: (state: TState) => void;
   readonly dispose: () => void;
+};
+
+export type FighterPlaygroundPanelState = {
+  readonly playerLabel: string;
+  readonly dummyLabel: string;
+  readonly playerHealth: string;
+  readonly dummyHealth: string;
+  readonly playerMeter: string;
+  readonly dummyMeter: string;
+  readonly playerStatus: string;
+  readonly dummyStatus: string;
+  readonly fillMeter: boolean;
+  readonly dummyGuard: boolean;
+  readonly overlays: Readonly<Record<FighterPlaygroundOverlayKey, boolean>>;
+  readonly exportText: string;
+  readonly warnings: readonly string[];
+};
+
+export type FighterPlaygroundPanelHandlers = {
+  readonly onAction: (action: 'light' | 'heavy' | 'special' | 'reset') => void;
+  readonly onFillMeterChange: (enabled: boolean) => void;
+  readonly onDummyGuardChange: (enabled: boolean) => void;
+  readonly onOverlayChange: (overlay: FighterPlaygroundOverlayKey, enabled: boolean) => void;
 };
 
 const OVERLAY_LABELS: Readonly<Record<CharacterGymOverlayKey, string>> = {
@@ -46,6 +70,7 @@ export function createDebugPanel(
   host: HTMLElement | null,
   options: {
     readonly onOpenCharacterGym: () => void;
+    readonly onOpenFighterPlayground: () => void;
   },
 ): void {
   if (!host || !import.meta.env.DEV) {
@@ -61,12 +86,15 @@ export function createDebugPanel(
         <h2 class="debug-panel__title">Tooling</h2>
       </div>
       <button class="debug-panel__button" type="button" data-open-character-gym>Character Gym</button>
-      <p class="debug-panel__hint">Frame boxes, attack windows, and animation previews.</p>
+      <button class="debug-panel__button" type="button" data-open-fighter-playground>Fighter Playground</button>
+      <p class="debug-panel__hint">Frame boxes, attack windows, animation previews, and live dummy combat.</p>
     </section>
   `;
 
-  const button = host.querySelector<HTMLButtonElement>('[data-open-character-gym]');
-  button?.addEventListener('click', options.onOpenCharacterGym);
+  host.querySelector<HTMLButtonElement>('[data-open-character-gym]')?.addEventListener('click', options.onOpenCharacterGym);
+  host
+    .querySelector<HTMLButtonElement>('[data-open-fighter-playground]')
+    ?.addEventListener('click', options.onOpenFighterPlayground);
 }
 
 export function mountCharacterGymPanel(
@@ -187,6 +215,175 @@ export function mountCharacterGymPanel(
     frameInput.value = String(state.frameIndex);
     frameLabel.textContent = `Frame ${state.frameIndex + 1} / ${Math.max(1, state.frameCount)}`;
     playPauseButton.textContent = state.isPlaying ? 'Pause' : 'Play';
+    exportTextarea.value = state.exportText;
+
+    for (const overlayKey of OVERLAY_KEYS) {
+      const input = overlayRoot.querySelector<HTMLInputElement>(`[data-overlay="${overlayKey}"]`);
+      if (input) {
+        input.checked = state.overlays[overlayKey];
+      }
+    }
+
+    warnings.hidden = state.warnings.length === 0;
+    warnings.textContent = state.warnings.join('\n');
+  };
+
+  update(initialState);
+
+  return {
+    update,
+    dispose: () => {
+      root?.removeEventListener('keydown', keyboardShield, true);
+      root?.removeEventListener('keyup', keyboardShield, true);
+      root?.removeEventListener('keypress', keyboardShield, true);
+      host.innerHTML = '';
+      host.dataset.active = 'false';
+    },
+  };
+}
+
+export function mountFighterPlaygroundPanel(
+  host: HTMLElement | null,
+  initialState: FighterPlaygroundPanelState,
+  handlers: FighterPlaygroundPanelHandlers,
+): DebugPanelMount<FighterPlaygroundPanelState> {
+  if (!host || !import.meta.env.DEV) {
+    return {
+      update: () => undefined,
+      dispose: () => undefined,
+    };
+  }
+
+  ensureDebugPanelStyle();
+  host.dataset.active = 'true';
+  host.innerHTML = `
+    <section class="debug-panel debug-panel--playground" aria-label="Fighter Playground controls">
+      <div class="debug-panel__header">
+        <p class="debug-panel__eyebrow">Fighter Playground</p>
+        <h2 class="debug-panel__title">Dummy Combat</h2>
+      </div>
+
+      <div class="debug-panel__stat-grid">
+        <span>Player</span>
+        <strong data-player-label></strong>
+        <span>Dummy</span>
+        <strong data-dummy-label></strong>
+        <span>Health</span>
+        <strong data-player-health></strong>
+        <span>Health</span>
+        <strong data-dummy-health></strong>
+        <span>Meter</span>
+        <strong data-player-meter></strong>
+        <span>Meter</span>
+        <strong data-dummy-meter></strong>
+        <span>Status</span>
+        <strong data-player-status></strong>
+        <span>Status</span>
+        <strong data-dummy-status></strong>
+      </div>
+
+      <div class="debug-panel__row debug-panel__row--buttons">
+        <button class="debug-panel__icon-button" type="button" data-action="light">Light Punch</button>
+        <button class="debug-panel__icon-button" type="button" data-action="heavy">Heavy Kick</button>
+      </div>
+      <button class="debug-panel__button" type="button" data-action="special">Special Combo</button>
+      <button class="debug-panel__button" type="button" data-action="reset">Reset Dummy</button>
+
+      <fieldset class="debug-panel__fieldset">
+        <legend>Combat</legend>
+        <div class="debug-panel__checkboxes">
+          <label class="debug-panel__checkbox">
+            <input type="checkbox" data-fill-meter />
+            <span>Fill special meter</span>
+          </label>
+          <label class="debug-panel__checkbox">
+            <input type="checkbox" data-dummy-guard />
+            <span>Dummy guard</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="debug-panel__fieldset">
+        <legend>Overlays</legend>
+        <div class="debug-panel__checkboxes" data-overlays></div>
+      </fieldset>
+
+      <label class="debug-panel__field">
+        <span>JSON export</span>
+        <textarea data-export readonly rows="10" spellcheck="false"></textarea>
+      </label>
+
+      <p class="debug-panel__hint">Light = punch, heavy = kick, special = combo. DOM controls shield keyboard shortcuts while focused.</p>
+      <p class="debug-panel__warning" data-warnings hidden></p>
+    </section>
+  `;
+
+  const root = host.querySelector<HTMLElement>('.debug-panel--playground');
+  const playerLabel = requireElement<HTMLElement>(host, '[data-player-label]');
+  const dummyLabel = requireElement<HTMLElement>(host, '[data-dummy-label]');
+  const playerHealth = requireElement<HTMLElement>(host, '[data-player-health]');
+  const dummyHealth = requireElement<HTMLElement>(host, '[data-dummy-health]');
+  const playerMeter = requireElement<HTMLElement>(host, '[data-player-meter]');
+  const dummyMeter = requireElement<HTMLElement>(host, '[data-dummy-meter]');
+  const playerStatus = requireElement<HTMLElement>(host, '[data-player-status]');
+  const dummyStatus = requireElement<HTMLElement>(host, '[data-dummy-status]');
+  const fillMeterInput = requireElement<HTMLInputElement>(host, '[data-fill-meter]');
+  const dummyGuardInput = requireElement<HTMLInputElement>(host, '[data-dummy-guard]');
+  const overlayRoot = requireElement<HTMLElement>(host, '[data-overlays]');
+  const exportTextarea = requireElement<HTMLTextAreaElement>(host, '[data-export]');
+  const warnings = requireElement<HTMLElement>(host, '[data-warnings]');
+
+  const keyboardShield = (event: Event): void => {
+    event.stopPropagation();
+  };
+
+  root?.addEventListener('keydown', keyboardShield, true);
+  root?.addEventListener('keyup', keyboardShield, true);
+  root?.addEventListener('keypress', keyboardShield, true);
+
+  for (const button of host.querySelectorAll<HTMLButtonElement>('[data-action]')) {
+    button.addEventListener('click', () => {
+      const action = button.dataset.action;
+
+      if (action === 'light' || action === 'heavy' || action === 'special' || action === 'reset') {
+        handlers.onAction(action);
+      }
+    });
+  }
+
+  fillMeterInput.addEventListener('change', () => {
+    handlers.onFillMeterChange(fillMeterInput.checked);
+  });
+  dummyGuardInput.addEventListener('change', () => {
+    handlers.onDummyGuardChange(dummyGuardInput.checked);
+  });
+
+  for (const overlayKey of OVERLAY_KEYS) {
+    const label = document.createElement('label');
+    label.className = 'debug-panel__checkbox';
+    label.innerHTML = `
+      <input type="checkbox" data-overlay="${overlayKey}" />
+      <span>${OVERLAY_LABELS[overlayKey]}</span>
+    `;
+    overlayRoot.append(label);
+
+    const input = label.querySelector<HTMLInputElement>('input');
+    input?.addEventListener('change', () => {
+      handlers.onOverlayChange(overlayKey, Boolean(input.checked));
+    });
+  }
+
+  const update = (state: FighterPlaygroundPanelState): void => {
+    playerLabel.textContent = state.playerLabel;
+    dummyLabel.textContent = state.dummyLabel;
+    playerHealth.textContent = state.playerHealth;
+    dummyHealth.textContent = state.dummyHealth;
+    playerMeter.textContent = state.playerMeter;
+    dummyMeter.textContent = state.dummyMeter;
+    playerStatus.textContent = state.playerStatus;
+    dummyStatus.textContent = state.dummyStatus;
+    fillMeterInput.checked = state.fillMeter;
+    dummyGuardInput.checked = state.dummyGuard;
     exportTextarea.value = state.exportText;
 
     for (const overlayKey of OVERLAY_KEYS) {
@@ -393,6 +590,29 @@ function ensureDebugPanelStyle(): void {
       color: #ffd483;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.6875rem;
+    }
+
+    .debug-panel__stat-grid {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 0.3rem 0.5rem;
+      min-width: 0;
+      padding: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.18);
+      font-size: 0.6875rem;
+    }
+
+    .debug-panel__stat-grid span {
+      color: #99aaa7;
+      font-weight: 800;
+    }
+
+    .debug-panel__stat-grid strong {
+      min-width: 0;
+      color: #f7fbfa;
+      overflow-wrap: anywhere;
     }
   `;
 

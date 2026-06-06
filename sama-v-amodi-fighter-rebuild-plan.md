@@ -101,9 +101,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/scenes/FighterPlaygroundScene.ts`, `fighter-rebuild/src/shell/debugPanel.ts`
 - **description**: Add Fighter Playground for movement, dummy combat, live tuning display, bounds overlays, forced meter fill, and JSON export text using the combat core from T7.
 - **validation**: Browser can navigate to playground in dev; player can exercise attacks/specials against a regenerating dummy and overlays remain readable.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a dev Fighter Playground scene backed by the T7 pure combat core with staged Sama v Amodi sprites, keyboard and pointer movement/attack controls, dummy guard/reset/regeneration, forced meter fill, live health/meter/status/tuning/event readouts, world-space visual/collision/hurt/attack/guard overlays, and readonly JSON export. Added debug-panel navigation plus minimal scene key/registry wiring. Validation passed: `npm run typecheck`, `npm run build`, `npm run test`, and Browser verification at `http://127.0.0.1:5173/` confirmed navigation, movement, heavy-kick hits, special-combo multi-hit events, fill-meter toggle, dummy regeneration, and readable overlays.
+- **files edited/created**: `fighter-rebuild/src/scenes/FighterPlaygroundScene.ts`, `fighter-rebuild/src/shell/debugPanel.ts`, `fighter-rebuild/src/main.ts`, `fighter-rebuild/src/scenes/sceneKeys.ts`, `fighter-rebuild/src/scenes/sceneRegistry.ts`, `fighter-rebuild/src/scenes/sceneKeys.test.ts`, `sama-v-amodi-fighter-rebuild-plan.md`
 
 ### T8: Match Scene, CPU, Rounds, Camera, HUD
 - **depends_on**: [T6, T7, T7a]

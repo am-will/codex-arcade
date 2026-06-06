@@ -37,6 +37,9 @@ function boot(): void {
     onOpenCharacterGym: () => {
       game.scene.start(SceneKey.CharacterGym);
     },
+    onOpenFighterPlayground: () => {
+      game.scene.start(SceneKey.FighterPlayground);
+    },
   });
 }
 
