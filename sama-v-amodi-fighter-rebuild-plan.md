@@ -83,9 +83,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/scenes/MainMenuScene.ts`, `fighter-rebuild/src/scenes/StageSelectScene.ts`, `fighter-rebuild/src/scenes/CharacterSelectScene.ts`, `fighter-rebuild/src/scenes/SettingsScene.ts`, `fighter-rebuild/src/scenes/BaseScene.ts`
 - **description**: Implement splash/main menu, stage select, character select, and settings. The only playable mode is 1vCPU. The player chooses Sama or Amodi; CPU automatically chooses the other. Use portraits and keyboard/pointer navigation.
 - **validation**: Browser smoke flow reaches a placeholder match launch event/config from Play without any 1v1 option.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a polished 1vCPU-only menu flow with shared scene UI helpers, manifest/config-backed portraits and stage cards, keyboard and pointer navigation, settings for rounds/timer/CPU, automatic CPU-opponent selection, and a placeholder match launch config/event. Added Playwright coverage that drives Main Menu -> Stage Select -> Character Select -> Placeholder and asserts no 1v1 option is exposed. Validation passed: `npm run typecheck`, `npm run build`, `npm run test`, `npm run test:e2e`, and browser smoke on `http://127.0.0.1:5174/`.
+- **files edited/created**: `fighter-rebuild/src/scenes/BaseScene.ts`, `fighter-rebuild/src/scenes/MainMenuScene.ts`, `fighter-rebuild/src/scenes/StageSelectScene.ts`, `fighter-rebuild/src/scenes/CharacterSelectScene.ts`, `fighter-rebuild/src/scenes/SettingsScene.ts`, `fighter-rebuild/src/scenes/PlaceholderScene.ts`, `fighter-rebuild/src/scenes/sceneKeys.ts`, `fighter-rebuild/src/scenes/sceneKeys.test.ts`, `fighter-rebuild/src/scenes/sceneRegistry.ts`, `fighter-rebuild/tests/smoke.spec.ts`
 
 ### T7: Fighter Actor and Combat Core
 - **depends_on**: [T3, T4]
