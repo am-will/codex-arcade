@@ -23,7 +23,7 @@ describe('fighter combat core', () => {
   it('resolves a light hit with damage, hitstun, knockback, and meter gain', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterContact = runFrames(state, 3, { player: { light: true } });
+    const afterContact = runFrames(state, 4, { player: { light: true } });
 
     expect(afterContact.cpu.health).toBe(98);
     expect(afterContact.cpu.status).toBe('hitstun');
@@ -46,7 +46,7 @@ describe('fighter combat core', () => {
   it('uses guard-box overlap for blocked hits and applies block damage/blockstun', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterBlock = runFrames(state, 3, {
+    const afterBlock = runFrames(state, 4, {
       player: { light: true },
       cpu: { block: true },
     });
@@ -61,7 +61,7 @@ describe('fighter combat core', () => {
   it('allows multi-hit special windows to connect independently', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterSpecial = runFrames(state, 18, { player: { special: true } });
+    const afterSpecial = runFrames(state, 34, { player: { special: true } });
     const specialHits = afterSpecial.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
 
     expect(specialHits).toHaveLength(3);
@@ -120,6 +120,32 @@ describe('fighter combat core', () => {
     expect(attacking.player.status).toBe('attack');
     expect(attacking.player.velocity.x).toBe(0);
     expect(attacking.player.position.x).toBeCloseTo(xBeforeAttack, 3);
+  });
+
+  it('keeps the light punch pose visible through quick recovery', () => {
+    const state = makeCombatState({ playerX: 120, cpuX: 560 });
+
+    const earlyPunch = runFrames(state, 6, { player: { light: true } });
+    const readablePunch = runFrames(earlyPunch, 10);
+
+    expect(earlyPunch.player.status).toBe('attack');
+    expect(earlyPunch.player.animationFrame).toBeGreaterThan(0);
+    expect(readablePunch.player.status).toBe('attack');
+    expect(readablePunch.player.animationFrame).toBe(2);
+  });
+
+  it('spreads special combo visuals across charge, strike, kick, and finisher beats', () => {
+    let state = runFrames(makeCombatState({ playerX: 120, cpuX: 560 }), 1, { player: { special: true } });
+    const visibleFrames = new Set<number>();
+
+    for (let index = 0; index < 132; index += 1) {
+      state = runFrames(state, 1);
+      visibleFrames.add(state.player.animationFrame);
+    }
+
+    expect(state.player.status).toBe('attack');
+    expect(visibleFrames.size).toBeGreaterThanOrEqual(5);
+    expect(Math.max(...visibleFrames)).toBeGreaterThanOrEqual(4);
   });
 
   it('holds the final block stance while guard input remains pressed', () => {

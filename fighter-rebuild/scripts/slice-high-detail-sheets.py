@@ -106,6 +106,8 @@ def main() -> None:
     for fighter in FIGHTERS:
         sheet = Image.open(SOURCE_ROOT / fighter.source_name).convert("RGBA")
         cells = extract_cells(sheet, fighter)
+        if fighter.fighter_id == "sama":
+            cells["light"] = build_sama_legacy_light_pose()
         fighter_dir = ASSET_ROOT / "characters" / fighter.fighter_id
         fighter_dir.mkdir(parents=True, exist_ok=True)
 
@@ -194,6 +196,29 @@ def extract_cells(sheet: Image.Image, fighter: FighterSource) -> dict[str, Image
         raise ValueError(f"{fighter.fighter_id} sheet is missing required poses: {', '.join(missing)}")
 
     return cells
+
+
+def build_sama_legacy_light_pose() -> Image.Image:
+    source = FighterSource(
+        fighter_id="sama",
+        display_name="Sama",
+        source_name="sama-high-detail-sheet.png",
+        portrait_key="sama-portrait",
+        visual_cue="legacy standing light punch pose",
+        columns=5,
+        rows=2,
+        poses=("idle", "walk1", "walk2", "jump", "block", "light", "heavy", "special_charge", "special_finisher", "knockdown"),
+        legacy_row_bounds=True,
+    )
+    cells = extract_cells(Image.open(SOURCE_ROOT / source.source_name).convert("RGBA"), source)
+    return align_frame_bottom(cells["light"], 310)
+
+
+def align_frame_bottom(image: Image.Image, target_bottom: int) -> Image.Image:
+    bbox = image.getchannel("A").getbbox()
+    if bbox is None:
+        return image
+    return shift_frame(image, y_offset=target_bottom - bbox[3])
 
 
 def remove_background(image: Image.Image) -> Image.Image:

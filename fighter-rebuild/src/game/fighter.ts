@@ -341,7 +341,7 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
 
   return {
     ...fighter,
-    animationFrame: nextActionFrame,
+    animationFrame: attackAnimationFrame(fighter.activeAttack, fighter.character, nextActionFrame),
     animationTick: 0,
     activeAttack: {
       ...fighter.activeAttack,
@@ -349,6 +349,42 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
       actionTick: 0,
     },
   };
+}
+
+function attackAnimationFrame(activeAttack: ActiveAttackState, character: CharacterDefinition, actionFrame: number): number {
+  const boxes = character.frameBoxes[activeAttack.profile.animation] ?? character.frameBoxes.idle;
+  const frameCount = Math.max(boxes?.length ?? 1, 1);
+
+  if (activeAttack.kind === 'light') {
+    return lightAttackAnimationFrame(activeAttack, actionFrame, frameCount);
+  }
+
+  if (activeAttack.kind === 'special') {
+    return spreadAttackAnimationFrame(activeAttack, actionFrame, frameCount);
+  }
+
+  return Math.min(actionFrame, frameCount - 1);
+}
+
+function lightAttackAnimationFrame(activeAttack: ActiveAttackState, actionFrame: number, frameCount: number): number {
+  if (frameCount <= 1 || actionFrame <= 0) {
+    return 0;
+  }
+
+  if (actionFrame >= activeAttack.totalFrames) {
+    return frameCount - 1;
+  }
+
+  return Math.min(Math.max(1, actionFrame), Math.max(1, frameCount - 2));
+}
+
+function spreadAttackAnimationFrame(activeAttack: ActiveAttackState, actionFrame: number, frameCount: number): number {
+  if (frameCount <= 1 || actionFrame <= 0) {
+    return 0;
+  }
+
+  const progress = actionFrame / Math.max(activeAttack.totalFrames, 1);
+  return clamp(Math.floor(progress * frameCount), 0, frameCount - 1);
 }
 
 export function clampMeter(fighter: FighterState, nextMeter: number): FighterState {
@@ -531,10 +567,11 @@ function animationFrameInterval(animationName: string): number {
 function attackActionFrameInterval(kind: AttackKind): number {
   switch (kind) {
     case 'light':
-      return 2;
+      return 3;
     case 'heavy':
-    case 'special':
       return 4;
+    case 'special':
+      return 5;
   }
 }
 
