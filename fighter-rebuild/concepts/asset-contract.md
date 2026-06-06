@@ -6,7 +6,7 @@ Consumers should load `/assets/manifest.json` and avoid hard-coding generated pa
 
 Each character has a `portrait` plus one PNG sheet for every animation. All current sheets are 1 row, with `columns === frameCount`.
 
-Frame size: 64x64
+Frame size: 320x320 for fighter animation strips. Portraits are 192x192.
 
 Animations:
 
@@ -14,9 +14,9 @@ Animations:
 - `walk`: 6 frames, 10 fps, loop=true
 - `jump`: 4 frames, 8 fps, loop=false
 - `block`: 3 frames, 8 fps, loop=false
-- `light`: 4 frames, 12 fps, loop=false
-- `heavy`: 5 frames, 10 fps, loop=false
-- `special`: 6 frames, 12 fps, loop=false
+- `light`: 4 frames, 12 fps, loop=false, punch/jab attack
+- `heavy`: 5 frames, 10 fps, loop=false, high/side kick attack
+- `special`: 6 frames, 12 fps, loop=false, combo sequence using charge, punch, kick, and finisher frames
 - `knockdown`: 5 frames, 8 fps, loop=false
 
 ## Stage
