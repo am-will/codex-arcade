@@ -482,7 +482,7 @@ function drawStageLayerMid() {
   }
   bmp.rect(54, 128, 145, 70, "#1a2130ee");
   bmp.rect(60, 135, 133, 56, "#0f1420");
-  drawPixelText(bmp, "MODEL ARENA", 78, 151, "#41d6b4", 2);
+  drawPixelText(bmp, "CODEX ARENA", 78, 151, "#41d6b4", 2);
   bmp.rect(454, 130, 118, 74, "#201b31ee");
   bmp.rect(462, 138, 102, 56, "#0c121f");
   drawPixelText(bmp, "ROUND 01", 486, 154, "#ffb24d", 2);
@@ -701,7 +701,18 @@ async function writeWav(publicAssetPath, config) {
   await writeFile(abs, makeWav(config));
 }
 
+async function writeStageMidgroundOnly() {
+  await writePng("/assets/stages/byte-boardroom/midground.png", drawStageLayerMid());
+  await assertPng("/assets/stages/byte-boardroom/midground.png", STAGE.width, STAGE.height);
+  console.log("Updated stage byte-boardroom midground layer.");
+}
+
 async function main() {
+  if (process.argv.includes("--stage-midground-only")) {
+    await writeStageMidgroundOnly();
+    return;
+  }
+
   await mkdir(assetRoot, { recursive: true });
   await mkdir(conceptsDir, { recursive: true });
 

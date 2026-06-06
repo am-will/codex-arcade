@@ -195,7 +195,7 @@ function resolveAttackAgainstTarget(attacker: FighterState, target: FighterState
     }
 
     const damage = blocked ? activeAttack.profile.blockDamage : activeAttack.profile.damage;
-    nextAttacker = markWindowConnected(clampMeter(nextAttacker, nextAttacker.meter + activeAttack.profile.meterGain), activeAttack, index);
+    nextAttacker = markWindowConnected(clampMeter(nextAttacker, nextAttacker.meter + activeAttack.profile.meterGain), index);
 
     if (blocked) {
       nextTarget = applyBlock(nextTarget, nextAttacker, damage, activeAttack);
@@ -203,7 +203,7 @@ function resolveAttackAgainstTarget(attacker: FighterState, target: FighterState
       continue;
     }
 
-    nextTarget = applyHit(nextTarget, nextAttacker, damage, activeAttack);
+    nextTarget = applyHit(nextTarget, nextAttacker, damage, activeAttack, index);
     events.push(createCombatEvent(frame, 'hit', nextAttacker, nextTarget, activeAttack, index, damage));
 
     if (nextTarget.isFinished) {
@@ -219,10 +219,11 @@ function resolveAttackAgainstTarget(attacker: FighterState, target: FighterState
   };
 }
 
-function applyHit(target: FighterState, attacker: FighterState, damage: number, attack: ActiveAttackState): FighterState {
+function applyHit(target: FighterState, attacker: FighterState, damage: number, attack: ActiveAttackState, windowIndex: number): FighterState {
   const nextHealth = Math.max(0, target.health - damage);
   const direction = attacker.position.x <= target.position.x ? 1 : -1;
   const defeated = nextHealth <= 0;
+  const knockback = getHitKnockback(attack, windowIndex);
 
   if (defeated) {
     return {
@@ -252,14 +253,32 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
     stunFrames: attack.profile.hitstunFrames,
     activeAttack: undefined,
     velocity: {
-      x: direction * Math.abs(attack.profile.knockbackX),
-      y: attack.profile.knockbackY,
+      x: direction * knockback.x,
+      y: knockback.y,
     },
   };
 }
 
 function isUninterruptibleSpecial(fighter: FighterState): boolean {
   return fighter.activeAttack?.kind === 'special';
+}
+
+function getHitKnockback(attack: ActiveAttackState, windowIndex: number): { readonly x: number; readonly y: number } {
+  if (attack.kind !== 'special' || isFinalAttackWindow(attack, windowIndex)) {
+    return {
+      x: Math.abs(attack.profile.knockbackX),
+      y: attack.profile.knockbackY,
+    };
+  }
+
+  return {
+    x: Math.max(12, Math.abs(attack.profile.knockbackX) * 0.14),
+    y: Math.min(0, attack.profile.knockbackY * 0.15),
+  };
+}
+
+function isFinalAttackWindow(attack: ActiveAttackState, windowIndex: number): boolean {
+  return windowIndex >= attack.profile.windows.length - 1;
 }
 
 function applyBlock(target: FighterState, attacker: FighterState, damage: number, attack: ActiveAttackState): FighterState {
@@ -278,12 +297,16 @@ function applyBlock(target: FighterState, attacker: FighterState, damage: number
   };
 }
 
-function markWindowConnected(attacker: FighterState, activeAttack: ActiveAttackState, windowIndex: number): FighterState {
+function markWindowConnected(attacker: FighterState, windowIndex: number): FighterState {
+  if (!attacker.activeAttack) {
+    return attacker;
+  }
+
   return {
     ...attacker,
     activeAttack: {
-      ...activeAttack,
-      connectedWindowIndexes: [...activeAttack.connectedWindowIndexes, windowIndex],
+      ...attacker.activeAttack,
+      connectedWindowIndexes: [...attacker.activeAttack.connectedWindowIndexes, windowIndex],
     },
   };
 }

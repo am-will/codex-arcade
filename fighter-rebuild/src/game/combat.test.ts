@@ -29,7 +29,7 @@ describe('fighter combat core', () => {
     expect(afterContact.cpu.status).toBe('hitstun');
     expect(afterContact.cpu.stunFrames).toBeGreaterThan(0);
     expect(afterContact.cpu.velocity.x).toBeGreaterThan(0);
-    expect(afterContact.player.meter).toBe(6);
+    expect(afterContact.player.meter).toBe(10);
     expect(afterContact.events.some((event) => event.type === 'hit' && event.attackId === 'sama-jab')).toBe(true);
   });
 
@@ -54,7 +54,7 @@ describe('fighter combat core', () => {
     expect(afterBlock.cpu.health).toBe(103);
     expect(afterBlock.cpu.status).toBe('blockstun');
     expect(afterBlock.cpu.stunFrames).toBeGreaterThan(0);
-    expect(afterBlock.player.meter).toBe(6);
+    expect(afterBlock.player.meter).toBe(10);
     expect(afterBlock.events.some((event) => event.type === 'blocked' && event.attackId === 'sama-jab')).toBe(true);
   });
 
@@ -67,6 +67,19 @@ describe('fighter combat core', () => {
     expect(specialHits).toHaveLength(3);
     expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
     expect(afterSpecial.cpu.health).toBe(44);
+  });
+
+  it('keeps early special combo hits in range before the final launch', () => {
+    const state = makeCombatState({ playerX: 220, cpuX: 345 });
+
+    const afterFirstHit = runFrames(state, 9, { player: { special: true } });
+    const afterCombo = runFrames(afterFirstHit, 25);
+    const specialHits = afterCombo.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
+
+    expect(afterFirstHit.events.some((event) => event.type === 'hit' && event.attackId === 'sama-combo' && event.windowIndex === 0)).toBe(true);
+    expect(Math.abs(afterFirstHit.cpu.velocity.x)).toBeLessThan(30);
+    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
+    expect(Math.abs(afterCombo.cpu.velocity.x)).toBeGreaterThan(100);
   });
 
   it('launches a defeated fighter into knockdown on a finishing hit', () => {
