@@ -128,9 +128,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/`, Browser runtime
 - **description**: Run full validation, inspect assets visually, start `npm run dev -- --host 127.0.0.1` on an available port, capture the URL, use the in-app Browser for manual gameplay checks on desktop and mobile-sized viewports, fix issues, stop the server, run clean-room audits, and ensure the plan logs are complete.
 - **validation**: `npm run typecheck`, `npm test`, `npm run build`, `npm run test:e2e`, Browser inspection, and `rg 'MortalCodex|red-brawler|green-boxer|jiujitsu|fighting-ui-atlas|rooftop' fighter-rebuild` clean-room audit all pass with only allowed documentation/log hits; final game satisfies 1vCPU Sama v Amodi scope with unique assets.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Ran the full validation suite successfully: `npm run typecheck`, `npm run test`, `npm run build`, and `npm run test:e2e` passed with 19 Vitest tests and 6 Playwright smoke tests. Started the dev server at `http://127.0.0.1:5173/`, verified the 1vCPU menu flow, Sama/Amodi character select, match start, HUD, debug sidebar, and hook-driven special-combo behavior. Saved final visual screenshots under ignored `fighter-rebuild/test-results/final-visual/`, including a targeted special-combo action frame where Sama spends 100 meter and drops Amodi from 104 to 44 health. Rechecked screenshot pixels for nonblank, color-rich output. Attempted the in-app Browser plugin, but `node_repl` failed to start and direct `browser-client.mjs` access was rejected as untrusted, so final visual/browser execution used Playwright Chromium as the fallback. Clean-room audit passed: the only `MortalCodex` hit inside `fighter-rebuild` is the allowed non-copying note in `concepts/asset-generation-notes.md`; no old character/stage/atlas names were found.
+- **files edited/created**: `sama-v-amodi-fighter-rebuild-plan.md`, ignored final screenshots in `fighter-rebuild/test-results/final-visual/`
 
 ## Parallel Execution Groups
 
