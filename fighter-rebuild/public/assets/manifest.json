@@ -130,7 +130,7 @@
       "id": "amodi",
       "displayName": "Amodi",
       "description": "Amodi original high-detail fighting sprite caricature",
-      "visualCue": "glasses, short beard, purple research coat, teal/violet energy accents",
+      "visualCue": "Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
       "portrait": {
         "key": "amodi-portrait",
         "path": "/assets/characters/amodi/portrait.png",

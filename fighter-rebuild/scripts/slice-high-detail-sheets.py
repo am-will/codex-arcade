@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""Slice high-detail generated fighter sheets into Phaser-ready strips.
-
-The source sheets are AI-generated raster targets saved under
-concepts/high-detail-sprite-sheets/. Each sheet is a 5x2 grid:
-idle, walk1, walk2, jump, block, light punch, heavy kick,
-special charge, special combo finisher, knockdown.
-"""
+"""Slice high-detail generated fighter sheets into Phaser-ready strips."""
 
 from __future__ import annotations
 
@@ -31,6 +25,10 @@ class FighterSource:
     source_name: str
     portrait_key: str
     visual_cue: str
+    columns: int
+    rows: int
+    poses: tuple[str, ...]
+    legacy_row_bounds: bool = False
 
 
 FIGHTERS = [
@@ -40,28 +38,35 @@ FIGHTERS = [
         source_name="sama-high-detail-sheet.png",
         portrait_key="sama-portrait",
         visual_cue="dark hair, navy bomber jacket, white shirt, orange tech-energy accents",
+        columns=5,
+        rows=2,
+        poses=("idle", "walk1", "walk2", "jump", "block", "light", "heavy", "special_charge", "special_finisher", "knockdown"),
+        legacy_row_bounds=True,
     ),
     FighterSource(
         fighter_id="amodi",
         display_name="Amodi",
-        source_name="amodi-high-detail-sheet.png",
+        source_name="amodi-dario-v2-sheet.png",
         portrait_key="amodi-portrait",
-        visual_cue="glasses, short beard, purple research coat, teal/violet energy accents",
+        visual_cue="Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
+        columns=4,
+        rows=3,
+        poses=(
+            "idle",
+            "walk1",
+            "walk2",
+            "crouch",
+            "jump",
+            "block",
+            "light",
+            "heavy",
+            "special_charge",
+            "special_finisher",
+            "knockdown",
+            "recovery",
+        ),
     ),
 ]
-
-POSE_INDEX = {
-    "idle": 0,
-    "walk1": 1,
-    "walk2": 2,
-    "jump": 3,
-    "block": 4,
-    "light": 5,
-    "heavy": 6,
-    "special_charge": 7,
-    "special_finisher": 8,
-    "knockdown": 9,
-}
 
 ANIMATIONS = [
     {"name": "idle", "frames": ["idle", "idle", "idle", "idle"], "fps": 5, "loop": True},
@@ -88,11 +93,11 @@ def main() -> None:
     updated_characters = []
     for fighter in FIGHTERS:
         sheet = Image.open(SOURCE_ROOT / fighter.source_name).convert("RGBA")
-        cells = extract_cells(sheet)
+        cells = extract_cells(sheet, fighter)
         fighter_dir = ASSET_ROOT / "characters" / fighter.fighter_id
         fighter_dir.mkdir(parents=True, exist_ok=True)
 
-        portrait = build_portrait(cells[POSE_INDEX["idle"]])
+        portrait = build_portrait(cells["idle"])
         portrait_path = fighter_dir / "portrait.png"
         portrait.save(portrait_path)
 
@@ -144,18 +149,38 @@ def main() -> None:
     print("High-detail sprite slicing complete.")
 
 
-def extract_cells(sheet: Image.Image) -> list[Image.Image]:
+def extract_cells(sheet: Image.Image, fighter: FighterSource) -> dict[str, Image.Image]:
     width, height = sheet.size
-    cells = []
-    row_bounds = [(0, round(height * 0.49)), (round(height * 0.54), height)]
-    for row in range(2):
-        for col in range(5):
-            left = round(col * width / 5)
-            right = round((col + 1) * width / 5)
+    cells: dict[str, Image.Image] = {}
+    if fighter.legacy_row_bounds:
+        row_bounds = [(0, round(height * 0.49)), (round(height * 0.54), height)]
+    else:
+        row_bounds = [
+            (
+                round(row * height / fighter.rows) + 8,
+                round((row + 1) * height / fighter.rows) - (18 if row < fighter.rows - 1 else 0),
+            )
+            for row in range(fighter.rows)
+        ]
+
+    for row in range(fighter.rows):
+        for col in range(fighter.columns):
+            index = row * fighter.columns + col
+            if index >= len(fighter.poses):
+                continue
+
+            left = round(col * width / fighter.columns)
+            right = round((col + 1) * width / fighter.columns)
             top, bottom = row_bounds[row]
             cell = sheet.crop((left, top, right, bottom))
             transparent = remove_background(cell)
-            cells.append(tighten_to_frame(transparent))
+            cells[fighter.poses[index]] = tighten_to_frame(transparent)
+
+    required = {"idle", "walk1", "walk2", "jump", "block", "light", "heavy", "special_charge", "special_finisher", "knockdown"}
+    missing = sorted(required.difference(cells))
+    if missing:
+        raise ValueError(f"{fighter.fighter_id} sheet is missing required poses: {', '.join(missing)}")
+
     return cells
 
 
@@ -281,8 +306,8 @@ def expand_bbox(bbox: tuple[int, int, int, int], size: tuple[int, int], pad: int
     return (max(0, left - pad), max(0, top - pad), min(width, right + pad), min(height, bottom + pad))
 
 
-def build_strip(cells: list[Image.Image], pose_names: Iterable[str]) -> Image.Image:
-    poses = [build_crouch_pose(cells[POSE_INDEX["idle"]]) if name == "crouch" else cells[POSE_INDEX[name]] for name in pose_names]
+def build_strip(cells: dict[str, Image.Image], pose_names: Iterable[str]) -> Image.Image:
+    poses = [cells[name] if name in cells else build_crouch_pose(cells["idle"]) for name in pose_names]
     strip = Image.new("RGBA", (FRAME_SIZE * len(poses), FRAME_SIZE), (255, 255, 255, 0))
     for index, pose in enumerate(poses):
         strip.alpha_composite(pose, (index * FRAME_SIZE, 0))
