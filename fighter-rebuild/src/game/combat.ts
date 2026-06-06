@@ -240,6 +240,10 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
     };
   }
 
+  if (isUninterruptibleSpecial(target)) {
+    return clampHealth(target, nextHealth);
+  }
+
   return {
     ...clampHealth(target, nextHealth),
     status: 'hitstun',
@@ -252,6 +256,10 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
       y: attack.profile.knockbackY,
     },
   };
+}
+
+function isUninterruptibleSpecial(fighter: FighterState): boolean {
+  return fighter.activeAttack?.kind === 'special';
 }
 
 function applyBlock(target: FighterState, attacker: FighterState, damage: number, attack: ActiveAttackState): FighterState {

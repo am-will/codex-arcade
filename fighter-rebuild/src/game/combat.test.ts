@@ -9,7 +9,7 @@ import {
   toSimulationFrames,
 } from './combat';
 import type { CombatState } from './combat';
-import type { FighterInput } from './fighter';
+import { createActiveAttack, type FighterInput } from './fighter';
 import type { GameConfigSources } from './config';
 
 import charactersRaw from '../../public/configs/characters.json?raw';
@@ -146,6 +146,46 @@ describe('fighter combat core', () => {
     expect(state.player.status).toBe('attack');
     expect(visibleFrames.size).toBeGreaterThanOrEqual(5);
     expect(Math.max(...visibleFrames)).toBeGreaterThanOrEqual(4);
+  });
+
+  it('does not interrupt an active special combo when the fighter is hit', () => {
+    const state = makeCombatState({ playerX: 220, cpuX: 330 });
+    const playerSpecial = createActiveAttack('special', state.player.character);
+    const cpuLight = createActiveAttack('light', state.cpu.character);
+    const trading: CombatState = {
+      ...state,
+      player: {
+        ...state.player,
+        status: 'attack',
+        animationFrame: 2,
+        activeAttack: {
+          ...playerSpecial,
+          actionFrame: 8,
+          actionTick: 0,
+        },
+      },
+      cpu: {
+        ...state.cpu,
+        status: 'attack',
+        animationFrame: 1,
+        activeAttack: {
+          ...cpuLight,
+          actionFrame: 1,
+          actionTick: 0,
+        },
+      },
+    };
+
+    const afterHit = runFrames(trading, 1);
+    const continued = runFrames(afterHit, 5);
+
+    expect(afterHit.events.some((event) => event.type === 'hit' && event.attackId === 'amodi-jab')).toBe(true);
+    expect(afterHit.player.health).toBeLessThan(trading.player.health);
+    expect(afterHit.player.status).toBe('attack');
+    expect(afterHit.player.stunFrames).toBe(0);
+    expect(afterHit.player.activeAttack?.kind).toBe('special');
+    expect(continued.player.activeAttack?.kind).toBe('special');
+    expect(continued.player.activeAttack?.actionFrame).toBeGreaterThan(trading.player.activeAttack?.actionFrame ?? 0);
   });
 
   it('holds the final block stance while guard input remains pressed', () => {
