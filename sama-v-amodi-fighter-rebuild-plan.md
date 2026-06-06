@@ -110,9 +110,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/scenes/MatchScene.ts`, `fighter-rebuild/src/game/cpu.ts`, `fighter-rebuild/src/game/hud.ts`, `fighter-rebuild/src/game/rounds.ts`, `fighter-rebuild/src/game/rounds.test.ts`
 - **description**: Build the 1vCPU match: Sama v Amodi intro, round start/fight banners, simple seedable CPU, best-of-3 rounds, 60s timer, timeout by health, rematch/menu overlay, group camera clamped to wide stage, HUD portraits/health/meter/round pips/timer, hit sparks, camera shake, super cut-in, and runtime test hooks. Specify simultaneous KO, timeout ties, round-transition input lockout, super cut-in input pause, rematch reset, wall collision, facing flip/cross-up, and per-round meter behavior.
 - **validation**: Unit tests cover round resolution and edge cases; browser confirms playable match, CPU attacks, HUD updates, specials trigger, test hooks work, and rematch resets state.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added the playable 1vCPU Match scene with menu launch replacement, deterministic seedable CPU, best-of-3 round flow, 60s timer, timeout/KO/draw resolution, round-intro/fight/round-over lockouts, meter-gated special-combo cut-in pause, rematch/menu overlay, wide arena camera tracking, HUD portraits/health/meter/round pips/timer, hit sparks, camera shake, pointer controls, and runtime test hooks. Specified simultaneous KO, timeout ties, transition lockout, super pause, rematch reset, wall clamp, facing flip/cross-up, and carry-until-rematch meter behavior in pure round policy. Validation passed: `npm run test -- rounds`, `npm run typecheck`, `npm run test`, `npm run build`, Browser visual verification on `http://127.0.0.1:5173/`, and Playwright hook probes for CPU damage, forced special, timeout, and reset.
+- **files edited/created**: `fighter-rebuild/src/scenes/MatchScene.ts`, `fighter-rebuild/src/game/cpu.ts`, `fighter-rebuild/src/game/hud.ts`, `fighter-rebuild/src/game/rounds.ts`, `fighter-rebuild/src/game/rounds.test.ts`, `fighter-rebuild/src/scenes/sceneKeys.ts`, `fighter-rebuild/src/scenes/sceneRegistry.ts`, `fighter-rebuild/src/scenes/CharacterSelectScene.ts`, `fighter-rebuild/src/scenes/sceneKeys.test.ts`, `sama-v-amodi-fighter-rebuild-plan.md`
 
 ### T9: End-to-End Tests and Test Hooks
 - **depends_on**: [T6, T7, T8]

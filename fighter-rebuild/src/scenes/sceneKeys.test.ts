@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SceneKey } from './sceneKeys';
 
 describe('scene key scaffold', () => {
-  it('declares the boot, menu flow, and placeholder scenes', () => {
+  it('declares the boot, menu flow, match, and placeholder scenes', () => {
     expect(Object.values(SceneKey)).toEqual([
       'Boot',
       'MainMenu',
@@ -11,6 +11,7 @@ describe('scene key scaffold', () => {
       'Settings',
       'CharacterGym',
       'FighterPlayground',
+      'Match',
       'Placeholder',
     ]);
   });

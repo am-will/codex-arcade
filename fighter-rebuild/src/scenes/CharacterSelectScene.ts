@@ -26,7 +26,7 @@ export class CharacterSelectScene extends BaseScene {
     const cards = config.characters.map((character, index) =>
       this.createCharacterCard(character, 300 + index * 360, 286, () => {
         selectedIndex = index;
-        this.launchPlaceholder(config, {
+        this.launchMatch(config, {
           ...data,
           playerCharacterId: character.id,
           stageId: stage?.id,
@@ -93,18 +93,18 @@ export class CharacterSelectScene extends BaseScene {
     return item;
   }
 
-  private launchPlaceholder(config: GameConfig, data: MenuFlowData): void {
+  private launchMatch(config: GameConfig, data: MenuFlowData): void {
     const playerId = data.playerCharacterId ?? config.settings.defaultPlayerId;
     const matchConfig = this.createMatchConfig(config, data, playerId);
 
-    this.publishMenuState(SceneKey.Placeholder, {
-      labels: ['Placeholder Match'],
+    this.publishMenuState(SceneKey.Match, {
+      labels: ['Match'],
       selectedStageId: matchConfig.stageId,
       selectedPlayerId: matchConfig.playerCharacterId,
       selectedCpuId: matchConfig.cpuCharacterId,
       matchConfig,
     });
     this.game.events.emit('match:launch', matchConfig);
-    this.scene.start(SceneKey.Placeholder, { matchConfig });
+    this.scene.start(SceneKey.Match, { matchConfig });
   }
 }
