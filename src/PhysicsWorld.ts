@@ -9,8 +9,8 @@ const NET_LENGTH = 1.02
 const NET_TOP_RADIUS = RIM_RADIUS * 0.96
 const NET_BOTTOM_RADIUS = 0.34
 const NET_GRAVITY = -13.6
-const NET_AIR_DRAG = 0.956
-const NET_CONSTRAINT_ITERATIONS = 7
+const NET_AIR_DRAG = 0.925
+const NET_CONSTRAINT_ITERATIONS = 6
 const NET_IMPACT_RADIUS = BALL_RADIUS + 0.18
 const NET_RENDER_SEGMENTS = NET_STRANDS * ((NET_ROWS - 1) * 3 + NET_ROWS)
 const NET_SEGMENT_FLOATS = NET_RENDER_SEGMENTS * 2 * 3
@@ -18,6 +18,7 @@ const NET_MAX_DISPLACEMENT = [0, 0.22, 0.34, 0.48, 0.62, 0.72, 0.82]
 const NET_ROW_DROP = NET_LENGTH / (NET_ROWS - 1)
 const NET_MIN_ROW_DROP = NET_ROW_DROP * 0.52
 const NET_ALLOWED_UPWARD_DISPLACEMENT = [0, 0.018, 0.024, 0.032, 0.04, 0.048, 0.056]
+const NET_IDLE_SWAY = 0.12
 
 type NetHitKind = 'rim' | 'net' | 'through'
 
@@ -60,6 +61,7 @@ export class PhysicsWorld {
   private readonly tmpNetVector = new THREE.Vector3()
   private readonly tmpNetVectorB = new THREE.Vector3()
   private netExcitement = 0
+  private netTime = 0
 
   private constructor(world: World, hoopBody: RigidBody) {
     this.world = world
@@ -85,6 +87,7 @@ export class PhysicsWorld {
     const timestep = Math.min(1 / 30, Math.max(1 / 120, dt))
     this.world.timestep = timestep
     this.world.step()
+    this.netTime += timestep
     this.simulateNet(timestep)
     this.netExcitement = Math.max(0, this.netExcitement - timestep)
   }
@@ -301,9 +304,9 @@ export class PhysicsWorld {
         this.addNetConstraint(row, strand, row, next, row === 0 ? 0.9 : 0.56, true)
 
         if (row < NET_ROWS - 1) {
-          this.addNetConstraint(row, strand, row + 1, strand, 0.86, true)
-          this.addNetConstraint(row, strand, row + 1, next, 0.48, true)
-          this.addNetConstraint(row, next, row + 1, strand, 0.38, true)
+          this.addNetConstraint(row, strand, row + 1, strand, 0.76, true)
+          this.addNetConstraint(row, strand, row + 1, next, 0.32, true)
+          this.addNetConstraint(row, next, row + 1, strand, 0.25, true)
         }
       }
     }
@@ -334,9 +337,9 @@ export class PhysicsWorld {
         this.pinNetToHoop()
         this.solveNetConstraints()
         this.limitNetDisplacement()
-        this.enforceNetHangingShape()
       }
       this.enforceNetHangingShape()
+      this.dampenNetVelocity()
       this.pinNetToHoop()
     }
 
@@ -362,8 +365,10 @@ export class PhysicsWorld {
         particle.position.y += gravityStep
 
         const rest = this.tmpNetVectorB.copy(this.hoopPosition).add(particle.restLocal)
-        particle.position.x += (rest.x - particle.position.x) * settleStrength
-        particle.position.z += (rest.z - particle.position.z) * settleStrength
+        const rowT = row / (NET_ROWS - 1)
+        const sway = Math.sin(this.netTime * 1.25 + rowT * 1.7 + particle.restLocal.x * 2.1) * NET_IDLE_SWAY * rowT
+        particle.position.x += (rest.x + sway - particle.position.x) * settleStrength
+        particle.position.z += (rest.z + Math.cos(this.netTime * 0.9 + particle.restLocal.z * 1.6) * NET_IDLE_SWAY * 0.35 * rowT - particle.position.z) * settleStrength
         if (this.netExcitement < 0.08) particle.position.y += (rest.y - particle.position.y) * settleStrength * 0.35
       }
     }
@@ -417,11 +422,22 @@ export class PhysicsWorld {
 
         if (particle.position.y > highestAllowed) {
           const upwardVelocity = Math.max(0, particle.position.y - particle.previous.y)
-          particle.position.y += (highestAllowed - particle.position.y) * 0.72
+          particle.position.y += (highestAllowed - particle.position.y) * 0.46
           if (upwardVelocity > 0) {
-            particle.previous.y = particle.position.y - upwardVelocity * 0.16
+            particle.previous.y = particle.position.y - upwardVelocity * 0.08
           }
         }
+      }
+    }
+  }
+
+  private dampenNetVelocity(): void {
+    for (let row = 1; row < NET_ROWS; row += 1) {
+      const rowT = row / (NET_ROWS - 1)
+      const damping = THREE.MathUtils.lerp(0.82, 0.9, rowT)
+      for (const particle of this.netParticles[row]) {
+        const velocity = this.tmpNetVector.copy(particle.position).sub(particle.previous).multiplyScalar(damping)
+        particle.previous.copy(particle.position).sub(velocity)
       }
     }
   }
@@ -445,7 +461,7 @@ export class PhysicsWorld {
         const penetration = contactRadius - distance
         const rowInfluence = 0.45 + row / NET_ROWS
         particle.position.addScaledVector(delta, penetration * rowInfluence)
-        this.applyNetVelocity(particle, velocity, 0.12 * rowInfluence)
+        this.applyNetVelocity(particle, velocity, 0.08 * rowInfluence)
         contacted = true
       }
     }
@@ -503,15 +519,15 @@ export class PhysicsWorld {
         radial.normalize()
 
         const inward = this.tmpNetVectorB.copy(radial).multiplyScalar(-1)
-        particle.position.addScaledVector(inward, 0.074 * rowFalloff)
-        particle.position.y -= 0.102 * rowFalloff
+        particle.position.addScaledVector(inward, 0.052 * rowFalloff)
+        particle.position.y -= 0.078 * rowFalloff
 
         const swishVelocity = this.tmpVector
           .copy(inward)
-          .multiplyScalar(0.92)
-          .addScaledVector(radial, rowT > 0.62 ? 0.34 : 0)
-          .addScaledVector(velocity, 0.045)
-        swishVelocity.y -= downwardSpeed * 0.56
+          .multiplyScalar(0.58)
+          .addScaledVector(radial, rowT > 0.62 ? 0.18 : 0)
+          .addScaledVector(velocity, 0.03)
+        swishVelocity.y -= downwardSpeed * 0.36
         this.applyNetVelocity(particle, swishVelocity, rowFalloff)
       }
     }
