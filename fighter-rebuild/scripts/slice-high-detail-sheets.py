@@ -183,7 +183,7 @@ def remove_background(image: Image.Image) -> Image.Image:
             pixels[x, y] = (255, 255, 255, 0)
             queue.extend(((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)))
 
-    return remove_small_components(image)
+    return remove_checker_holes(remove_small_components(image))
 
 
 def is_checker_background(r: int, g: int, b: int) -> bool:
@@ -219,6 +219,47 @@ def remove_small_components(image: Image.Image, min_area: int = 650) -> Image.Im
     return image
 
 
+def remove_checker_holes(image: Image.Image) -> Image.Image:
+    pixels = image.load()
+    width, height = image.size
+    seen: set[tuple[int, int]] = set()
+
+    for y in range(height):
+        for x in range(width):
+            if (x, y) in seen:
+                continue
+
+            r, g, b, a = pixels[x, y]
+            if a == 0 or not is_checker_background(r, g, b):
+                continue
+
+            component = []
+            queue: deque[tuple[int, int]] = deque([(x, y)])
+            while queue:
+                cx, cy = queue.popleft()
+                if (cx, cy) in seen or not (0 <= cx < width and 0 <= cy < height):
+                    continue
+                seen.add((cx, cy))
+                cr, cg, cb, ca = pixels[cx, cy]
+                if ca == 0 or not is_checker_background(cr, cg, cb):
+                    continue
+                component.append((cx, cy))
+                queue.extend(((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)))
+
+            if not component:
+                continue
+
+            left = min(px for px, _ in component)
+            right = max(px for px, _ in component) + 1
+            top = min(py for _, py in component)
+            bottom = max(py for _, py in component) + 1
+            if top > height * 0.42 and right - left > 24 and bottom - top > 24:
+                for px, py in component:
+                    pixels[px, py] = (255, 255, 255, 0)
+
+    return image
+
+
 def tighten_to_frame(image: Image.Image) -> Image.Image:
     alpha = image.getchannel("A")
     bbox = alpha.getbbox()
@@ -231,7 +272,7 @@ def tighten_to_frame(image: Image.Image) -> Image.Image:
     x = (FRAME_SIZE - cropped.width) // 2
     y = FRAME_SIZE - cropped.height - 10
     frame.alpha_composite(cropped, (x, max(0, y)))
-    return frame
+    return remove_small_components(frame, min_area=700)
 
 
 def expand_bbox(bbox: tuple[int, int, int, int], size: tuple[int, int], pad: int) -> tuple[int, int, int, int]:
