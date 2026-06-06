@@ -557,7 +557,7 @@ function nextAnimationFrame(fighter: FighterState): number {
     return Math.min(fighter.activeAttack.actionFrame, frameCount - 1);
   }
 
-  if (animationName === 'block') {
+  if (animationName === 'block' || animationName === 'knockdown') {
     return Math.min(fighter.animationFrame + 1, frameCount - 1);
   }
 

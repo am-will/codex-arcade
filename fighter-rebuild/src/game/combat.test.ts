@@ -9,7 +9,7 @@ import {
   toSimulationFrames,
 } from './combat';
 import type { CombatState } from './combat';
-import { createActiveAttack, type FighterInput } from './fighter';
+import { createActiveAttack, finalAnimationFrameFor, type FighterInput } from './fighter';
 import type { GameConfigSources } from './config';
 
 import charactersRaw from '../../public/configs/characters.json?raw';
@@ -120,6 +120,25 @@ describe('fighter combat core', () => {
     expect(finished.cpu.velocity.x).toBeGreaterThan(100);
     expect(finished.cpu.velocity.y).toBeLessThan(-120);
     expect(finished.events.some((event) => event.type === 'finisher')).toBe(true);
+  });
+
+  it('holds defeated fighters on the final knockdown frame instead of looping upright', () => {
+    const state = makeCombatState({ playerX: 220, cpuX: 330 });
+    const nearlyDone: CombatState = {
+      ...state,
+      cpu: {
+        ...state.cpu,
+        health: 5,
+      },
+    };
+    const finished = runFrames(nearlyDone, 10, { player: { heavy: true } });
+    const settled = runFrames(finished, 120);
+    const finalKnockdownFrame = finalAnimationFrameFor(settled.cpu, 'knockdown');
+
+    expect(settled.cpu.status).toBe('knockdown');
+    expect(settled.cpu.isFinished).toBe(true);
+    expect(settled.cpu.animationFrame).toBe(finalKnockdownFrame);
+    expect(runFrames(settled, 24).cpu.animationFrame).toBe(finalKnockdownFrame);
   });
 
   it('moves, jumps, applies gravity, and keeps fighters facing one another', () => {
