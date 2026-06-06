@@ -23,7 +23,7 @@ describe('fighter combat core', () => {
   it('resolves a light hit with damage, hitstun, knockback, and meter gain', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterContact = runFrames(state, 3, { player: { light: true } });
+    const afterContact = runFrames(state, 4, { player: { light: true } });
 
     expect(afterContact.cpu.health).toBe(98);
     expect(afterContact.cpu.status).toBe('hitstun');
@@ -46,7 +46,7 @@ describe('fighter combat core', () => {
   it('uses guard-box overlap for blocked hits and applies block damage/blockstun', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterBlock = runFrames(state, 3, {
+    const afterBlock = runFrames(state, 4, {
       player: { light: true },
       cpu: { block: true },
     });
@@ -61,7 +61,7 @@ describe('fighter combat core', () => {
   it('allows multi-hit special windows to connect independently', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
-    const afterSpecial = runFrames(state, 7, { player: { special: true } });
+    const afterSpecial = runFrames(state, 18, { player: { special: true } });
     const specialHits = afterSpecial.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
 
     expect(specialHits).toHaveLength(3);
@@ -79,7 +79,7 @@ describe('fighter combat core', () => {
       },
     };
 
-    const finished = runFrames(nearlyDone, 4, { player: { heavy: true } });
+    const finished = runFrames(nearlyDone, 10, { player: { heavy: true } });
 
     expect(finished.cpu.health).toBe(0);
     expect(finished.cpu.status).toBe('knockdown');

@@ -29,6 +29,7 @@ export interface ActiveAttackState {
   readonly kind: AttackKind;
   readonly profile: AttackProfile;
   readonly actionFrame: number;
+  readonly actionTick: number;
   readonly totalFrames: number;
   readonly connectedWindowIndexes: readonly number[];
 }
@@ -117,6 +118,7 @@ export function createActiveAttack(kind: AttackKind, character: CharacterDefinit
     kind,
     profile,
     actionFrame: 0,
+    actionTick: 0,
     totalFrames: Math.max(lastWindowFrame + profile.recoveryFrames, 1),
     connectedWindowIndexes: [],
   };
@@ -296,6 +298,19 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
     return advanceAmbientAnimation(fighter);
   }
 
+  const nextActionTick = fighter.activeAttack.actionTick + 1;
+  const actionFrameInterval = attackActionFrameInterval(fighter.activeAttack.kind);
+  if (nextActionTick < actionFrameInterval) {
+    return {
+      ...fighter,
+      animationTick: nextActionTick,
+      activeAttack: {
+        ...fighter.activeAttack,
+        actionTick: nextActionTick,
+      },
+    };
+  }
+
   const nextActionFrame = fighter.activeAttack.actionFrame + 1;
 
   if (nextActionFrame > fighter.activeAttack.totalFrames) {
@@ -315,6 +330,7 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
     activeAttack: {
       ...fighter.activeAttack,
       actionFrame: nextActionFrame,
+      actionTick: 0,
     },
   };
 }
@@ -488,6 +504,16 @@ function animationFrameInterval(animationName: string): number {
       return 8;
     default:
       return 6;
+  }
+}
+
+function attackActionFrameInterval(kind: AttackKind): number {
+  switch (kind) {
+    case 'light':
+      return 3;
+    case 'heavy':
+    case 'special':
+      return 4;
   }
 }
 

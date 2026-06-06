@@ -967,7 +967,6 @@ export class MatchScene extends BaseScene {
     event.preventDefault();
 
     if (action === 'light' || action === 'heavy' || action === 'special') {
-      this.pulseInput.delete(action);
       return;
     }
 
