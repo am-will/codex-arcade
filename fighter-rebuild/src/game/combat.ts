@@ -228,6 +228,8 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
     return {
       ...clampHealth(target, nextHealth),
       status: 'knockdown',
+      animationFrame: 0,
+      animationTick: 0,
       stunFrames: 0,
       isFinished: true,
       activeAttack: undefined,
@@ -241,6 +243,8 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
   return {
     ...clampHealth(target, nextHealth),
     status: 'hitstun',
+    animationFrame: 0,
+    animationTick: 0,
     stunFrames: attack.profile.hitstunFrames,
     activeAttack: undefined,
     velocity: {
@@ -256,6 +260,8 @@ function applyBlock(target: FighterState, attacker: FighterState, damage: number
   return {
     ...clampHealth(target, target.health - damage),
     status: 'blockstun',
+    animationFrame: 0,
+    animationTick: 0,
     stunFrames: attack.profile.blockstunFrames,
     velocity: {
       x: direction * Math.abs(attack.profile.knockbackX) * 0.35,

@@ -65,7 +65,7 @@ POSE_INDEX = {
 
 ANIMATIONS = [
     {"name": "idle", "frames": ["idle", "idle", "idle", "idle"], "fps": 5, "loop": True},
-    {"name": "walk", "frames": ["walk1", "walk2", "walk1", "idle", "walk2", "idle"], "fps": 10, "loop": True},
+    {"name": "walk", "frames": ["walk1", "walk2", "walk1", "idle", "walk2", "idle"], "fps": 8, "loop": True},
     {"name": "jump", "frames": ["idle", "jump", "jump", "idle"], "fps": 8, "loop": False},
     {"name": "block", "frames": ["idle", "block", "block"], "fps": 8, "loop": False},
     {"name": "light", "frames": ["idle", "light", "light", "idle"], "fps": 12, "loop": False},

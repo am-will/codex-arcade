@@ -46,6 +46,7 @@ export interface FighterState {
   readonly facing: Facing;
   readonly status: FighterStatus;
   readonly animationFrame: number;
+  readonly animationTick: number;
   readonly health: number;
   readonly meter: number;
   readonly stunFrames: number;
@@ -83,6 +84,7 @@ export function createFighterState(options: CreateFighterOptions): FighterState 
     facing: options.facing ?? 'right',
     status: 'idle',
     animationFrame: 0,
+    animationTick: 0,
     health: options.tuning.maxHealth,
     meter: options.tuning.meterStart,
     stunFrames: 0,
@@ -234,6 +236,7 @@ export function advanceFighterForFrame(
         ...fighter,
         status: 'attack',
         animationFrame: 0,
+        animationTick: 0,
         activeAttack: createActiveAttack(attackKind, fighter.character),
       },
       stage,
@@ -242,17 +245,20 @@ export function advanceFighterForFrame(
   }
 
   if (input.block && fighter.isGrounded) {
-    return advancePhysics(
-      {
-        ...fighter,
-        status: 'block',
-        velocity: {
-          x: fighter.velocity.x * fighter.tuning.groundFriction,
-          y: fighter.velocity.y,
+    return applyStatus(
+      advancePhysics(
+        {
+          ...fighter,
+          velocity: {
+            x: fighter.velocity.x * fighter.tuning.groundFriction,
+            y: fighter.velocity.y,
+          },
         },
-      },
-      stage,
-      deltaSeconds,
+        stage,
+        deltaSeconds,
+      ),
+      'block',
+      fighter.status,
     );
   }
 
@@ -261,17 +267,11 @@ export function advanceFighterForFrame(
 
 export function finalizeFighterFrame(fighter: FighterState): FighterState {
   if (fighter.isFinished) {
-    return {
-      ...fighter,
-      animationFrame: nextAnimationFrame(fighter),
-    };
+    return advanceAmbientAnimation(fighter);
   }
 
   if (!fighter.activeAttack) {
-    return {
-      ...fighter,
-      animationFrame: nextAnimationFrame(fighter),
-    };
+    return advanceAmbientAnimation(fighter);
   }
 
   const nextActionFrame = fighter.activeAttack.actionFrame + 1;
@@ -281,6 +281,7 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
       ...fighter,
       status: fighter.isGrounded ? 'idle' : 'jump',
       animationFrame: 0,
+      animationTick: 0,
       activeAttack: undefined,
     };
   }
@@ -288,6 +289,7 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
   return {
     ...fighter,
     animationFrame: nextActionFrame,
+    animationTick: 0,
     activeAttack: {
       ...fighter.activeAttack,
       actionFrame: nextActionFrame,
@@ -342,10 +344,8 @@ function advanceMobileFighter(
     deltaSeconds,
   );
 
-  return {
-    ...next,
-    status: next.isGrounded ? (Math.abs(next.velocity.x) > 0.1 ? 'walk' : 'idle') : 'jump',
-  };
+  const nextStatus: FighterStatus = next.isGrounded ? (Math.abs(next.velocity.x) > 0.1 ? 'walk' : 'idle') : 'jump';
+  return applyStatus(next, nextStatus, fighter.status);
 }
 
 function advanceStunnedFighter(
@@ -369,6 +369,8 @@ function advanceStunnedFighter(
   return {
     ...next,
     status: next.isGrounded ? 'idle' : 'jump',
+    animationFrame: 0,
+    animationTick: 0,
   };
 }
 
@@ -431,6 +433,55 @@ function nextAnimationFrame(fighter: FighterState): number {
   }
 
   return (fighter.animationFrame + 1) % frameCount;
+}
+
+function advanceAmbientAnimation(fighter: FighterState): FighterState {
+  const frameInterval = animationFrameInterval(fighterAnimationName(fighter));
+  const nextTick = fighter.animationTick + 1;
+
+  if (nextTick < frameInterval) {
+    return {
+      ...fighter,
+      animationTick: nextTick,
+    };
+  }
+
+  return {
+    ...fighter,
+    animationFrame: nextAnimationFrame(fighter),
+    animationTick: 0,
+  };
+}
+
+function animationFrameInterval(animationName: string): number {
+  switch (animationName) {
+    case 'idle':
+      return 12;
+    case 'walk':
+      return 8;
+    case 'jump':
+    case 'block':
+    case 'knockdown':
+      return 8;
+    default:
+      return 6;
+  }
+}
+
+function applyStatus(fighter: FighterState, nextStatus: FighterStatus, previousStatus: FighterStatus): FighterState {
+  if (nextStatus === previousStatus) {
+    return {
+      ...fighter,
+      status: nextStatus,
+    };
+  }
+
+  return {
+    ...fighter,
+    status: nextStatus,
+    animationFrame: 0,
+    animationTick: 0,
+  };
 }
 
 function clamp(value: number, min: number, max: number): number {

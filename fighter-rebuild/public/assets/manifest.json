@@ -37,7 +37,7 @@
           "frameCount": 6,
           "columns": 6,
           "rows": 1,
-          "fps": 10,
+          "fps": 8,
           "loop": true
         },
         {
@@ -147,7 +147,7 @@
           "frameCount": 6,
           "columns": 6,
           "rows": 1,
-          "fps": 10,
+          "fps": 8,
           "loop": true
         },
         {
