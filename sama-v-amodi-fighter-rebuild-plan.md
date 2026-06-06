@@ -65,9 +65,9 @@ T4 ─────────────────────────�
 - **location**: `fighter-rebuild/src/game/assets.ts`, `fighter-rebuild/src/scenes/BootScene.ts`
 - **description**: Register generated images, sprite sheets, audio, and animation definitions from `public/assets/manifest.json` without importing MortalCodex data. Boot should preload assets and start the scaffolded main menu stub from T1.
 - **validation**: Dev build loads without missing-asset console errors; assets can be referenced by declared keys.
-- **status**: Not Completed
-- **log**:
-- **files edited/created**:
+- **status**: Completed
+- **log**: Added a clean-room generated asset registry that loads `/assets/manifest.json`, queues all manifest-declared character portraits, sprite sheets, stage layers, HUD images, VFX sheets, and WAV SFX, then creates character and hit-spark animations from manifest frame definitions before entering the scaffolded main menu.
+- **files edited/created**: `fighter-rebuild/src/game/assets.ts`, `fighter-rebuild/src/scenes/BootScene.ts`
 
 ### T5: Character Gym
 - **depends_on**: [T3, T4]
