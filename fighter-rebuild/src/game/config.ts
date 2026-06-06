@@ -703,7 +703,7 @@ function normalizeSettings(
     roundTimeSeconds: rangedIntWithWarning(sourceRecord.roundTimeSeconds, 15, 300, 60, 'roundTimeSeconds', warnings),
     cpuDifficulty,
     seed: rangedIntWithWarning(sourceRecord.seed, 1, 2147483647, 6102026, 'seed', warnings),
-    debugEnabled: typeof sourceRecord.debugEnabled === 'boolean' ? sourceRecord.debugEnabled : true,
+    debugEnabled: typeof sourceRecord.debugEnabled === 'boolean' ? sourceRecord.debugEnabled : false,
   };
 }
 

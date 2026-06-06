@@ -30,7 +30,7 @@ type CanvasMetrics = {
   readonly hudColorBuckets: number;
 };
 
-test('renders readable desktop/mobile canvas and launches Match through the 1vCPU-only menu flow', async ({ page }, testInfo) => {
+test('renders readable desktop/mobile canvas and launches Match through the Play vs CPU menu flow', async ({ page }, testInfo) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Sama v Amodi');
 
@@ -45,7 +45,7 @@ test('renders readable desktop/mobile canvas and launches Match through the 1vCP
   await expect.poll(() => readScene(page)).toBe('MainMenu');
 
   const mainMenuState = await readMenuFlowState(page);
-  expect(mainMenuState?.playableModes).toEqual(['1vCPU']);
+  expect(mainMenuState?.playableModes).toEqual(['Play vs CPU']);
   expect(mainMenuState?.hasOneVsOneOption).toBe(false);
   expect(mainMenuState?.labels?.join(' ')).not.toMatch(/1v1|1 v 1|versus player/i);
 
@@ -177,7 +177,7 @@ async function launchMatchViaMenu(page: Page): Promise<void> {
   await expect.poll(() => readScene(page)).toBe('MainMenu');
 
   const mainMenuState = await readMenuFlowState(page);
-  expect(mainMenuState?.playableModes).toEqual(['1vCPU']);
+  expect(mainMenuState?.playableModes).toEqual(['Play vs CPU']);
   expect(mainMenuState?.hasOneVsOneOption).toBe(false);
   expect(mainMenuState?.labels?.join(' ')).not.toMatch(/1v1|1 v 1|versus player/i);
 

@@ -52,7 +52,7 @@ export class PlaceholderScene extends Phaser.Scene {
     }
 
     return [
-      `Mode: 1vCPU`,
+      `Mode: Play vs CPU`,
       `Stage: ${matchConfig.stageId}`,
       `Player: ${matchConfig.playerCharacterId}`,
       `CPU: ${matchConfig.cpuCharacterId}`,

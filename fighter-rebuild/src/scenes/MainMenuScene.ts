@@ -16,7 +16,7 @@ export class MainMenuScene extends BaseScene {
     const stage = config.stagesById[data?.stageId ?? config.settings.defaultStageId] ?? config.stages[0];
     const characters = config.characters.slice(0, 2);
     this.drawBackdrop(stage);
-    this.addTitle('Sama v Amodi', '1vCPU only');
+    this.addTitle('Sama v Amodi', 'Play vs CPU');
 
     this.add
       .text(52, 126, 'Pick a fighter, the CPU takes the other side.', {
@@ -53,7 +53,7 @@ export class MainMenuScene extends BaseScene {
       .setOrigin(0.5, 0);
 
     const items: SelectableItem[] = [
-      this.createButton(246, 248, 340, 78, 'Play 1vCPU', 'Stage select -> fighter select', () => {
+      this.createButton(246, 248, 340, 78, 'Play vs CPU', 'Stage select -> fighter select', () => {
         this.scene.start(SceneKey.StageSelect, { ...data, settings });
       }, 'primary'),
       this.createButton(246, 346, 340, 68, 'Settings', 'Rounds, time, CPU', () => {
@@ -64,7 +64,7 @@ export class MainMenuScene extends BaseScene {
     this.bindSelection(items, 0);
     this.addFooter('Arrow keys navigate   Enter selects');
     this.publishMenuState(SceneKey.MainMenu, {
-      labels: ['Play 1vCPU', 'Settings'],
+      labels: ['Play vs CPU', 'Settings'],
       selectedStageId: stage?.id,
     });
   }

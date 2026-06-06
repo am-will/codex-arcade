@@ -6,7 +6,7 @@ type ButtonTheme = 'primary' | 'secondary';
 
 type MenuDebugState = {
   readonly scene: string;
-  readonly playableModes: readonly ['1vCPU'];
+  readonly playableModes: readonly ['Play vs CPU'];
   readonly hasOneVsOneOption: false;
   readonly labels: readonly string[];
   readonly selectedStageId?: StageId;
@@ -20,6 +20,7 @@ export type MenuSettingsSelection = {
   readonly roundTimeSeconds: number;
   readonly cpuDifficulty: 'easy' | 'normal' | 'hard';
   readonly seed: number;
+  readonly debugEnabled: boolean;
 };
 
 export type MenuFlowData = {
@@ -31,6 +32,7 @@ export type MenuFlowData = {
 
 export type MatchLaunchData = {
   readonly matchConfig?: MatchConfig;
+  readonly settings?: MenuSettingsSelection;
 };
 
 export type SelectableItem = {
@@ -72,6 +74,7 @@ export abstract class BaseScene extends Phaser.Scene {
       roundTimeSeconds: data?.settings?.roundTimeSeconds ?? config.settings.roundTimeSeconds,
       cpuDifficulty: data?.settings?.cpuDifficulty ?? config.settings.cpuDifficulty,
       seed: data?.settings?.seed ?? config.settings.seed,
+      debugEnabled: data?.settings?.debugEnabled ?? config.settings.debugEnabled,
     };
   }
 
@@ -271,7 +274,7 @@ export abstract class BaseScene extends Phaser.Scene {
     const host = globalThis as typeof globalThis & { __SAMA_V_AMODI_MENU_FLOW__?: MenuDebugState };
     host.__SAMA_V_AMODI_MENU_FLOW__ = {
       scene,
-      playableModes: ['1vCPU'],
+      playableModes: ['Play vs CPU'],
       hasOneVsOneOption: false,
       labels: details.labels ?? [],
       selectedStageId: details.selectedStageId,

@@ -7,5 +7,5 @@
   "roundTimeSeconds": 60,
   "cpuDifficulty": "normal",
   "seed": 6102026,
-  "debugEnabled": true
+  "debugEnabled": false
 }

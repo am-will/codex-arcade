@@ -36,7 +36,7 @@ export class CharacterSelectScene extends BaseScene {
     );
 
     this.bindSelection(cards, selectedIndex, () => this.scene.start(SceneKey.StageSelect, { ...data, settings }));
-    this.addFooter('Arrow keys choose fighter   Enter plays 1vCPU   Esc stage select');
+    this.addFooter('Arrow keys choose fighter   Enter plays vs CPU   Esc stage select');
     this.publishMenuState(SceneKey.CharacterSelect, {
       labels: config.characters.map((character) => character.displayName),
       selectedStageId: stage?.id,
@@ -46,35 +46,25 @@ export class CharacterSelectScene extends BaseScene {
   }
 
   private createCharacterCard(character: CharacterDefinition, x: number, y: number, flipPortrait: boolean, onPress: () => void): SelectableItem {
-    const width = 260;
-    const height = 314;
+    const width = 300;
+    const height = 330;
     const container = this.add.container(x, y);
     const frame = this.add.rectangle(0, 0, width, height, 0x10141a, 0.94).setStrokeStyle(2, 0x5bd7cb, 0.5);
-    const portraitFrame = this.add.rectangle(0, -48, 182, 182, 0x06070a, 0.96).setStrokeStyle(2, 0xffffff, 0.12);
-    const portrait = this.add.image(0, -48, character.portraitKey).setDisplaySize(166, 166).setFlipX(flipPortrait);
+    const portraitFrame = this.add.rectangle(0, -52, 212, 212, 0x06070a, 0.96).setStrokeStyle(2, 0xffffff, 0.12);
+    const portrait = this.add.image(0, -52, character.portraitKey).setDisplaySize(198, 198).setFlipX(flipPortrait);
     const name = this.add
-      .text(0, 78, character.displayName, {
+      .text(0, 118, character.displayName, {
         align: 'center',
         color: '#f8fafc',
         fixedWidth: width - 32,
         fontFamily: 'monospace',
-        fontSize: '25px',
+        fontSize: '28px',
         fontStyle: 'bold',
-      })
-      .setOrigin(0.5);
-    const moveText = this.add
-      .text(0, 128, 'Light: punch\nHeavy: kick\nSpecial: combo', {
-        align: 'center',
-        color: '#9fb6bc',
-        fixedWidth: width - 40,
-        fontFamily: 'monospace',
-        fontSize: '13px',
-        lineSpacing: 5,
       })
       .setOrigin(0.5);
     const zone = this.add.zone(0, 0, width, height).setOrigin(0.5).setInteractive();
 
-    container.add([frame, portraitFrame, portrait, name, moveText, zone]);
+    container.add([frame, portraitFrame, portrait, name, zone]);
 
     const item: SelectableItem = {
       activate: onPress,
@@ -105,6 +95,6 @@ export class CharacterSelectScene extends BaseScene {
       matchConfig,
     });
     this.game.events.emit('match:launch', matchConfig);
-    this.scene.start(SceneKey.Match, { matchConfig });
+    this.scene.start(SceneKey.Match, { matchConfig, settings: data.settings });
   }
 }

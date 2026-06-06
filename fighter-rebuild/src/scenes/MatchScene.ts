@@ -141,13 +141,14 @@ export class MatchScene extends BaseScene {
       cpuCharacterId: cpu.id,
       stageId: sourceStage.id,
     };
+    const settings = this.resolveSettings(config, data);
     this.stageDefinition = createRuntimeStage(sourceStage, this.scale.width, this.scale.height);
     this.inputByCode = createInputCodeMap(config.input);
-    this.cpuEnabled = config.settings.cpuDifficulty !== 'easy' || true;
-    this.debugOverlay = config.settings.debugEnabled;
+    this.cpuEnabled = settings.cpuDifficulty !== 'easy' || true;
+    this.debugOverlay = settings.debugEnabled;
     this.cpuController = createCpuController({
       seed: this.matchConfig.seed,
-      difficulty: config.settings.cpuDifficulty,
+      difficulty: settings.cpuDifficulty,
       enabled: this.cpuEnabled,
     });
 

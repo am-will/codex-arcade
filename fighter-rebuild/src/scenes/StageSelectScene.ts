@@ -19,7 +19,7 @@ export class StageSelectScene extends BaseScene {
     );
     const settings = this.resolveSettings(config, data);
     this.drawBackdrop(config.stages[selectedIndex]);
-    this.addTitle('Stage Select', '1vCPU route');
+    this.addTitle('Stage Select', 'Choose an arena');
 
     const cards = config.stages.map((stage, index) =>
       this.createStageCard(stage, 480 + (index - (config.stages.length - 1) / 2) * 292, 278, () => {
@@ -67,18 +67,9 @@ export class StageSelectScene extends BaseScene {
         fontStyle: 'bold',
       })
       .setOrigin(0.5);
-    const stats = this.add
-      .text(0, 124, `${stage.width}x${stage.height}   floor ${stage.floorY}`, {
-        align: 'center',
-        color: '#9fb6bc',
-        fixedWidth: width - 40,
-        fontFamily: 'monospace',
-        fontSize: '13px',
-      })
-      .setOrigin(0.5);
     const zone = this.add.zone(0, 0, width, height).setOrigin(0.5).setInteractive();
 
-    container.add([title, stats, zone]);
+    container.add([title, zone]);
 
     const item: SelectableItem = {
       activate: onPress,
