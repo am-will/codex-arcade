@@ -1,0 +1,9 @@
+.env
+.DS_Store
+node_modules
+dist
+*.log
+
+# Capacitor native projects are generated on demand, not committed
+ios/
+android/
