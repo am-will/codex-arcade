@@ -35,8 +35,8 @@ export class CharacterSelectScene extends BaseScene {
       }),
     );
 
-    this.bindSelection(cards, selectedIndex, () => this.scene.start(SceneKey.StageSelect, { ...data, settings }));
-    this.addFooter('Arrow keys choose fighter   Enter plays vs CPU   Esc stage select');
+    this.bindSelection(cards, selectedIndex, () => this.scene.start(SceneKey.MainMenu, { ...data, settings }));
+    this.addFooter('Arrow keys choose fighter   Enter plays vs CPU   Esc main menu');
     this.publishMenuState(SceneKey.CharacterSelect, {
       labels: config.characters.map((character) => character.displayName),
       selectedStageId: stage?.id,

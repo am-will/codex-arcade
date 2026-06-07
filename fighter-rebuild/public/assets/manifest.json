@@ -286,6 +286,48 @@
           "height": 360
         }
       ]
+    },
+    {
+      "id": "neon-metropolis",
+      "displayName": "Neon Metropolis",
+      "width": 640,
+      "height": 360,
+      "floorY": 220,
+      "spawn": {
+        "playerX": 220,
+        "cpuX": 420
+      },
+      "layers": [
+        {
+          "id": "background",
+          "key": "stage-neon-metropolis-background",
+          "path": "/assets/stages/neon-metropolis/background.png",
+          "parallax": 1,
+          "width": 640,
+          "height": 360
+        }
+      ]
+    },
+    {
+      "id": "tropic-cove",
+      "displayName": "Tropic Cove",
+      "width": 640,
+      "height": 360,
+      "floorY": 220,
+      "spawn": {
+        "playerX": 220,
+        "cpuX": 420
+      },
+      "layers": [
+        {
+          "id": "background",
+          "key": "stage-tropic-cove-background",
+          "path": "/assets/stages/tropic-cove/background.png",
+          "parallax": 1,
+          "width": 640,
+          "height": 360
+        }
+      ]
     }
   ],
   "hud": [

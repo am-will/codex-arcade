@@ -16,7 +16,7 @@ describe('game config loading and normalization', () => {
 
     expect(config.warnings).toEqual([]);
     expect(config.characters.map((character) => character.id)).toEqual(['sama', 'amodi']);
-    expect(config.stages.map((stage) => stage.id)).toEqual(['byte-boardroom']);
+    expect(config.stages.map((stage) => stage.id)).toEqual(['byte-boardroom', 'neon-metropolis', 'tropic-cove']);
     expect(config.match).toMatchObject({
       stageId: 'byte-boardroom',
       playerCharacterId: 'sama',

@@ -4,12 +4,14 @@ import { inflateSync as nodeInflateSync } from 'node:zlib';
 import { TEST_HOOK_KEY, type SamaAmodiTestHooks, type TestHookInputAction, type TestHookMatchState } from '../src/game/testHooks';
 
 const inflateSync: (data: Uint8Array) => Uint8Array = nodeInflateSync;
+const STAGE_IDS = ['byte-boardroom', 'neon-metropolis', 'tropic-cove'] as const;
 
 type MenuFlowState = {
   readonly scene?: string;
   readonly playableModes?: readonly string[];
   readonly hasOneVsOneOption?: boolean;
   readonly labels?: readonly string[];
+  readonly selectedStageId?: string;
   readonly selectedPlayerId?: string;
   readonly selectedCpuId?: string;
   readonly matchConfig?: {
@@ -50,13 +52,11 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
   expect(mainMenuState?.labels?.join(' ')).not.toMatch(/1v1|1 v 1|versus player/i);
 
   await page.keyboard.press('Enter');
-  await expect.poll(() => readScene(page)).toBe('StageSelect');
-
-  await page.keyboard.press('Enter');
   await expect.poll(() => readScene(page)).toBe('CharacterSelect');
 
   const characterSelectState = await readMenuFlowState(page);
   expect(characterSelectState?.labels).toEqual(['Sama', 'Amodi']);
+  expect(STAGE_IDS).toContain(characterSelectState?.selectedStageId as (typeof STAGE_IDS)[number]);
   expect(characterSelectState?.selectedPlayerId).toBe('sama');
   expect(characterSelectState?.selectedCpuId).toBe('amodi');
 
@@ -66,12 +66,12 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
 
   const launchState = await readMenuFlowState(page);
   expect(launchState?.matchConfig).toMatchObject({
-    stageId: 'byte-boardroom',
     playerCharacterId: 'sama',
     cpuCharacterId: 'amodi',
     roundsToWin: 2,
     roundTimeSeconds: 60,
   });
+  expect(STAGE_IDS).toContain(launchState?.matchConfig?.stageId as (typeof STAGE_IDS)[number]);
 
   await setDebugOverlay(page, true);
   await waitForFighting(page);
@@ -79,11 +79,11 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
   const matchState = await readMatchState(page);
   expect(matchState).toMatchObject({
     phase: 'fighting',
-    stageId: 'byte-boardroom',
     roundIndex: 1,
     player: { id: 'sama' },
     cpu: { id: 'amodi' },
   });
+  expect(STAGE_IDS).toContain(matchState?.stageId as (typeof STAGE_IDS)[number]);
   expect(matchState?.timerSeconds).toBeGreaterThan(55);
   expect(matchState?.player.health).toBeGreaterThan(0);
   expect(matchState?.cpu.health).toBeGreaterThan(0);
@@ -188,8 +188,6 @@ async function launchMatchViaMenu(page: Page): Promise<void> {
   expect(mainMenuState?.hasOneVsOneOption).toBe(false);
   expect(mainMenuState?.labels?.join(' ')).not.toMatch(/1v1|1 v 1|versus player/i);
 
-  await page.keyboard.press('Enter');
-  await expect.poll(() => readScene(page)).toBe('StageSelect');
   await page.keyboard.press('Enter');
   await expect.poll(() => readScene(page)).toBe('CharacterSelect');
   await page.keyboard.press('Enter');

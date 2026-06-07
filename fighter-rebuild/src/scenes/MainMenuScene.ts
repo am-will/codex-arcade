@@ -53,8 +53,12 @@ export class MainMenuScene extends BaseScene {
       .setOrigin(0.5, 0);
 
     const items: SelectableItem[] = [
-      this.createButton(246, 248, 340, 78, 'Play vs CPU', 'Stage select -> fighter select', () => {
-        this.scene.start(SceneKey.StageSelect, { ...data, settings });
+      this.createButton(246, 248, 340, 78, 'Play vs CPU', 'Random arena -> fighter select', () => {
+        this.scene.start(SceneKey.CharacterSelect, {
+          ...data,
+          stageId: this.randomStageId(config),
+          settings,
+        });
       }, 'primary'),
       this.createButton(246, 346, 340, 68, 'Settings', 'Rounds, time, CPU', () => {
         this.scene.start(SceneKey.Settings, { ...data, settings });
@@ -75,5 +79,11 @@ export class MainMenuScene extends BaseScene {
       `Timer: ${settings.roundTimeSeconds}s`,
       `CPU: ${settings.cpuDifficulty}`,
     ].join('\n');
+  }
+
+  private randomStageId(config: GameConfig): string {
+    const stages = config.stages.length > 0 ? config.stages : Object.values(config.stagesById);
+    const index = Math.floor(Math.random() * Math.max(stages.length, 1));
+    return stages[index]?.id ?? config.settings.defaultStageId;
   }
 }

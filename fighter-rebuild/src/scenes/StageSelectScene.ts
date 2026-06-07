@@ -22,7 +22,7 @@ export class StageSelectScene extends BaseScene {
     this.addTitle('Stage Select', 'Choose an arena');
 
     const cards = config.stages.map((stage, index) =>
-      this.createStageCard(stage, 480 + (index - (config.stages.length - 1) / 2) * 292, 278, () => {
+      this.createStageCard(stage, 480 + (index - (config.stages.length - 1) / 2) * 300, 278, () => {
         selectedIndex = index;
         this.scene.start(SceneKey.CharacterSelect, {
           ...data,
@@ -41,29 +41,29 @@ export class StageSelectScene extends BaseScene {
   }
 
   private createStageCard(stage: StageDefinition, x: number, y: number, onPress: () => void): SelectableItem {
-    const width = 430;
-    const height = 276;
+    const width = 280;
+    const height = 232;
     const container = this.add.container(x, y);
     const frame = this.add.rectangle(0, 0, width, height, 0x10141a, 0.94).setStrokeStyle(2, 0x5bd7cb, 0.5);
-    const previewMask = this.add.rectangle(0, -38, width - 32, 164, 0x050608, 0.88);
+    const previewMask = this.add.rectangle(0, -34, width - 24, 144, 0x050608, 0.88);
     container.add([frame, previewMask]);
 
     for (const [index, layer] of stage.layers.entries()) {
       container.add(
         this.add
           .image(0, -38, layer.assetKey)
-          .setDisplaySize(width - 32, 164)
+          .setDisplaySize(width - 24, 144)
           .setAlpha(index === stage.layers.length - 1 ? 0.9 : 0.74),
       );
     }
 
     const title = this.add
-      .text(0, 86, stage.displayName, {
+      .text(0, 78, stage.displayName, {
         align: 'center',
         color: '#f8fafc',
         fixedWidth: width - 40,
         fontFamily: 'monospace',
-        fontSize: '22px',
+        fontSize: '18px',
         fontStyle: 'bold',
       })
       .setOrigin(0.5);
