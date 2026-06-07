@@ -15,7 +15,7 @@ describe('game config loading and normalization', () => {
     const config = normalizeGameConfig(readFixtureSources());
 
     expect(config.warnings).toEqual([]);
-    expect(config.characters.map((character) => character.id)).toEqual(['sama', 'amodi']);
+    expect(config.characters.map((character) => character.id)).toEqual(['sama', 'amodi', 'tibo', 'boris']);
     expect(config.stages.map((stage) => stage.id)).toEqual(['byte-boardroom', 'neon-metropolis', 'tropic-cove']);
     expect(config.match).toMatchObject({
       stageId: 'neon-metropolis',
@@ -45,7 +45,7 @@ describe('game config loading and normalization', () => {
     const sama = config.charactersById.sama;
 
     expect(sama).toBeDefined();
-    expect(config.characters).toHaveLength(2);
+    expect(config.characters).toHaveLength(4);
     expect(config.warnings.join('\n')).toContain('duplicate character id "sama"');
     expect(config.warnings.join('\n')).toContain('references missing asset');
     expect(config.warnings.join('\n')).toContain('invalid frame index');

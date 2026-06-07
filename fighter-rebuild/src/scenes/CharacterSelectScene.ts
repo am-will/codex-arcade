@@ -23,16 +23,31 @@ export class CharacterSelectScene extends BaseScene {
     this.drawBackdrop(stage);
     this.addTitle('Character Select', 'CPU automatically takes the other fighter');
 
+    const isCompact = config.characters.length > 2;
+    const columns = Math.min(4, Math.max(1, config.characters.length));
+    const spacingX = isCompact ? 220 : 360;
+    const spacingY = isCompact ? 250 : 0;
+    const startX = this.scale.width / 2 - ((columns - 1) * spacingX) / 2;
+    const rows = Math.ceil(config.characters.length / columns);
+    const startY = rows > 1 ? 232 : 286;
+
     const cards = config.characters.map((character, index) =>
-      this.createCharacterCard(character, 300 + index * 360, 286, index % 2 === 1, () => {
-        selectedIndex = index;
-        this.launchMatch(config, {
-          ...data,
-          playerCharacterId: character.id,
-          stageId: stage?.id,
-          settings,
-        });
-      }),
+      this.createCharacterCard(
+        character,
+        startX + (index % columns) * spacingX,
+        startY + Math.floor(index / columns) * spacingY,
+        index % 2 === 1,
+        isCompact,
+        () => {
+          selectedIndex = index;
+          this.launchMatch(config, {
+            ...data,
+            playerCharacterId: character.id,
+            stageId: stage?.id,
+            settings,
+          });
+        },
+      ),
     );
 
     this.bindSelection(cards, selectedIndex, () => this.scene.start(SceneKey.MainMenu, { ...data, settings }));
@@ -45,20 +60,33 @@ export class CharacterSelectScene extends BaseScene {
     });
   }
 
-  private createCharacterCard(character: CharacterDefinition, x: number, y: number, flipPortrait: boolean, onPress: () => void): SelectableItem {
-    const width = 300;
-    const height = 330;
+  private createCharacterCard(
+    character: CharacterDefinition,
+    x: number,
+    y: number,
+    flipPortrait: boolean,
+    compact: boolean,
+    onPress: () => void,
+  ): SelectableItem {
+    const width = compact ? 200 : 300;
+    const height = compact ? 300 : 330;
+    const portraitFrameSize = compact ? 168 : 212;
+    const portraitSize = compact ? 154 : 198;
+    const portraitY = compact ? -48 : -52;
+    const nameY = compact ? 112 : 118;
     const container = this.add.container(x, y);
     const frame = this.add.rectangle(0, 0, width, height, 0x10141a, 0.94).setStrokeStyle(2, 0x5bd7cb, 0.5);
-    const portraitFrame = this.add.rectangle(0, -52, 212, 212, 0x06070a, 0.96).setStrokeStyle(2, 0xffffff, 0.12);
-    const portrait = this.add.image(0, -52, character.portraitKey).setDisplaySize(198, 198).setFlipX(flipPortrait);
+    const portraitFrame = this.add
+      .rectangle(0, portraitY, portraitFrameSize, portraitFrameSize, 0x06070a, 0.96)
+      .setStrokeStyle(2, 0xffffff, 0.12);
+    const portrait = this.add.image(0, portraitY, character.portraitKey).setDisplaySize(portraitSize, portraitSize).setFlipX(flipPortrait);
     const name = this.add
-      .text(0, 118, character.displayName, {
+      .text(0, nameY, character.displayName, {
         align: 'center',
         color: '#f8fafc',
         fixedWidth: width - 32,
         fontFamily: 'monospace',
-        fontSize: '28px',
+        fontSize: compact ? '22px' : '28px',
         fontStyle: 'bold',
       })
       .setOrigin(0.5);

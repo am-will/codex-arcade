@@ -38,6 +38,32 @@
       "meterStart": 0,
       "pushboxWidth": 108,
       "pushboxHeight": 164
+    },
+    {
+      "id": "tibo-agile",
+      "maxHealth": 98,
+      "walkSpeed": 142,
+      "jumpVelocity": 342,
+      "gravity": 820,
+      "groundFriction": 0.85,
+      "airControl": 0.5,
+      "meterMax": 100,
+      "meterStart": 0,
+      "pushboxWidth": 100,
+      "pushboxHeight": 158
+    },
+    {
+      "id": "boris-power",
+      "maxHealth": 110,
+      "walkSpeed": 116,
+      "jumpVelocity": 306,
+      "gravity": 820,
+      "groundFriction": 0.79,
+      "airControl": 0.39,
+      "meterMax": 100,
+      "meterStart": 0,
+      "pushboxWidth": 112,
+      "pushboxHeight": 166
     }
   ]
 }

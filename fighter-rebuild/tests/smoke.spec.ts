@@ -55,7 +55,7 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
   await expect.poll(() => readScene(page)).toBe('CharacterSelect');
 
   const characterSelectState = await readMenuFlowState(page);
-  expect(characterSelectState?.labels).toEqual(['Sama', 'Amodi']);
+  expect(characterSelectState?.labels).toEqual(['Sama', 'Amodi', 'Tibo', 'Boris']);
   expect(PLAY_STAGE_IDS).toContain(characterSelectState?.selectedStageId as (typeof PLAY_STAGE_IDS)[number]);
   expect(characterSelectState?.selectedPlayerId).toBe('sama');
   expect(characterSelectState?.selectedCpuId).toBe('amodi');

@@ -247,6 +247,250 @@
           "loop": false
         }
       ]
+    },
+    {
+      "id": "tibo",
+      "displayName": "Tibo",
+      "description": "Tibo original high-detail fighting sprite caricature",
+      "visualCue": "brown hair, black tech jacket, emerald-green energy accents",
+      "portrait": {
+        "key": "tibo-portrait",
+        "path": "/assets/characters/tibo/portrait.png",
+        "width": 192,
+        "height": 192
+      },
+      "animations": [
+        {
+          "name": "idle",
+          "key": "tibo-idle",
+          "path": "/assets/characters/tibo/idle.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 12,
+          "columns": 12,
+          "rows": 1,
+          "fps": 12,
+          "loop": true
+        },
+        {
+          "name": "walk",
+          "key": "tibo-walk",
+          "path": "/assets/characters/tibo/walk.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "name": "jump",
+          "key": "tibo-jump",
+          "path": "/assets/characters/tibo/jump.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "crouch",
+          "key": "tibo-crouch",
+          "path": "/assets/characters/tibo/crouch.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "block",
+          "key": "tibo-block",
+          "path": "/assets/characters/tibo/block.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 3,
+          "columns": 3,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "light",
+          "key": "tibo-light",
+          "path": "/assets/characters/tibo/light.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "heavy",
+          "key": "tibo-heavy",
+          "path": "/assets/characters/tibo/heavy.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 10,
+          "loop": false
+        },
+        {
+          "name": "special",
+          "key": "tibo-special",
+          "path": "/assets/characters/tibo/special.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "knockdown",
+          "key": "tibo-knockdown",
+          "path": "/assets/characters/tibo/knockdown.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "boris",
+      "displayName": "Boris",
+      "description": "Boris original high-detail fighting sprite caricature",
+      "visualCue": "bald head, brown utility jacket, copper-gold energy accents",
+      "portrait": {
+        "key": "boris-portrait",
+        "path": "/assets/characters/boris/portrait.png",
+        "width": 192,
+        "height": 192
+      },
+      "animations": [
+        {
+          "name": "idle",
+          "key": "boris-idle",
+          "path": "/assets/characters/boris/idle.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 12,
+          "columns": 12,
+          "rows": 1,
+          "fps": 12,
+          "loop": true
+        },
+        {
+          "name": "walk",
+          "key": "boris-walk",
+          "path": "/assets/characters/boris/walk.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 8,
+          "loop": true
+        },
+        {
+          "name": "jump",
+          "key": "boris-jump",
+          "path": "/assets/characters/boris/jump.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "crouch",
+          "key": "boris-crouch",
+          "path": "/assets/characters/boris/crouch.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "block",
+          "key": "boris-block",
+          "path": "/assets/characters/boris/block.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 3,
+          "columns": 3,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        },
+        {
+          "name": "light",
+          "key": "boris-light",
+          "path": "/assets/characters/boris/light.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 4,
+          "columns": 4,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "heavy",
+          "key": "boris-heavy",
+          "path": "/assets/characters/boris/heavy.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 10,
+          "loop": false
+        },
+        {
+          "name": "special",
+          "key": "boris-special",
+          "path": "/assets/characters/boris/special.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 6,
+          "columns": 6,
+          "rows": 1,
+          "fps": 12,
+          "loop": false
+        },
+        {
+          "name": "knockdown",
+          "key": "boris-knockdown",
+          "path": "/assets/characters/boris/knockdown.png",
+          "frameWidth": 320,
+          "frameHeight": 320,
+          "frameCount": 5,
+          "columns": 5,
+          "rows": 1,
+          "fps": 8,
+          "loop": false
+        }
+      ]
     }
   ],
   "stages": [
