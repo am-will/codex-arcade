@@ -10,13 +10,14 @@ Frame size: 320x320 for fighter animation strips. Portraits are 192x192.
 
 Animations:
 
-- `idle`: 4 frames, 5 fps, loop=true
-- `walk`: 6 frames, 10 fps, loop=true
+- `idle`: 12 frames, 12 fps, loop=true
+- `walk`: 6 frames, 8 fps, loop=true
 - `jump`: 4 frames, 8 fps, loop=false
+- `crouch`: 4 frames, 8 fps, loop=false
 - `block`: 3 frames, 8 fps, loop=false
 - `light`: 4 frames, 12 fps, loop=false, punch/jab attack
-- `heavy`: 5 frames, 10 fps, loop=false, high/side kick attack
-- `special`: 6 frames, 12 fps, loop=false, combo sequence using charge, punch, kick, and finisher frames
+- `heavy`: 5 frames, 10 fps, loop=false, side kick attack
+- `special`: 6 frames, 12 fps, loop=false, character-specific energy attack
 - `knockdown`: 5 frames, 8 fps, loop=false
 
 ## Stage
