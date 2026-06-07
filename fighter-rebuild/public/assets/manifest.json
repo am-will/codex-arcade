@@ -22,10 +22,10 @@
           "path": "/assets/characters/sama/idle.png",
           "frameWidth": 320,
           "frameHeight": 320,
-          "frameCount": 4,
-          "columns": 4,
+          "frameCount": 12,
+          "columns": 12,
           "rows": 1,
-          "fps": 5,
+          "fps": 12,
           "loop": true
         },
         {
@@ -144,10 +144,10 @@
           "path": "/assets/characters/amodi/idle.png",
           "frameWidth": 320,
           "frameHeight": 320,
-          "frameCount": 4,
-          "columns": 4,
+          "frameCount": 12,
+          "columns": 12,
           "rows": 1,
-          "fps": 5,
+          "fps": 12,
           "loop": true
         },
         {

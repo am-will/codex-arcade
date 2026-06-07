@@ -53,10 +53,18 @@
       },
       "frameBoxes": {
         "idle": [
-          { "frame": 0, "hurt": [{ "x": 108, "y": 62, "width": 100, "height": 218 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
-          { "frame": 1, "hurt": [{ "x": 107, "y": 60, "width": 102, "height": 220 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
-          { "frame": 2, "hurt": [{ "x": 108, "y": 62, "width": 100, "height": 218 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
-          { "frame": 3, "hurt": [{ "x": 110, "y": 64, "width": 98, "height": 216 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } }
+          { "frame": 0, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 1, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 2, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 3, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 4, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 5, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 6, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 7, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 8, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 9, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 10, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } },
+          { "frame": 11, "hurt": [{ "x": 107, "y": 52, "width": 102, "height": 236 }], "guard": [], "collision": { "x": 112, "y": 118, "width": 94, "height": 162 } }
         ],
         "walk": [
           { "frame": 0, "hurt": [{ "x": 104, "y": 66, "width": 108, "height": 214 }], "guard": [], "collision": { "x": 106, "y": 126, "width": 104, "height": 154 } },
@@ -165,10 +173,18 @@
       },
       "frameBoxes": {
         "idle": [
-          { "frame": 0, "hurt": [{ "x": 104, "y": 52, "width": 112, "height": 228 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
-          { "frame": 1, "hurt": [{ "x": 104, "y": 50, "width": 112, "height": 230 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
-          { "frame": 2, "hurt": [{ "x": 104, "y": 52, "width": 112, "height": 228 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
-          { "frame": 3, "hurt": [{ "x": 106, "y": 54, "width": 110, "height": 226 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } }
+          { "frame": 0, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 1, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 2, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 3, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 4, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 5, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 6, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 7, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 8, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 9, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 10, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } },
+          { "frame": 11, "hurt": [{ "x": 104, "y": 42, "width": 112, "height": 246 }], "guard": [], "collision": { "x": 108, "y": 112, "width": 102, "height": 168 } }
         ],
         "walk": [
           { "frame": 0, "hurt": [{ "x": 100, "y": 58, "width": 120, "height": 222 }], "guard": [], "collision": { "x": 102, "y": 120, "width": 112, "height": 160 } },
