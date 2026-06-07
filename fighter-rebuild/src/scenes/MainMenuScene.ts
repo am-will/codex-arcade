@@ -2,6 +2,8 @@ import type { GameConfig } from '../game/types';
 import { BaseScene, type MenuFlowData, type MenuSettingsSelection, type SelectableItem } from './BaseScene';
 import { SceneKey } from './sceneKeys';
 
+const PLAY_STAGE_IDS = ['neon-metropolis', 'tropic-cove'] as const;
+
 export class MainMenuScene extends BaseScene {
   public constructor() {
     super(SceneKey.MainMenu);
@@ -82,7 +84,7 @@ export class MainMenuScene extends BaseScene {
   }
 
   private randomStageId(config: GameConfig): string {
-    const stages = config.stages.length > 0 ? config.stages : Object.values(config.stagesById);
+    const stages = PLAY_STAGE_IDS.map((stageId) => config.stagesById[stageId]).filter((stage) => stage !== undefined);
     const index = Math.floor(Math.random() * Math.max(stages.length, 1));
     return stages[index]?.id ?? config.settings.defaultStageId;
   }

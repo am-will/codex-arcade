@@ -4,7 +4,7 @@ import { inflateSync as nodeInflateSync } from 'node:zlib';
 import { TEST_HOOK_KEY, type SamaAmodiTestHooks, type TestHookInputAction, type TestHookMatchState } from '../src/game/testHooks';
 
 const inflateSync: (data: Uint8Array) => Uint8Array = nodeInflateSync;
-const STAGE_IDS = ['byte-boardroom', 'neon-metropolis', 'tropic-cove'] as const;
+const PLAY_STAGE_IDS = ['neon-metropolis', 'tropic-cove'] as const;
 
 type MenuFlowState = {
   readonly scene?: string;
@@ -56,7 +56,7 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
 
   const characterSelectState = await readMenuFlowState(page);
   expect(characterSelectState?.labels).toEqual(['Sama', 'Amodi']);
-  expect(STAGE_IDS).toContain(characterSelectState?.selectedStageId as (typeof STAGE_IDS)[number]);
+  expect(PLAY_STAGE_IDS).toContain(characterSelectState?.selectedStageId as (typeof PLAY_STAGE_IDS)[number]);
   expect(characterSelectState?.selectedPlayerId).toBe('sama');
   expect(characterSelectState?.selectedCpuId).toBe('amodi');
 
@@ -71,7 +71,7 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
     roundsToWin: 2,
     roundTimeSeconds: 60,
   });
-  expect(STAGE_IDS).toContain(launchState?.matchConfig?.stageId as (typeof STAGE_IDS)[number]);
+  expect(PLAY_STAGE_IDS).toContain(launchState?.matchConfig?.stageId as (typeof PLAY_STAGE_IDS)[number]);
 
   await setDebugOverlay(page, true);
   await waitForFighting(page);
@@ -83,7 +83,7 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
     player: { id: 'sama' },
     cpu: { id: 'amodi' },
   });
-  expect(STAGE_IDS).toContain(matchState?.stageId as (typeof STAGE_IDS)[number]);
+  expect(PLAY_STAGE_IDS).toContain(matchState?.stageId as (typeof PLAY_STAGE_IDS)[number]);
   expect(matchState?.timerSeconds).toBeGreaterThan(55);
   expect(matchState?.player.health).toBeGreaterThan(0);
   expect(matchState?.cpu.health).toBeGreaterThan(0);
