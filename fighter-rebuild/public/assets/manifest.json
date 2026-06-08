@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-06T07:35:00.000Z",
+  "generatedAt": "2026-06-08T02:12:00.000Z",
   "title": "MortalCodex",
   "style": "Original high-detail 16-bit arcade fighting sprites generated with GPT Image 2, then sliced into Phaser animation strips; no copied source images or legacy game assets.",
   "characters": [
@@ -11,7 +11,7 @@
       "visualCue": "dark hair, navy bomber jacket, white shirt, orange tech-energy accents",
       "portrait": {
         "key": "sama-portrait",
-        "path": "/assets/characters/sama/portrait.png",
+        "path": "/assets/characters/sama/portrait.png?v=alpha-fill-20260607",
         "width": 192,
         "height": 192
       },
@@ -19,7 +19,7 @@
         {
           "name": "idle",
           "key": "sama-idle",
-          "path": "/assets/characters/sama/idle.png",
+          "path": "/assets/characters/sama/idle.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -31,7 +31,7 @@
         {
           "name": "walk",
           "key": "sama-walk",
-          "path": "/assets/characters/sama/walk.png",
+          "path": "/assets/characters/sama/walk.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -43,7 +43,7 @@
         {
           "name": "jump",
           "key": "sama-jump",
-          "path": "/assets/characters/sama/jump.png",
+          "path": "/assets/characters/sama/jump.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -55,7 +55,7 @@
         {
           "name": "crouch",
           "key": "sama-crouch",
-          "path": "/assets/characters/sama/crouch.png",
+          "path": "/assets/characters/sama/crouch.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -67,7 +67,7 @@
         {
           "name": "block",
           "key": "sama-block",
-          "path": "/assets/characters/sama/block.png",
+          "path": "/assets/characters/sama/block.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -79,7 +79,7 @@
         {
           "name": "light",
           "key": "sama-light",
-          "path": "/assets/characters/sama/light.png",
+          "path": "/assets/characters/sama/light.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -91,7 +91,7 @@
         {
           "name": "heavy",
           "key": "sama-heavy",
-          "path": "/assets/characters/sama/heavy.png",
+          "path": "/assets/characters/sama/heavy.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -103,7 +103,7 @@
         {
           "name": "special",
           "key": "sama-special",
-          "path": "/assets/characters/sama/special.png",
+          "path": "/assets/characters/sama/special.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -115,7 +115,7 @@
         {
           "name": "knockdown",
           "key": "sama-knockdown",
-          "path": "/assets/characters/sama/knockdown.png",
+          "path": "/assets/characters/sama/knockdown.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -133,7 +133,7 @@
       "visualCue": "Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
       "portrait": {
         "key": "amodi-portrait",
-        "path": "/assets/characters/amodi/portrait.png",
+        "path": "/assets/characters/amodi/portrait.png?v=alpha-fill-20260607",
         "width": 192,
         "height": 192
       },
@@ -141,7 +141,7 @@
         {
           "name": "idle",
           "key": "amodi-idle",
-          "path": "/assets/characters/amodi/idle.png",
+          "path": "/assets/characters/amodi/idle.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -153,7 +153,7 @@
         {
           "name": "walk",
           "key": "amodi-walk",
-          "path": "/assets/characters/amodi/walk.png",
+          "path": "/assets/characters/amodi/walk.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -165,7 +165,7 @@
         {
           "name": "jump",
           "key": "amodi-jump",
-          "path": "/assets/characters/amodi/jump.png",
+          "path": "/assets/characters/amodi/jump.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -177,7 +177,7 @@
         {
           "name": "crouch",
           "key": "amodi-crouch",
-          "path": "/assets/characters/amodi/crouch.png",
+          "path": "/assets/characters/amodi/crouch.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -189,7 +189,7 @@
         {
           "name": "block",
           "key": "amodi-block",
-          "path": "/assets/characters/amodi/block.png",
+          "path": "/assets/characters/amodi/block.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -201,7 +201,7 @@
         {
           "name": "light",
           "key": "amodi-light",
-          "path": "/assets/characters/amodi/light.png",
+          "path": "/assets/characters/amodi/light.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -213,7 +213,7 @@
         {
           "name": "heavy",
           "key": "amodi-heavy",
-          "path": "/assets/characters/amodi/heavy.png",
+          "path": "/assets/characters/amodi/heavy.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -225,7 +225,7 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png",
+          "path": "/assets/characters/amodi/special.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -237,7 +237,7 @@
         {
           "name": "knockdown",
           "key": "amodi-knockdown",
-          "path": "/assets/characters/amodi/knockdown.png",
+          "path": "/assets/characters/amodi/knockdown.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -255,7 +255,7 @@
       "visualCue": "brown hair, black tech jacket, emerald-green energy accents",
       "portrait": {
         "key": "tibo-portrait",
-        "path": "/assets/characters/tibo/portrait.png",
+        "path": "/assets/characters/tibo/portrait.png?v=alpha-fill-20260607",
         "width": 192,
         "height": 192
       },
@@ -263,7 +263,7 @@
         {
           "name": "idle",
           "key": "tibo-idle",
-          "path": "/assets/characters/tibo/idle.png",
+          "path": "/assets/characters/tibo/idle.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -275,7 +275,7 @@
         {
           "name": "walk",
           "key": "tibo-walk",
-          "path": "/assets/characters/tibo/walk.png",
+          "path": "/assets/characters/tibo/walk.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -287,7 +287,7 @@
         {
           "name": "jump",
           "key": "tibo-jump",
-          "path": "/assets/characters/tibo/jump.png",
+          "path": "/assets/characters/tibo/jump.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -299,7 +299,7 @@
         {
           "name": "crouch",
           "key": "tibo-crouch",
-          "path": "/assets/characters/tibo/crouch.png",
+          "path": "/assets/characters/tibo/crouch.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -311,7 +311,7 @@
         {
           "name": "block",
           "key": "tibo-block",
-          "path": "/assets/characters/tibo/block.png",
+          "path": "/assets/characters/tibo/block.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -323,7 +323,7 @@
         {
           "name": "light",
           "key": "tibo-light",
-          "path": "/assets/characters/tibo/light.png",
+          "path": "/assets/characters/tibo/light.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -335,7 +335,7 @@
         {
           "name": "heavy",
           "key": "tibo-heavy",
-          "path": "/assets/characters/tibo/heavy.png",
+          "path": "/assets/characters/tibo/heavy.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -347,7 +347,7 @@
         {
           "name": "special",
           "key": "tibo-special",
-          "path": "/assets/characters/tibo/special.png",
+          "path": "/assets/characters/tibo/special.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -359,7 +359,7 @@
         {
           "name": "knockdown",
           "key": "tibo-knockdown",
-          "path": "/assets/characters/tibo/knockdown.png",
+          "path": "/assets/characters/tibo/knockdown.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -377,7 +377,7 @@
       "visualCue": "bald head, brown utility jacket, copper-gold energy accents",
       "portrait": {
         "key": "boris-portrait",
-        "path": "/assets/characters/boris/portrait.png",
+        "path": "/assets/characters/boris/portrait.png?v=alpha-fill-20260607",
         "width": 192,
         "height": 192
       },
@@ -385,7 +385,7 @@
         {
           "name": "idle",
           "key": "boris-idle",
-          "path": "/assets/characters/boris/idle.png",
+          "path": "/assets/characters/boris/idle.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -397,7 +397,7 @@
         {
           "name": "walk",
           "key": "boris-walk",
-          "path": "/assets/characters/boris/walk.png",
+          "path": "/assets/characters/boris/walk.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -409,7 +409,7 @@
         {
           "name": "jump",
           "key": "boris-jump",
-          "path": "/assets/characters/boris/jump.png",
+          "path": "/assets/characters/boris/jump.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -421,7 +421,7 @@
         {
           "name": "crouch",
           "key": "boris-crouch",
-          "path": "/assets/characters/boris/crouch.png",
+          "path": "/assets/characters/boris/crouch.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -433,7 +433,7 @@
         {
           "name": "block",
           "key": "boris-block",
-          "path": "/assets/characters/boris/block.png",
+          "path": "/assets/characters/boris/block.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -445,7 +445,7 @@
         {
           "name": "light",
           "key": "boris-light",
-          "path": "/assets/characters/boris/light.png",
+          "path": "/assets/characters/boris/light.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -457,7 +457,7 @@
         {
           "name": "heavy",
           "key": "boris-heavy",
-          "path": "/assets/characters/boris/heavy.png",
+          "path": "/assets/characters/boris/heavy.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -469,7 +469,7 @@
         {
           "name": "special",
           "key": "boris-special",
-          "path": "/assets/characters/boris/special.png",
+          "path": "/assets/characters/boris/special.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -481,7 +481,7 @@
         {
           "name": "knockdown",
           "key": "boris-knockdown",
-          "path": "/assets/characters/boris/knockdown.png",
+          "path": "/assets/characters/boris/knockdown.png?v=alpha-fill-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
