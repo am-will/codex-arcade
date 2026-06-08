@@ -259,7 +259,7 @@ export class MatchScene extends BaseScene {
     this.pendingSuperSlot = null;
     this.clearInputs();
     this.hud?.clearMatchOverlay();
-    this.hud?.showBanner('MORTALCODEX', `Round ${this.roundIndex}`);
+    this.hud?.showBanner('MORTAL CODEX', `Round ${this.roundIndex}`);
     this.syncSprites();
     this.updateCamera(true);
     this.updateHud();
