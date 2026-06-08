@@ -1090,7 +1090,7 @@ export class MatchScene extends BaseScene {
 }
 
 function isLiveSprite(sprite: Phaser.GameObjects.Sprite | null): sprite is Phaser.GameObjects.Sprite {
-  return Boolean(sprite?.scene && sprite.active);
+  return Boolean(sprite?.scene && sprite.active && sprite.scene.children.list.includes(sprite));
 }
 
 function createRuntimeStage(source: StageDefinition, canvasWidth: number, canvasHeight: number): RuntimeStage {
