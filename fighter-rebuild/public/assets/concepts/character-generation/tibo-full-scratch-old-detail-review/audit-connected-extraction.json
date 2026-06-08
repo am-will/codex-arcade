@@ -1,0 +1,386 @@
+{
+  "block": {
+    "anchors": 3,
+    "components": 3,
+    "frames": 3,
+    "scale": 0.40509915014164305,
+    "records": [
+      {
+        "frame": 0,
+        "bbox": [
+          71,
+          16,
+          249,
+          298
+        ],
+        "source_bbox": [
+          76,
+          91,
+          525,
+          797
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 1,
+        "bbox": [
+          69,
+          18,
+          251,
+          298
+        ],
+        "source_bbox": [
+          638,
+          97,
+          1096,
+          797
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 2,
+        "bbox": [
+          67,
+          23,
+          253,
+          298
+        ],
+        "source_bbox": [
+          1207,
+          110,
+          1675,
+          798
+        ],
+        "spill_removed": 0
+      }
+    ],
+    "final_size": [
+      960,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "light": {
+    "anchors": 4,
+    "components": 4,
+    "frames": 4,
+    "scale": 0.5457943925233645,
+    "records": [
+      {
+        "frame": 0,
+        "bbox": [
+          74,
+          22,
+          244,
+          297
+        ],
+        "source_bbox": [
+          77,
+          147,
+          398,
+          660
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 1,
+        "bbox": [
+          32,
+          28,
+          287,
+          297
+        ],
+        "source_bbox": [
+          495,
+          158,
+          971,
+          660
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 2,
+        "bbox": [
+          16,
+          27,
+          303,
+          297
+        ],
+        "source_bbox": [
+          1018,
+          156,
+          1553,
+          659
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 3,
+        "bbox": [
+          74,
+          23,
+          245,
+          297
+        ],
+        "source_bbox": [
+          1549,
+          147,
+          1871,
+          659
+        ],
+        "spill_removed": 0
+      }
+    ],
+    "final_size": [
+      1280,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "heavy": {
+    "anchors": 5,
+    "components": 5,
+    "frames": 5,
+    "scale": 0.6190476190476191,
+    "records": [
+      {
+        "frame": 0,
+        "bbox": [
+          75,
+          20,
+          243,
+          297
+        ],
+        "source_bbox": [
+          60,
+          173,
+          339,
+          628
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 1,
+        "bbox": [
+          83,
+          16,
+          236,
+          296
+        ],
+        "source_bbox": [
+          392,
+          166,
+          648,
+          628
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 2,
+        "bbox": [
+          31,
+          35,
+          286,
+          297
+        ],
+        "source_bbox": [
+          771,
+          195,
+          1193,
+          627
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 3,
+        "bbox": [
+          30,
+          18,
+          288,
+          297
+        ],
+        "source_bbox": [
+          1212,
+          167,
+          1637,
+          628
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 4,
+        "bbox": [
+          75,
+          20,
+          243,
+          297
+        ],
+        "source_bbox": [
+          1637,
+          173,
+          1917,
+          628
+        ],
+        "spill_removed": 0
+      }
+    ],
+    "final_size": [
+      1600,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "special": {
+    "anchors": 5,
+    "components": 7,
+    "frames": 6,
+    "scale": 0.52994555353902,
+    "records": [
+      {
+        "frame": 0,
+        "bbox": [
+          97,
+          83,
+          222,
+          297
+        ],
+        "source_bbox": [
+          53,
+          178,
+          299,
+          591
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 1,
+        "bbox": [
+          89,
+          91,
+          230,
+          297
+        ],
+        "source_bbox": [
+          359,
+          193,
+          635,
+          591
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 2,
+        "bbox": [
+          68,
+          115,
+          251,
+          297
+        ],
+        "source_bbox": [
+          672,
+          238,
+          1026,
+          591
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 3,
+        "bbox": [
+          24,
+          97,
+          296,
+          297
+        ],
+        "source_bbox": [
+          1053,
+          203,
+          1574,
+          591
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 4,
+        "bbox": [
+          24,
+          97,
+          296,
+          297
+        ],
+        "source_bbox": [
+          1053,
+          203,
+          1574,
+          591
+        ],
+        "spill_removed": 0
+      },
+      {
+        "frame": 5,
+        "bbox": [
+          21,
+          83,
+          303,
+          297
+        ],
+        "source_bbox": [
+          1574,
+          178,
+          2125,
+          591
+        ],
+        "spill_removed": 0
+      }
+    ],
+    "final_size": [
+      1920,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "idle": {
+    "final_size": [
+      3840,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "walk": {
+    "final_size": [
+      1920,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "jump": {
+    "final_size": [
+      1280,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "crouch": {
+    "final_size": [
+      1280,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  },
+  "knockdown": {
+    "final_size": [
+      1600,
+      320
+    ],
+    "final_spill": 0,
+    "final_mid_alpha": 0
+  }
+}

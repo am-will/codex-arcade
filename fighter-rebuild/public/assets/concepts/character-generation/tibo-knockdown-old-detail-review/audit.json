@@ -1,0 +1,148 @@
+{
+  "raw_chroma_removed": 1345837,
+  "scale": 0.6173361522198731,
+  "components": [
+    {
+      "area": 52469,
+      "bbox": [
+        96,
+        182,
+        398,
+        580
+      ]
+    },
+    {
+      "area": 47895,
+      "bbox": [
+        475,
+        266,
+        841,
+        565
+      ]
+    },
+    {
+      "area": 45351,
+      "bbox": [
+        880,
+        359,
+        1265,
+        579
+      ]
+    },
+    {
+      "area": 36637,
+      "bbox": [
+        1299,
+        474,
+        1763,
+        580
+      ]
+    },
+    {
+      "area": 44316,
+      "bbox": [
+        1836,
+        309,
+        2139,
+        579
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "frame": 0,
+      "source_bbox": [
+        96,
+        182,
+        398,
+        580
+      ],
+      "cleared_magenta_spill": 0,
+      "filled_tiny_holes": 3,
+      "left_large_transparent_gap_pixels": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "bbox": [
+        66,
+        51,
+        253,
+        297
+      ]
+    },
+    {
+      "frame": 1,
+      "source_bbox": [
+        475,
+        266,
+        841,
+        565
+      ],
+      "cleared_magenta_spill": 0,
+      "filled_tiny_holes": 5,
+      "left_large_transparent_gap_pixels": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "bbox": [
+        46,
+        112,
+        273,
+        297
+      ]
+    },
+    {
+      "frame": 2,
+      "source_bbox": [
+        880,
+        359,
+        1265,
+        579
+      ],
+      "cleared_magenta_spill": 0,
+      "filled_tiny_holes": 2,
+      "left_large_transparent_gap_pixels": 389,
+      "remaining_magenta_spill_pixels": 0,
+      "bbox": [
+        40,
+        161,
+        278,
+        297
+      ]
+    },
+    {
+      "frame": 3,
+      "source_bbox": [
+        1299,
+        474,
+        1763,
+        580
+      ],
+      "cleared_magenta_spill": 0,
+      "filled_tiny_holes": 8,
+      "left_large_transparent_gap_pixels": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "bbox": [
+        16,
+        231,
+        303,
+        297
+      ]
+    },
+    {
+      "frame": 4,
+      "source_bbox": [
+        1836,
+        309,
+        2139,
+        579
+      ],
+      "cleared_magenta_spill": 0,
+      "filled_tiny_holes": 13,
+      "left_large_transparent_gap_pixels": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "bbox": [
+        65,
+        130,
+        253,
+        297
+      ]
+    }
+  ]
+}

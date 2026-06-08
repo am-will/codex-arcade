@@ -1,0 +1,200 @@
+{
+  "idle": {
+    "frames": 12,
+    "source": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_07304ab6443125a5016a262e325994819aa5d0b76a4dc6cf1a.png",
+    "scale": 0.6137339055793991,
+    "records": [
+      {
+        "filled_holes": 1,
+        "mid_alpha": 0,
+        "bbox": [
+          79,
+          17,
+          241,
+          298
+        ]
+      },
+      {
+        "filled_holes": 0,
+        "mid_alpha": 0,
+        "bbox": [
+          83,
+          17,
+          236,
+          298
+        ]
+      },
+      {
+        "filled_holes": 6,
+        "mid_alpha": 0,
+        "bbox": [
+          79,
+          16,
+          240,
+          298
+        ]
+      },
+      {
+        "filled_holes": 1,
+        "mid_alpha": 0,
+        "bbox": [
+          82,
+          16,
+          237,
+          298
+        ]
+      },
+      {
+        "filled_holes": 0,
+        "mid_alpha": 0,
+        "bbox": [
+          84,
+          18,
+          236,
+          298
+        ]
+      },
+      {
+        "filled_holes": 2,
+        "mid_alpha": 0,
+        "bbox": [
+          83,
+          17,
+          237,
+          298
+        ]
+      },
+      {
+        "filled_holes": 2,
+        "mid_alpha": 0,
+        "bbox": [
+          83,
+          17,
+          237,
+          298
+        ]
+      },
+      {
+        "filled_holes": 0,
+        "mid_alpha": 0,
+        "bbox": [
+          84,
+          18,
+          236,
+          298
+        ]
+      },
+      {
+        "filled_holes": 1,
+        "mid_alpha": 0,
+        "bbox": [
+          82,
+          16,
+          237,
+          298
+        ]
+      },
+      {
+        "filled_holes": 6,
+        "mid_alpha": 0,
+        "bbox": [
+          79,
+          16,
+          240,
+          298
+        ]
+      },
+      {
+        "filled_holes": 0,
+        "mid_alpha": 0,
+        "bbox": [
+          83,
+          17,
+          236,
+          298
+        ]
+      },
+      {
+        "filled_holes": 1,
+        "mid_alpha": 0,
+        "bbox": [
+          79,
+          17,
+          241,
+          298
+        ]
+      }
+    ]
+  },
+  "walk": {
+    "frames": 6,
+    "source": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_07304ab6443125a5016a262ec4e518819a950b0ed1fa460b9a.png",
+    "scale": 0.5663366336633663,
+    "records": [
+      {
+        "filled_holes": 7,
+        "mid_alpha": 0,
+        "bbox": [
+          84,
+          17,
+          237,
+          298
+        ]
+      },
+      {
+        "filled_holes": 3,
+        "mid_alpha": 0,
+        "bbox": [
+          57,
+          16,
+          261,
+          298
+        ]
+      },
+      {
+        "filled_holes": 14,
+        "mid_alpha": 0,
+        "bbox": [
+          92,
+          17,
+          227,
+          298
+        ]
+      },
+      {
+        "filled_holes": 8,
+        "mid_alpha": 0,
+        "bbox": [
+          83,
+          17,
+          235,
+          298
+        ]
+      },
+      {
+        "filled_holes": 12,
+        "mid_alpha": 0,
+        "bbox": [
+          62,
+          16,
+          259,
+          298
+        ]
+      },
+      {
+        "filled_holes": 5,
+        "mid_alpha": 0,
+        "bbox": [
+          91,
+          23,
+          227,
+          298
+        ]
+      }
+    ]
+  },
+  "knockdown": {
+    "frames": 5,
+    "source": "tibo-knockdown-old-detail-review/knockdown-5frames-transparent.png"
+  }
+}

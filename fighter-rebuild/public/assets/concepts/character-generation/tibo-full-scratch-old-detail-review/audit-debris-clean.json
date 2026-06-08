@@ -1,0 +1,38 @@
+{
+  "idle": {
+    "frames": 12,
+    "removed_debris_pixels": 8
+  },
+  "walk": {
+    "frames": 6,
+    "removed_debris_pixels": 3
+  },
+  "jump": {
+    "frames": 4,
+    "removed_debris_pixels": 11
+  },
+  "crouch": {
+    "frames": 4,
+    "removed_debris_pixels": 0
+  },
+  "block": {
+    "frames": 3,
+    "removed_debris_pixels": 47
+  },
+  "light": {
+    "frames": 4,
+    "removed_debris_pixels": 47
+  },
+  "heavy": {
+    "frames": 5,
+    "removed_debris_pixels": 77
+  },
+  "special": {
+    "frames": 6,
+    "removed_debris_pixels": 188
+  },
+  "knockdown": {
+    "frames": 5,
+    "removed_debris_pixels": 10
+  }
+}

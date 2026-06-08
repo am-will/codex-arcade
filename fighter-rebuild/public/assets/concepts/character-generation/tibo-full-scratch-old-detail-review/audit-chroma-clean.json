@@ -1,0 +1,31 @@
+{
+  "removed": {
+    "idle.png": 5660,
+    "idle-transparent-source.png": 7653,
+    "walk.png": 2521,
+    "walk-transparent-source.png": 8237,
+    "knockdown.png": 0
+  },
+  "audit": {
+    "idle.png": {
+      "removed": 5660,
+      "remaining_magenta_spill_pixels": 0,
+      "mid_alpha_pixels": 0
+    },
+    "walk.png": {
+      "removed": 2521,
+      "remaining_magenta_spill_pixels": 0,
+      "mid_alpha_pixels": 0
+    },
+    "knockdown.png": {
+      "removed": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "mid_alpha_pixels": 0
+    },
+    "partial-review-contact.png": {
+      "removed": 0,
+      "remaining_magenta_spill_pixels": 0,
+      "mid_alpha_pixels": 0
+    }
+  }
+}
