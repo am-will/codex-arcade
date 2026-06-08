@@ -156,7 +156,6 @@ export class MatchScene extends BaseScene {
 
     this.drawStage(this.stageDefinition);
     this.hud = new MatchHud(this);
-    this.createSprites();
     this.createPointerControls();
     this.installRuntimeHooks();
     this.resetMatchState(this.matchConfig.seed, true);
@@ -620,6 +619,8 @@ export class MatchScene extends BaseScene {
 
     this.playerSprite?.destroy();
     this.cpuSprite?.destroy();
+    this.playerSprite = null;
+    this.cpuSprite = null;
     const playerAsset = this.getAnimationAsset(this.combatState.player.character, fighterAnimationName(this.combatState.player));
     const cpuAsset = this.getAnimationAsset(this.combatState.cpu.character, fighterAnimationName(this.combatState.cpu));
 
@@ -637,7 +638,7 @@ export class MatchScene extends BaseScene {
       return;
     }
 
-    if (!this.playerSprite || !this.cpuSprite) {
+    if (!isLiveSprite(this.playerSprite) || !isLiveSprite(this.cpuSprite)) {
       this.createSprites();
     }
 
@@ -653,7 +654,7 @@ export class MatchScene extends BaseScene {
     const animationName = fighterAnimationName(fighter);
     const animationAsset = this.getAnimationAsset(fighter.character, animationName);
 
-    if (animationAsset) {
+    if (animationAsset && this.textures.exists(animationAsset.key)) {
       sprite.setTexture(animationAsset.key);
       sprite.setFrame(Phaser.Math.Clamp(fighter.animationFrame, 0, Math.max(0, animationAsset.frameCount - 1)));
     }
@@ -1078,9 +1079,18 @@ export class MatchScene extends BaseScene {
     removeTestHooks(globalThis as TestHookHost);
     this.hud?.destroy();
     this.hud = null;
+    this.playerSprite?.destroy();
+    this.cpuSprite?.destroy();
+    this.playerSprite = null;
+    this.cpuSprite = null;
+    this.combatState = null;
     this.pointerObjects = [];
     this.stageObjects = [];
   }
+}
+
+function isLiveSprite(sprite: Phaser.GameObjects.Sprite | null): sprite is Phaser.GameObjects.Sprite {
+  return Boolean(sprite?.scene && sprite.active);
 }
 
 function createRuntimeStage(source: StageDefinition, canvasWidth: number, canvasHeight: number): RuntimeStage {

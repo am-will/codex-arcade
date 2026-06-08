@@ -126,6 +126,23 @@ test('opponent select auto-picks a remaining character after five seconds', asyn
   expect(launchState?.matchConfig?.cpuCharacterId).not.toBe('sama');
 });
 
+test('character select remains usable after leaving a match with Escape', async ({ page }) => {
+  await launchMatchViaMenu(page);
+  await page.keyboard.press('Escape');
+  await expect.poll(() => readScene(page)).toBe('MainMenu');
+
+  await page.keyboard.press('Enter');
+  await expect.poll(() => readScene(page)).toBe('CharacterSelect');
+  await expect.poll(() => readMenuFlowState(page).then((state) => state?.selectPhase)).toBe('player');
+
+  await page.keyboard.press('Enter');
+  await expect.poll(() => readMenuFlowState(page).then((state) => state?.selectPhase)).toBe('opponent');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => readScene(page)).toBe('Match');
+  await waitForHooks(page);
+  await waitForFighting(page);
+});
+
 test('test hooks drive deterministic damage, block, and special behavior', async ({ page }) => {
   await launchMatchViaMenu(page);
   await setCpuEnabled(page, false);

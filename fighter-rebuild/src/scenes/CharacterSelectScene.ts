@@ -16,6 +16,10 @@ type CharacterCard = {
   readonly setState: (state: CharacterCardState) => void;
 };
 
+const SELECT_PORTRAIT_ZOOM: Partial<Record<CharacterDefinition['id'], number>> = {
+  tibo: 1.12,
+};
+
 export class CharacterSelectScene extends BaseScene {
   public constructor() {
     super(SceneKey.CharacterSelect);
@@ -251,7 +255,8 @@ export class CharacterSelectScene extends BaseScene {
     const portraitFrame = this.add
       .rectangle(0, portraitY, portraitFrameSize, portraitFrameSize, 0x06070a, 0.96)
       .setStrokeStyle(2, 0xffffff, 0.12);
-    const portrait = this.add.image(0, portraitY, character.portraitKey).setDisplaySize(portraitSize, portraitSize).setFlipX(flipPortrait);
+    const portraitDisplaySize = Math.round(portraitSize * (SELECT_PORTRAIT_ZOOM[character.id] ?? 1));
+    const portrait = this.add.image(0, portraitY, character.portraitKey).setDisplaySize(portraitDisplaySize, portraitDisplaySize).setFlipX(flipPortrait);
     const name = this.add
       .text(0, nameY, character.displayName, {
         align: 'center',
@@ -276,7 +281,6 @@ export class CharacterSelectScene extends BaseScene {
         portraitFrame.setStrokeStyle(focused ? 4 : 2, focused ? focusStroke : 0xffffff, disabled ? 0.08 : focused ? 0.9 : 0.12);
         portrait.setAlpha(disabled ? 0.28 : 1);
         name.setColor(disabled ? '#6f7880' : focused ? (phase === 'opponent' ? '#ffd6d6' : '#fff3c4') : '#f8fafc');
-        zone.setInteractive({ useHandCursor: !disabled });
         if (zone.input) {
           zone.input.enabled = !disabled;
         }
