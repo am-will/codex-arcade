@@ -11,7 +11,7 @@
       "visualCue": "messy brown hair, grey crewneck sweater, dark pants, cool blue tech-energy accents",
       "portrait": {
         "key": "sama-portrait",
-        "path": "/assets/characters/sama/portrait.png?v=alpha-solid-sama-redo-20260608",
+        "path": "/assets/characters/sama/portrait.png?v=outline-mask-fill-20260608",
         "width": 192,
         "height": 192
       },
@@ -19,7 +19,7 @@
         {
           "name": "idle",
           "key": "sama-idle",
-          "path": "/assets/characters/sama/idle.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/idle.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -31,7 +31,7 @@
         {
           "name": "walk",
           "key": "sama-walk",
-          "path": "/assets/characters/sama/walk.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/walk.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -43,7 +43,7 @@
         {
           "name": "jump",
           "key": "sama-jump",
-          "path": "/assets/characters/sama/jump.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/jump.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -55,7 +55,7 @@
         {
           "name": "crouch",
           "key": "sama-crouch",
-          "path": "/assets/characters/sama/crouch.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/crouch.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -67,7 +67,7 @@
         {
           "name": "block",
           "key": "sama-block",
-          "path": "/assets/characters/sama/block.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/block.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -79,7 +79,7 @@
         {
           "name": "light",
           "key": "sama-light",
-          "path": "/assets/characters/sama/light.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/light.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -91,7 +91,7 @@
         {
           "name": "heavy",
           "key": "sama-heavy",
-          "path": "/assets/characters/sama/heavy.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/heavy.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -103,7 +103,7 @@
         {
           "name": "special",
           "key": "sama-special",
-          "path": "/assets/characters/sama/special.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/special.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -115,7 +115,7 @@
         {
           "name": "knockdown",
           "key": "sama-knockdown",
-          "path": "/assets/characters/sama/knockdown.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/sama/knockdown.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -133,7 +133,7 @@
       "visualCue": "Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
       "portrait": {
         "key": "amodi-portrait",
-        "path": "/assets/characters/amodi/portrait.png?v=alpha-solid-sama-redo-20260608",
+        "path": "/assets/characters/amodi/portrait.png?v=outline-mask-fill-20260608",
         "width": 192,
         "height": 192
       },
@@ -141,7 +141,7 @@
         {
           "name": "idle",
           "key": "amodi-idle",
-          "path": "/assets/characters/amodi/idle.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/idle.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -153,7 +153,7 @@
         {
           "name": "walk",
           "key": "amodi-walk",
-          "path": "/assets/characters/amodi/walk.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/walk.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -165,7 +165,7 @@
         {
           "name": "jump",
           "key": "amodi-jump",
-          "path": "/assets/characters/amodi/jump.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/jump.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -177,7 +177,7 @@
         {
           "name": "crouch",
           "key": "amodi-crouch",
-          "path": "/assets/characters/amodi/crouch.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/crouch.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -189,7 +189,7 @@
         {
           "name": "block",
           "key": "amodi-block",
-          "path": "/assets/characters/amodi/block.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/block.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -201,7 +201,7 @@
         {
           "name": "light",
           "key": "amodi-light",
-          "path": "/assets/characters/amodi/light.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/light.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -213,7 +213,7 @@
         {
           "name": "heavy",
           "key": "amodi-heavy",
-          "path": "/assets/characters/amodi/heavy.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/heavy.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -225,7 +225,7 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/special.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -237,7 +237,7 @@
         {
           "name": "knockdown",
           "key": "amodi-knockdown",
-          "path": "/assets/characters/amodi/knockdown.png?v=alpha-solid-sama-redo-20260608",
+          "path": "/assets/characters/amodi/knockdown.png?v=outline-mask-fill-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
