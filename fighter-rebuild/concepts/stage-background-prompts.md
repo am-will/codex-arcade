@@ -1,4 +1,4 @@
-# MortalCodex Stage Background Prompts
+# Mortal Codex Stage Background Prompts
 
 Generated with the built-in image generation tool, then cropped/resized to the 640x360 stage contract and copied into `public/assets/stages/`.
 

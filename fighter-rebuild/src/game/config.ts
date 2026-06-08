@@ -242,7 +242,7 @@ function normalizeManifest(source: unknown, warnings: WarningList): AssetManifes
   return {
     schemaVersion: positiveInt(sourceRecord?.schemaVersion, 1),
     generatedAt: stringOr(sourceRecord?.generatedAt, new Date(0).toISOString()),
-    title: stringOr(sourceRecord?.title, 'MortalCodex'),
+    title: stringOr(sourceRecord?.title, 'Mortal Codex'),
     style: stringOr(sourceRecord?.style, 'Generated original fighter assets.'),
     characters,
     stages,
