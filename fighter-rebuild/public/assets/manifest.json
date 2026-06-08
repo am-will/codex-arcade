@@ -255,7 +255,7 @@
       "visualCue": "brown hair, black tech jacket, emerald-green energy accents",
       "portrait": {
         "key": "tibo-portrait",
-        "path": "/assets/characters/tibo/portrait.png?v=alpha-fill-20260607",
+        "path": "/assets/characters/tibo/portrait.png?v=tibo-full-old-detail-20260607",
         "width": 192,
         "height": 192
       },
@@ -263,7 +263,7 @@
         {
           "name": "idle",
           "key": "tibo-idle",
-          "path": "/assets/characters/tibo/idle.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/idle.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -275,7 +275,7 @@
         {
           "name": "walk",
           "key": "tibo-walk",
-          "path": "/assets/characters/tibo/walk.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/walk.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -287,7 +287,7 @@
         {
           "name": "jump",
           "key": "tibo-jump",
-          "path": "/assets/characters/tibo/jump.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/jump.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -299,7 +299,7 @@
         {
           "name": "crouch",
           "key": "tibo-crouch",
-          "path": "/assets/characters/tibo/crouch.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/crouch.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -311,7 +311,7 @@
         {
           "name": "block",
           "key": "tibo-block",
-          "path": "/assets/characters/tibo/block.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/block.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -323,7 +323,7 @@
         {
           "name": "light",
           "key": "tibo-light",
-          "path": "/assets/characters/tibo/light.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/light.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -335,7 +335,7 @@
         {
           "name": "heavy",
           "key": "tibo-heavy",
-          "path": "/assets/characters/tibo/heavy.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/heavy.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -347,7 +347,7 @@
         {
           "name": "special",
           "key": "tibo-special",
-          "path": "/assets/characters/tibo/special.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/special.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -359,7 +359,7 @@
         {
           "name": "knockdown",
           "key": "tibo-knockdown",
-          "path": "/assets/characters/tibo/knockdown.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/tibo/knockdown.png?v=tibo-full-old-detail-20260607",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
