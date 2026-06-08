@@ -11,6 +11,8 @@ type MenuFlowState = {
   readonly playableModes?: readonly string[];
   readonly hasOneVsOneOption?: boolean;
   readonly labels?: readonly string[];
+  readonly selectPhase?: 'player' | 'opponent';
+  readonly opponentAutoPickSeconds?: number;
   readonly selectedStageId?: string;
   readonly selectedPlayerId?: string;
   readonly selectedCpuId?: string;
@@ -61,6 +63,15 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
   expect(characterSelectState?.selectedCpuId).toBe('amodi');
 
   await page.keyboard.press('Enter');
+  await expect.poll(() => readScene(page)).toBe('CharacterSelect');
+
+  const opponentSelectState = await readMenuFlowState(page);
+  expect(opponentSelectState?.selectPhase).toBe('opponent');
+  expect(opponentSelectState?.selectedPlayerId).toBe('sama');
+  expect(opponentSelectState?.selectedCpuId).toBe('amodi');
+  expect(opponentSelectState?.opponentAutoPickSeconds).toBeGreaterThan(0);
+
+  await page.keyboard.press('Enter');
   await expect.poll(() => readScene(page)).toBe('Match');
   await waitForHooks(page);
 
@@ -96,6 +107,23 @@ test('renders readable desktop/mobile canvas and launches Match through the Play
   expect(metrics.distinctColorBuckets).toBeGreaterThan(24);
   expect(metrics.hudBrightPixels).toBeGreaterThan(30);
   expect(metrics.hudColorBuckets).toBeGreaterThan(10);
+});
+
+test('opponent select auto-picks a remaining character after five seconds', async ({ page }) => {
+  await page.goto('/');
+  await expect.poll(() => readScene(page)).toBe('MainMenu');
+
+  await page.keyboard.press('Enter');
+  await expect.poll(() => readScene(page)).toBe('CharacterSelect');
+  await page.keyboard.press('Enter');
+
+  await expect.poll(() => readMenuFlowState(page).then((state) => state?.selectPhase)).toBe('opponent');
+  await expect.poll(() => readScene(page), { timeout: 7_000 }).toBe('Match');
+
+  const launchState = await readMenuFlowState(page);
+  expect(launchState?.matchConfig?.playerCharacterId).toBe('sama');
+  expect(launchState?.matchConfig?.cpuCharacterId).toBeTruthy();
+  expect(launchState?.matchConfig?.cpuCharacterId).not.toBe('sama');
 });
 
 test('test hooks drive deterministic damage, block, and special behavior', async ({ page }) => {
@@ -190,6 +218,8 @@ async function launchMatchViaMenu(page: Page): Promise<void> {
 
   await page.keyboard.press('Enter');
   await expect.poll(() => readScene(page)).toBe('CharacterSelect');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => readMenuFlowState(page).then((state) => state?.selectPhase)).toBe('opponent');
   await page.keyboard.press('Enter');
   await expect.poll(() => readScene(page)).toBe('Match');
   await waitForHooks(page);

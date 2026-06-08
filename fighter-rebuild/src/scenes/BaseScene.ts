@@ -10,6 +10,8 @@ type MenuDebugState = {
   readonly playableModes: readonly ['Play vs CPU'];
   readonly hasOneVsOneOption: false;
   readonly labels: readonly string[];
+  readonly selectPhase?: 'player' | 'opponent';
+  readonly opponentAutoPickSeconds?: number;
   readonly selectedStageId?: StageId;
   readonly selectedPlayerId?: CharacterId;
   readonly selectedCpuId?: CharacterId;
@@ -82,8 +84,10 @@ export abstract class BaseScene extends Phaser.Scene {
   protected createMatchConfig(config: GameConfig, data: MenuFlowData, playerCharacterId: CharacterId): MatchConfig {
     const stageId = data.stageId && config.stagesById[data.stageId] ? data.stageId : config.settings.defaultStageId;
     const cpuCharacterId =
+      (data.cpuCharacterId && data.cpuCharacterId !== playerCharacterId && config.charactersById[data.cpuCharacterId]
+        ? data.cpuCharacterId
+        : undefined) ??
       config.characters.find((character) => character.id !== playerCharacterId)?.id ??
-      data.cpuCharacterId ??
       config.settings.defaultCpuId;
     const settings = this.resolveSettings(config, data);
 
@@ -313,6 +317,8 @@ export abstract class BaseScene extends Phaser.Scene {
       playableModes: ['Play vs CPU'],
       hasOneVsOneOption: false,
       labels: details.labels ?? [],
+      selectPhase: details.selectPhase,
+      opponentAutoPickSeconds: details.opponentAutoPickSeconds,
       selectedStageId: details.selectedStageId,
       selectedPlayerId: details.selectedPlayerId,
       selectedCpuId: details.selectedCpuId,
