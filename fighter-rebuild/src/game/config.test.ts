@@ -29,7 +29,7 @@ describe('game config loading and normalization', () => {
       expect(character.portraitKey).toBe(`${character.assetId}-portrait`);
       expect(character.attacks.light.windows[0]?.hitbox.x).toBeGreaterThan(190);
       expect(character.attacks.heavy.windows[0]?.hitbox.width).toBeGreaterThan(100);
-      expect(character.attacks.special.windows).toHaveLength(3);
+      expect(character.attacks.special.windows).toHaveLength(4);
       expectAllRequiredBoxesAreAuthored(character);
     }
 

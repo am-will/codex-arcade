@@ -196,7 +196,7 @@ function resolveAttackAgainstTarget(attacker: FighterState, target: FighterState
       continue;
     }
 
-    const damage = blocked ? activeAttack.profile.blockDamage : activeAttack.profile.damage;
+    const damage = damageForAttackWindow(activeAttack, index, blocked);
     nextAttacker = markWindowConnected(clampMeter(nextAttacker, nextAttacker.meter + activeAttack.profile.meterGain), index);
 
     if (blocked) {
@@ -232,7 +232,7 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
       return clampHealth(target, nextHealth);
     }
 
-    if (attack.kind === 'special') {
+    if (attack.kind === 'special' && !isFinalAttackWindow(attack, windowIndex)) {
       return {
         ...clampHealth(target, nextHealth),
         status: 'hitstun',
@@ -269,6 +269,41 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
       y: knockback.y,
     },
   };
+}
+
+function damageForAttackWindow(attack: ActiveAttackState, windowIndex: number, blocked: boolean): number {
+  const damage = blocked ? attack.profile.blockDamage : attack.profile.damage;
+
+  if (attack.kind !== 'special') {
+    return damage;
+  }
+
+  const windowCount = Math.max(attack.profile.windows.length, 1);
+  const finalWindowIndex = windowCount - 1;
+
+  if (windowIndex >= finalWindowIndex) {
+    return finalSpecialWindowDamage(damage, windowCount);
+  }
+
+  return splitDamageAcrossWindows(damage - finalSpecialWindowDamage(damage, windowCount), windowIndex, finalWindowIndex);
+}
+
+function finalSpecialWindowDamage(damage: number, windowCount: number): number {
+  if (windowCount <= 1) {
+    return damage;
+  }
+
+  const evenShare = Math.ceil(damage / windowCount);
+  return Math.min(damage, evenShare + Math.max(1, Math.floor(evenShare / 2)));
+}
+
+function splitDamageAcrossWindows(damage: number, windowIndex: number, windowCount: number): number {
+  const safeWindowCount = Math.max(windowCount, 1);
+  const baseDamage = Math.floor(damage / safeWindowCount);
+  const remainder = damage % safeWindowCount;
+  const remainderStart = safeWindowCount - remainder;
+
+  return baseDamage + (remainder > 0 && windowIndex >= remainderStart ? 1 : 0);
 }
 
 function isUninterruptibleSpecial(fighter: FighterState): boolean {

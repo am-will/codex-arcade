@@ -165,13 +165,16 @@ test('test hooks drive deterministic damage, block, and special behavior', async
   const beforeSpecial = await requireMatchState(page);
   expect(beforeSpecial.player.meter).toBe(100);
   await press(page, 'special');
-  const afterSpecial = await waitForCpuHealthBelow(page, beforeSpecial.cpu.health, 120);
-  expect(afterSpecial.cpu.health).toBeLessThan(beforeSpecial.cpu.health);
+  const afterFirstSpecialHit = await waitForCpuHealthBelow(page, beforeSpecial.cpu.health, 120);
+  expect(afterFirstSpecialHit.cpu.health).toBeLessThan(beforeSpecial.cpu.health);
+  expect(afterFirstSpecialHit.cpu.health).toBeGreaterThan(0);
+  const afterSpecial = await waitForCpuHealthBelow(page, 1, 240);
   expect(afterSpecial.cpu.health).toBe(0);
   expect(afterSpecial.phase).toBe('fighting');
   expect(afterSpecial.player.animation).toBe('special');
   expect(afterSpecial.player.meter).toBeLessThan(beforeSpecial.player.meter);
   await waitForKnockdownBounce(page, 'cpu', afterSpecial.cpu.y);
+  await expect.poll(() => readMatchPhase(page), { timeout: 5_000 }).toBe('roundOver');
 });
 
 test('timeout round-over reaches match-over and rematch resets state', async ({ page }) => {
@@ -388,7 +391,7 @@ async function waitForKnockdownBounce(page: Page, slot: 'player' | 'cpu', ground
     const state = await requireMatchState(page);
     const fighter = state[slot];
 
-    if (state.phase === 'roundOver' && fighter.animation === 'knockdown' && fighter.y < groundY - 4) {
+    if (fighter.animation === 'knockdown' && fighter.y < groundY - 4) {
       return state;
     }
   }

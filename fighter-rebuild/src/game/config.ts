@@ -737,8 +737,9 @@ function defaultWindowsForAttack(attackId: AttackId, frameCount: number): readon
   if (attackId === 'special') {
     return [
       { startFrame: clampInt(1, 0, frameCount - 1, 0), endFrame: clampInt(1, 0, frameCount - 1, 0), hitbox: { x: 190, y: 92, width: 88, height: 76 } },
-      { startFrame: clampInt(2, 0, frameCount - 1, 0), endFrame: clampInt(3, 0, frameCount - 1, 0), hitbox: { x: 204, y: 108, width: 94, height: 66 } },
-      { startFrame: clampInt(4, 0, frameCount - 1, 0), endFrame: clampInt(5, 0, frameCount - 1, 0), hitbox: { x: 194, y: 72, width: 114, height: 90 } },
+      { startFrame: clampInt(2, 0, frameCount - 1, 0), endFrame: clampInt(2, 0, frameCount - 1, 0), hitbox: { x: 204, y: 108, width: 94, height: 66 } },
+      { startFrame: clampInt(3, 0, frameCount - 1, 0), endFrame: clampInt(3, 0, frameCount - 1, 0), hitbox: { x: 214, y: 98, width: 96, height: 70 } },
+      { startFrame: clampInt(4, 0, frameCount - 1, 0), endFrame: clampInt(5, 0, frameCount - 1, 0), hitbox: { x: 176, y: 70, width: 152, height: 96 } },
     ];
   }
 

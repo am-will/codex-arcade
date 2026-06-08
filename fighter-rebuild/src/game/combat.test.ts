@@ -64,9 +64,10 @@ describe('fighter combat core', () => {
     const afterSpecial = runFrames(state, 34, { player: { special: true } });
     const specialHits = afterSpecial.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
 
-    expect(specialHits).toHaveLength(3);
-    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
-    expect(afterSpecial.cpu.health).toBe(44);
+    expect(specialHits).toHaveLength(4);
+    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2, 3]);
+    expect(specialHits.map((event) => event.damage)).toEqual([4, 4, 5, 7]);
+    expect(afterSpecial.cpu.health).toBe(84);
   });
 
   it('lets special combos continue after an early zero-health hit', () => {
@@ -83,9 +84,12 @@ describe('fighter combat core', () => {
     const afterCombo = runFrames(afterFirstHit, 25);
     const specialHits = afterCombo.events.filter((event) => event.type === 'hit' && event.attackId === 'sama-combo');
 
-    expect(afterFirstHit.cpu.health).toBe(0);
+    expect(afterFirstHit.cpu.health).toBe(11);
     expect(afterFirstHit.cpu.isFinished).toBe(false);
-    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
+    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2, 3]);
+    expect(afterCombo.cpu.health).toBe(0);
+    expect(afterCombo.cpu.isFinished).toBe(true);
+    expect(afterCombo.events.some((event) => event.type === 'finisher' && event.windowIndex === 3)).toBe(true);
     expect(afterCombo.player.activeAttack?.kind).toBe('special');
   });
 
@@ -98,7 +102,7 @@ describe('fighter combat core', () => {
 
     expect(afterFirstHit.events.some((event) => event.type === 'hit' && event.attackId === 'sama-combo' && event.windowIndex === 0)).toBe(true);
     expect(Math.abs(afterFirstHit.cpu.velocity.x)).toBeLessThan(30);
-    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2]);
+    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2, 3]);
     expect(Math.abs(afterCombo.cpu.velocity.x)).toBeGreaterThan(100);
   });
 
