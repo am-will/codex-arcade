@@ -225,11 +225,11 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=amodei-special-no-overlay-20260608",
-          "frameWidth": 320,
+          "path": "/assets/characters/amodi/special.png?v=amodei-special-beam-range-20260609",
+          "frameWidth": 480,
           "frameHeight": 320,
-          "frameCount": 6,
-          "columns": 6,
+          "frameCount": 7,
+          "columns": 7,
           "rows": 1,
           "fps": 12,
           "loop": false
