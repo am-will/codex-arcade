@@ -1,0 +1,618 @@
+{
+  "source": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a275e8efc988195ba3ac7bbd212d033.png",
+  "output": "fighter-rebuild/public/assets/concepts/amodei-fullsheet-claude-20260608",
+  "grid": {
+    "columns": 12,
+    "rows": 8,
+    "cellSizeApprox": [
+      120.66666666666667,
+      135.75
+    ]
+  },
+  "rows": {
+    "idle": {
+      "rowIndex": 0,
+      "expectedFrameCount": 12,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "detectedPopulatedCount": 12,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 5212,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 5245,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 5215,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 5192,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 5325,
+          "populated": true
+        },
+        {
+          "column": 5,
+          "opaquePixels": 5174,
+          "populated": true
+        },
+        {
+          "column": 6,
+          "opaquePixels": 5349,
+          "populated": true
+        },
+        {
+          "column": 7,
+          "opaquePixels": 5278,
+          "populated": true
+        },
+        {
+          "column": 8,
+          "opaquePixels": 5226,
+          "populated": true
+        },
+        {
+          "column": 9,
+          "opaquePixels": 5165,
+          "populated": true
+        },
+        {
+          "column": 10,
+          "opaquePixels": 5156,
+          "populated": true
+        },
+        {
+          "column": 11,
+          "opaquePixels": 5144,
+          "populated": true
+        }
+      ]
+    },
+    "walk": {
+      "rowIndex": 1,
+      "expectedFrameCount": 6,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "detectedPopulatedCount": 5,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4237,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 4500,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 3962,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 4238,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 4612,
+          "populated": true
+        },
+        {
+          "column": 5,
+          "opaquePixels": 474,
+          "populated": false
+        },
+        {
+          "column": 6,
+          "opaquePixels": 440,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 455,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 464,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 474,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 518,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 443,
+          "populated": false
+        }
+      ]
+    },
+    "jump": {
+      "rowIndex": 2,
+      "expectedFrameCount": 4,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "detectedPopulatedCount": 4,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4744,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 4769,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 4518,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 4895,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 435,
+          "populated": false
+        },
+        {
+          "column": 5,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 6,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 97,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    },
+    "crouch": {
+      "rowIndex": 3,
+      "expectedFrameCount": 4,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "detectedPopulatedCount": 4,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4793,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 4855,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 4460,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 4442,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 5,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 6,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 93,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    },
+    "block": {
+      "rowIndex": 4,
+      "expectedFrameCount": 3,
+      "populatedColumns": [
+        0,
+        1,
+        2
+      ],
+      "detectedPopulatedCount": 3,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 5368,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 5126,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 5204,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 4,
+          "opaquePixels": 40,
+          "populated": false
+        },
+        {
+          "column": 5,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 6,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 25,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 80,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    },
+    "light": {
+      "rowIndex": 5,
+      "expectedFrameCount": 4,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "detectedPopulatedCount": 5,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4932,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 4996,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 5454,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 5375,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 4917,
+          "populated": true
+        },
+        {
+          "column": 5,
+          "opaquePixels": 32,
+          "populated": false
+        },
+        {
+          "column": 6,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 112,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    },
+    "special": {
+      "rowIndex": 6,
+      "expectedFrameCount": 6,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "detectedPopulatedCount": 7,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4836,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 4824,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 5016,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 5457,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 1769,
+          "populated": true
+        },
+        {
+          "column": 5,
+          "opaquePixels": 3080,
+          "populated": true
+        },
+        {
+          "column": 6,
+          "opaquePixels": 4291,
+          "populated": true
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 96,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    },
+    "knockdown": {
+      "rowIndex": 7,
+      "expectedFrameCount": 5,
+      "populatedColumns": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "detectedPopulatedCount": 6,
+      "cells": [
+        {
+          "column": 0,
+          "opaquePixels": 4217,
+          "populated": true
+        },
+        {
+          "column": 1,
+          "opaquePixels": 3589,
+          "populated": true
+        },
+        {
+          "column": 2,
+          "opaquePixels": 2594,
+          "populated": true
+        },
+        {
+          "column": 3,
+          "opaquePixels": 2721,
+          "populated": true
+        },
+        {
+          "column": 4,
+          "opaquePixels": 4573,
+          "populated": true
+        },
+        {
+          "column": 5,
+          "opaquePixels": 4763,
+          "populated": true
+        },
+        {
+          "column": 6,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 7,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 8,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 9,
+          "opaquePixels": 0,
+          "populated": false
+        },
+        {
+          "column": 10,
+          "opaquePixels": 134,
+          "populated": false
+        },
+        {
+          "column": 11,
+          "opaquePixels": 0,
+          "populated": false
+        }
+      ]
+    }
+  },
+  "notes": [
+    "walk: expected 6 populated cells, detected 5 at columns [0, 1, 2, 3, 4]",
+    "light: expected 4 populated cells, detected 5 at columns [0, 1, 2, 3, 4]",
+    "special: expected 6 populated cells, detected 7 at columns [0, 1, 2, 3, 4, 5, 6]",
+    "knockdown: expected 5 populated cells, detected 6 at columns [0, 1, 2, 3, 4, 5]"
+  ]
+}

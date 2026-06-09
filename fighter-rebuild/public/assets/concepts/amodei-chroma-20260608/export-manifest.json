@@ -1,0 +1,198 @@
+{
+  "source": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a275d419a988195b1d1627e34bf4c2a.png",
+  "output": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608",
+  "backgroundKey": "#ff00ff chroma magenta",
+  "poseOrder": [
+    "idle_a",
+    "idle_b",
+    "walk_a",
+    "walk_b",
+    "crouch",
+    "block",
+    "light",
+    "heavy",
+    "special_charge",
+    "special_fire",
+    "fall",
+    "recover"
+  ],
+  "animations": {
+    "idle": [
+      "idle_a",
+      "idle_b",
+      "idle_a",
+      "idle_b",
+      "idle_a",
+      "idle_b",
+      "idle_a",
+      "idle_b",
+      "idle_a",
+      "idle_b",
+      "idle_a",
+      "idle_b"
+    ],
+    "walk": [
+      "walk_a",
+      "walk_b",
+      "walk_a",
+      "idle_a",
+      "walk_b",
+      "idle_b"
+    ],
+    "jump": [
+      "crouch",
+      "recover",
+      "recover",
+      "crouch"
+    ],
+    "crouch": [
+      "idle_a",
+      "crouch",
+      "crouch",
+      "recover"
+    ],
+    "block": [
+      "idle_a",
+      "block",
+      "block"
+    ],
+    "light": [
+      "idle_a",
+      "light",
+      "light",
+      "idle_b"
+    ],
+    "heavy": [
+      "idle_a",
+      "block",
+      "heavy",
+      "heavy",
+      "idle_b"
+    ],
+    "special": [
+      "idle_a",
+      "special_charge",
+      "special_charge",
+      "special_fire",
+      "special_fire",
+      "recover"
+    ],
+    "knockdown": [
+      "idle_a",
+      "fall",
+      "fall",
+      "fall",
+      "recover"
+    ]
+  },
+  "runtimeFrameSize": [
+    320,
+    320
+  ],
+  "scale": 1.0144927536231885,
+  "animationReport": {
+    "idle": {
+      "frames": 12,
+      "opaquePixelsByFrame": [
+        28686,
+        29451,
+        28686,
+        29451,
+        28686,
+        29451,
+        28686,
+        29451,
+        28686,
+        29451,
+        28686,
+        29451
+      ]
+    },
+    "walk": {
+      "frames": 6,
+      "opaquePixelsByFrame": [
+        29508,
+        28587,
+        29508,
+        28686,
+        28587,
+        29451
+      ]
+    },
+    "jump": {
+      "frames": 4,
+      "opaquePixelsByFrame": [
+        24605,
+        29706,
+        29706,
+        24605
+      ]
+    },
+    "crouch": {
+      "frames": 4,
+      "opaquePixelsByFrame": [
+        28686,
+        24605,
+        24605,
+        29706
+      ]
+    },
+    "block": {
+      "frames": 3,
+      "opaquePixelsByFrame": [
+        28686,
+        27091,
+        27091
+      ]
+    },
+    "light": {
+      "frames": 4,
+      "opaquePixelsByFrame": [
+        28686,
+        29629,
+        29629,
+        29451
+      ]
+    },
+    "heavy": {
+      "frames": 5,
+      "opaquePixelsByFrame": [
+        28686,
+        27091,
+        25435,
+        25435,
+        29451
+      ]
+    },
+    "special": {
+      "frames": 6,
+      "opaquePixelsByFrame": [
+        28686,
+        37681,
+        37681,
+        19764,
+        19764,
+        29706
+      ]
+    },
+    "knockdown": {
+      "frames": 5,
+      "opaquePixelsByFrame": [
+        28686,
+        21861,
+        21861,
+        21861,
+        29706
+      ]
+    }
+  },
+  "layers": {
+    "rawMagenta": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/raw",
+    "poseSprites": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/poses/sprites",
+    "poseMasks": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/poses/masks",
+    "animationSprites": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/animations/sprites",
+    "animationMasks": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/animations/masks",
+    "animationColorLayers": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/animations/color-layers",
+    "reviews": "fighter-rebuild/public/assets/concepts/amodei-chroma-20260608/reviews"
+  }
+}
