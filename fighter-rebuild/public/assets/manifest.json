@@ -225,7 +225,7 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=amodei-rowgen-claude-20260608",
+          "path": "/assets/characters/amodi/special.png?v=amodei-special-no-overlay-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
