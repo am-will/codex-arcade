@@ -1,0 +1,78 @@
+{
+  "output": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608",
+  "sources": {
+    "idle": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a276183bd188195a06bdaebfb362302.png",
+    "walk": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a2761dfe46c81958cfa6d884e403bbc.png",
+    "jump": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_0e4a3857cd1bac99016a27659f57508196b068e01861f55b6c.png",
+    "crouch": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_0e4a3857cd1bac99016a2765df46308196be27edaed446d0c7.png",
+    "block": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_0e4a3857cd1bac99016a276621d878819685a11c1abc63af8a.png",
+    "light_heavy": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a2762ad5b6081958bc48f79efb0a964.png",
+    "special": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_0e4a3857cd1bac99016a27643f36208196a4b49e91655ba62b.png",
+    "knockdown": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_076a77670b3ed179016a276304061c8195b22f9987cd0fbb8f.png"
+  },
+  "animations": {
+    "idle": {
+      "frames": 12,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "walk": {
+      "frames": 6,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "jump": {
+      "frames": 4,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "crouch": {
+      "frames": 4,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "block": {
+      "frames": 3,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "light": {
+      "frames": 4,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "heavy": {
+      "frames": 5,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "knockdown": {
+      "frames": 5,
+      "frameWidth": 320,
+      "frameHeight": 320
+    },
+    "special": {
+      "frames": 6,
+      "frameWidth": 320,
+      "frameHeight": 320
+    }
+  },
+  "layers": {
+    "raw_sources": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/sources/raw",
+    "raw_rows": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/rows/raw",
+    "transparent_rows": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/rows/sprites",
+    "row_alpha_masks": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/rows/masks",
+    "row_color_layers": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/rows/color-layers",
+    "raw_cells": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/cells/raw",
+    "transparent_cells": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/cells/sprites",
+    "cell_alpha_masks": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/cells/masks",
+    "cell_color_layers": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/cells/color-layers",
+    "reviews": "/Users/am.will/Applications/Codex Arcade/fighter-rebuild/public/assets/concepts/amodei-rowgen-claude-20260608/reviews"
+  },
+  "notes": [
+    "Rows are generated separately for detail and pose count instead of using the lower-detail full atlas.",
+    "Character-only rows are cropped from detected sprite components with neighbor-bounded padding to avoid adjacent-frame slivers.",
+    "Imagegen simplified the Claude mark, so special frames include a deterministic pixel-art central-hub-and-rounded-spokes radial mark overlay.",
+    "These are concept/review assets only and have not been installed into public/assets/characters/amodi."
+  ]
+}

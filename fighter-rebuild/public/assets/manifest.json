@@ -129,11 +129,11 @@
     {
       "id": "amodi",
       "displayName": "Amodei",
-      "description": "Amodei original high-detail fighting sprite caricature",
-      "visualCue": "Dario-like curly hair, dark rectangular glasses, purple research coat, teal/violet energy accents",
+      "description": "Amodei high-detail fighting sprite caricature",
+      "visualCue": "Curly rusty-brown hair, dark glasses, navy blazer, dark blue shirt, orange Claude-like energy portal",
       "portrait": {
         "key": "amodi-portrait",
-        "path": "/assets/characters/amodi/portrait.png?v=tibo-style-final2-20260608",
+        "path": "/assets/characters/amodi/portrait.png?v=amodei-rowgen-claude-20260608",
         "width": 192,
         "height": 192
       },
@@ -141,7 +141,7 @@
         {
           "name": "idle",
           "key": "amodi-idle",
-          "path": "/assets/characters/amodi/idle.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/idle.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -153,7 +153,7 @@
         {
           "name": "walk",
           "key": "amodi-walk",
-          "path": "/assets/characters/amodi/walk.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/walk.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -165,7 +165,7 @@
         {
           "name": "jump",
           "key": "amodi-jump",
-          "path": "/assets/characters/amodi/jump.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/jump.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -177,7 +177,7 @@
         {
           "name": "crouch",
           "key": "amodi-crouch",
-          "path": "/assets/characters/amodi/crouch.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/crouch.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -189,7 +189,7 @@
         {
           "name": "block",
           "key": "amodi-block",
-          "path": "/assets/characters/amodi/block.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/block.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -201,7 +201,7 @@
         {
           "name": "light",
           "key": "amodi-light",
-          "path": "/assets/characters/amodi/light.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/light.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -213,7 +213,7 @@
         {
           "name": "heavy",
           "key": "amodi-heavy",
-          "path": "/assets/characters/amodi/heavy.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/heavy.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -225,7 +225,7 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/special.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -237,7 +237,7 @@
         {
           "name": "knockdown",
           "key": "amodi-knockdown",
-          "path": "/assets/characters/amodi/knockdown.png?v=tibo-style-final2-20260608",
+          "path": "/assets/characters/amodi/knockdown.png?v=amodei-rowgen-claude-20260608",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
