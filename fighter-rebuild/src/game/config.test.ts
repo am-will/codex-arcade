@@ -29,14 +29,9 @@ describe('game config loading and normalization', () => {
       expect(character.portraitKey).toBe(`${character.assetId}-portrait`);
       expect(character.attacks.light.windows[0]?.hitbox.x).toBeGreaterThan(190);
       expect(character.attacks.heavy.windows[0]?.hitbox.width).toBeGreaterThan(100);
-      expect(character.attacks.special.windows.length).toBeGreaterThanOrEqual(4);
+      expect(character.attacks.special.windows).toHaveLength(4);
       expectAllRequiredBoxesAreAuthored(character);
     }
-
-    const amodei = config.charactersById.amodi;
-    expect(amodei?.attacks.special.windows.map((window) => window.startFrame)).toEqual([4, 8, 12, 16, 20]);
-    expect(amodei?.attacks.special.windows[3]?.hitbox.width).toBeGreaterThan(240);
-    expect(amodei?.frameBoxes.special).toHaveLength(7);
 
     const samaSpecialFrame = resolveFrameBoxes(config, 'sama', 'special', 5);
     expect(samaSpecialFrame.frame).toBe(5);

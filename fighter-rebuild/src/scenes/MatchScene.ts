@@ -659,11 +659,8 @@ export class MatchScene extends BaseScene {
       sprite.setFrame(Phaser.Math.Clamp(fighter.animationFrame, 0, Math.max(0, animationAsset.frameCount - 1)));
     }
 
-    const originX = animationAsset ? Phaser.Math.Clamp(160 / animationAsset.frameWidth, 0.2, 0.5) : 0.5;
-
     sprite
       .setPosition(fighter.position.x, fighter.position.y)
-      .setOrigin(originX, 1)
       .setFlipX(fighter.facing === 'left')
       .setAlpha(fighter.isFinished ? 0.82 : 1);
   }

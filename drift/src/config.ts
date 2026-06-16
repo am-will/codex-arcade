@@ -1,0 +1,40 @@
+export const GAME_CONFIG = {
+  fixedTimeStep: 1 / 120,
+  maxFrameDelta: 0.05,
+  roadSampleCount: 720,
+  car: {
+    maxSpeed: 43,
+    boostMaxSpeed: 58,
+    acceleration: 34,
+    boostAcceleration: 48,
+    reverseAcceleration: 15,
+    brakeDrag: 18,
+    coastDrag: 3.2,
+    normalGrip: 8.5,
+    driftGrip: 1.35,
+    normalTurnRate: 2.55,
+    driftTurnRate: 4.85,
+    driftSpeedBleed: 0.985,
+    hopVelocity: 3.6,
+    rampVelocity: 7.8,
+    gravity: 20,
+    hopCooldown: 0.18,
+    landingForgiveness: 0.12,
+    collisionRadius: 1.35,
+  },
+  pickups: {
+    boostPadSeconds: 1.65,
+    turboSeconds: 2.25,
+    clockBonus: 1.5,
+    shieldSeconds: 7,
+    respawnSeconds: 4,
+  },
+  camera: {
+    distance: 14,
+    height: 8,
+    lookAhead: 7,
+    followLerp: 0.09,
+  },
+};
+
+export const STORAGE_PREFIX = 'codex-drift-best-';

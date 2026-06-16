@@ -70,20 +70,6 @@ describe('fighter combat core', () => {
     expect(afterSpecial.cpu.health).toBe(84);
   });
 
-  it('paces Amodei special hits to the visible beam animation beats', () => {
-    const state = makeCombatState({ playerId: 'amodi', cpuId: 'sama', playerX: 220, cpuX: 330 });
-
-    const startedSpecial = runFrames(state, 1, { player: { special: true } });
-    const afterSpecial = runFrames(startedSpecial, 130);
-    const specialHits = afterSpecial.events.filter((event) => event.type === 'hit' && event.attackId === 'amodi-combo');
-    const hitFrameDeltas = specialHits.slice(1).map((event, index) => event.frame - specialHits[index]!.frame);
-
-    expect(specialHits).toHaveLength(5);
-    expect(specialHits.map((event) => event.windowIndex)).toEqual([0, 1, 2, 3, 4]);
-    expect(hitFrameDeltas.every((delta) => delta >= 18)).toBe(true);
-    expect(specialHits.map((event) => event.damage).reduce((total, damage) => total + damage, 0)).toBe(19);
-  });
-
   it('lets special combos continue after an early zero-health hit', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
     const nearlyDone: CombatState = {
@@ -313,19 +299,11 @@ describe('fighter combat core', () => {
   });
 });
 
-function makeCombatState(
-  options: {
-    readonly playerX?: number;
-    readonly cpuX?: number;
-    readonly seed?: number;
-    readonly playerId?: string;
-    readonly cpuId?: string;
-  } = {},
-): CombatState {
+function makeCombatState(options: { readonly playerX?: number; readonly cpuX?: number; readonly seed?: number } = {}): CombatState {
   const config = normalizeGameConfig(readFixtureSources());
   const stage = config.stagesById[config.match.stageId] ?? config.stages[0];
-  const player = config.charactersById[options.playerId ?? 'sama'] ?? config.characters[0];
-  const cpu = config.charactersById[options.cpuId ?? 'amodi'] ?? config.characters[1] ?? config.characters[0];
+  const player = config.charactersById.sama ?? config.characters[0];
+  const cpu = config.charactersById.amodi ?? config.characters[1] ?? config.characters[0];
 
   if (!stage || !player || !cpu) {
     throw new Error('Combat fixture config did not normalize required stage and characters.');

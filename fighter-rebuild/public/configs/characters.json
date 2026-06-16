@@ -1095,14 +1095,14 @@
           "blockDamage": 6,
           "hitstunFrames": 24,
           "blockstunFrames": 15,
-          "recoveryFrames": 4,
+          "recoveryFrames": 24,
           "meterGain": 0,
           "knockbackX": 112,
           "knockbackY": -40,
           "windows": [
             {
-              "startFrame": 4,
-              "endFrame": 4,
+              "startFrame": 1,
+              "endFrame": 1,
               "hitbox": {
                 "x": 186,
                 "y": 92,
@@ -1111,43 +1111,33 @@
               }
             },
             {
-              "startFrame": 8,
-              "endFrame": 8,
+              "startFrame": 2,
+              "endFrame": 2,
               "hitbox": {
                 "x": 202,
+                "y": 106,
+                "width": 96,
+                "height": 68
+              }
+            },
+            {
+              "startFrame": 3,
+              "endFrame": 3,
+              "hitbox": {
+                "x": 212,
                 "y": 96,
-                "width": 112,
-                "height": 78
+                "width": 100,
+                "height": 74
               }
             },
             {
-              "startFrame": 12,
-              "endFrame": 12,
+              "startFrame": 4,
+              "endFrame": 5,
               "hitbox": {
-                "x": 232,
-                "y": 110,
-                "width": 188,
-                "height": 58
-              }
-            },
-            {
-              "startFrame": 16,
-              "endFrame": 16,
-              "hitbox": {
-                "x": 224,
-                "y": 82,
-                "width": 252,
-                "height": 104
-              }
-            },
-            {
-              "startFrame": 20,
-              "endFrame": 20,
-              "hitbox": {
-                "x": 232,
-                "y": 88,
-                "width": 190,
-                "height": 96
+                "x": 172,
+                "y": 68,
+                "width": 156,
+                "height": 98
               }
             }
           ]
@@ -1966,24 +1956,6 @@
           },
           {
             "frame": 5,
-            "hurt": [
-              {
-                "x": 90,
-                "y": 46,
-                "width": 212,
-                "height": 234
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 102,
-              "y": 116,
-              "width": 112,
-              "height": 164
-            }
-          },
-          {
-            "frame": 6,
             "hurt": [
               {
                 "x": 102,

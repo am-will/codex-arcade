@@ -541,15 +541,7 @@ function normalizeAttacks(
     const defaultAttack = DEFAULT_ATTACKS[attackId];
     const animation = manifestCharacter.animations.find((candidate) => candidate.name === defaultAttack.animation);
     const frameCount = animation?.frameCount ?? 1;
-    const maxActionFrame = attackId === 'special' ? frameCount * 4 : frameCount - 1;
-    const windows = normalizeAttackWindows(
-      rawAttack?.windows,
-      defaultWindowsForAttack(attackId, frameCount),
-      maxActionFrame,
-      animation?.frameWidth ?? 320,
-      `${characterId}.${attackId}`,
-      warnings,
-    );
+    const windows = normalizeAttackWindows(rawAttack?.windows, defaultWindowsForAttack(attackId, frameCount), frameCount, `${characterId}.${attackId}`, warnings);
 
     attacks[attackId] = {
       id: stringOr(rawAttack?.id, `${characterId}-${attackId}`),
@@ -572,8 +564,7 @@ function normalizeAttacks(
 function normalizeAttackWindows(
   source: unknown,
   fallback: readonly AttackWindow[],
-  maxActionFrame: number,
-  hitboxFrameWidth: number,
+  frameCount: number,
   label: string,
   warnings: WarningList,
 ): readonly AttackWindow[] {
@@ -596,9 +587,9 @@ function normalizeAttackWindows(
     }
 
     windows.push({
-      startFrame: clampInt(lower, 0, maxActionFrame, 0),
-      endFrame: clampInt(upper, 0, maxActionFrame, 0),
-      hitbox: normalizeRect(rawWindow.hitbox, fallback[0]?.hitbox ?? defaultAttackHitbox(), hitboxFrameWidth, 320, `${label}.hitbox`, warnings),
+      startFrame: clampInt(lower, 0, frameCount - 1, 0),
+      endFrame: clampInt(upper, 0, frameCount - 1, 0),
+      hitbox: normalizeRect(rawWindow.hitbox, fallback[0]?.hitbox ?? defaultAttackHitbox(), 320, 320, `${label}.hitbox`, warnings),
     });
   }
 
