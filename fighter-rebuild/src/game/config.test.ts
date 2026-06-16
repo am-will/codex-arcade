@@ -54,7 +54,7 @@ describe('game config loading and normalization', () => {
 
     expect(tibo.attacks.light.cancels.map((cancel) => cancel.nextAttack)).toEqual(['light2', 'target', 'special']);
     expect(tiboCross.id).toBe('tibo-cross');
-    expect(tiboTarget.animation).toBe('heavy');
+    expect(tiboTarget.animation).toBe('target');
     expect(tiboSweep.hitResult).toBe('knockdown');
     expect(tiboSweep.cancels[0]).toMatchObject({
       input: 'special',
