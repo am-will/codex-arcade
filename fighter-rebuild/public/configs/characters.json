@@ -2080,10 +2080,12 @@
           "blockDamage": 1,
           "hitstunFrames": 12,
           "blockstunFrames": 7,
-          "recoveryFrames": 6,
+          "recoveryFrames": 8,
           "meterGain": 11,
           "knockbackX": 48,
           "knockbackY": 0,
+          "frameInterval": 2,
+          "animationMode": "hold-final",
           "windows": [
             {
               "startFrame": 1,
@@ -2094,6 +2096,76 @@
                 "width": 88,
                 "height": 56
               }
+            }
+          ],
+          "cancels": [
+            {
+              "input": "light",
+              "nextAttack": "light2",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": false,
+              "requiresMeter": false
+            },
+            {
+              "input": "heavy",
+              "nextAttack": "target",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": false,
+              "requiresMeter": false
+            },
+            {
+              "input": "special",
+              "nextAttack": "special",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": true,
+              "requiresMeter": true
+            }
+          ]
+        },
+        "light2": {
+          "id": "tibo-cross",
+          "animation": "light",
+          "damage": 6,
+          "blockDamage": 1,
+          "hitstunFrames": 13,
+          "blockstunFrames": 7,
+          "recoveryFrames": 9,
+          "meterGain": 10,
+          "knockbackX": 54,
+          "knockbackY": 0,
+          "frameInterval": 2,
+          "animationMode": "hold-final",
+          "windows": [
+            {
+              "startFrame": 2,
+              "endFrame": 3,
+              "hitbox": {
+                "x": 206,
+                "y": 108,
+                "width": 96,
+                "height": 62
+              }
+            }
+          ],
+          "cancels": [
+            {
+              "input": "heavy",
+              "nextAttack": "target",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": false,
+              "requiresMeter": false
+            },
+            {
+              "input": "special",
+              "nextAttack": "special",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": true,
+              "requiresMeter": true
             }
           ]
         },
@@ -2108,6 +2180,8 @@
           "meterGain": 17,
           "knockbackX": 84,
           "knockbackY": -18,
+          "frameInterval": 3,
+          "animationMode": "spread",
           "windows": [
             {
               "startFrame": 2,
@@ -2118,6 +2192,79 @@
                 "width": 106,
                 "height": 78
               }
+            }
+          ]
+        },
+        "target": {
+          "id": "tibo-target-combo",
+          "animation": "heavy",
+          "damage": 11,
+          "blockDamage": 3,
+          "hitstunFrames": 18,
+          "blockstunFrames": 11,
+          "recoveryFrames": 12,
+          "meterGain": 13,
+          "knockbackX": 78,
+          "knockbackY": -12,
+          "frameInterval": 3,
+          "animationMode": "spread",
+          "windows": [
+            {
+              "startFrame": 2,
+              "endFrame": 4,
+              "hitbox": {
+                "x": 198,
+                "y": 90,
+                "width": 116,
+                "height": 86
+              }
+            }
+          ],
+          "cancels": [
+            {
+              "input": "special",
+              "nextAttack": "special",
+              "startFrame": 2,
+              "endFrame": 8,
+              "requiresConnection": true,
+              "requiresMeter": true
+            }
+          ]
+        },
+        "sweep": {
+          "id": "tibo-low-sweep",
+          "animation": "heavy",
+          "damage": 10,
+          "blockDamage": 2,
+          "hitstunFrames": 34,
+          "blockstunFrames": 12,
+          "recoveryFrames": 18,
+          "meterGain": 9,
+          "knockbackX": 94,
+          "knockbackY": -48,
+          "hitResult": "knockdown",
+          "frameInterval": 3,
+          "animationMode": "spread",
+          "windows": [
+            {
+              "startFrame": 2,
+              "endFrame": 4,
+              "hitbox": {
+                "x": 170,
+                "y": 178,
+                "width": 140,
+                "height": 48
+              }
+            }
+          ],
+          "cancels": [
+            {
+              "input": "special",
+              "nextAttack": "special",
+              "startFrame": 3,
+              "endFrame": 8,
+              "requiresConnection": true,
+              "requiresMeter": true
             }
           ]
         },
@@ -2132,6 +2279,8 @@
           "meterGain": 0,
           "knockbackX": 116,
           "knockbackY": -34,
+          "frameInterval": 4,
+          "animationMode": "spread",
           "windows": [
             {
               "startFrame": 1,

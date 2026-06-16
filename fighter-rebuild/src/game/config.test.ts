@@ -37,6 +37,31 @@ describe('game config loading and normalization', () => {
     expect(samaSpecialFrame.frame).toBe(5);
     expect(samaSpecialFrame.hurt[0]?.width).toBeGreaterThan(100);
     expect(samaSpecialFrame.collision.height).toBeGreaterThan(140);
+
+    const tibo = config.charactersById.tibo;
+
+    if (!tibo) {
+      throw new Error('Expected Tibo to normalize from fixture config.');
+    }
+
+    const tiboCross = tibo.attacks.light2;
+    const tiboTarget = tibo.attacks.target;
+    const tiboSweep = tibo.attacks.sweep;
+
+    if (!tiboCross || !tiboTarget || !tiboSweep) {
+      throw new Error('Expected Tibo combo prototype attacks to normalize.');
+    }
+
+    expect(tibo.attacks.light.cancels.map((cancel) => cancel.nextAttack)).toEqual(['light2', 'target', 'special']);
+    expect(tiboCross.id).toBe('tibo-cross');
+    expect(tiboTarget.animation).toBe('heavy');
+    expect(tiboSweep.hitResult).toBe('knockdown');
+    expect(tiboSweep.cancels[0]).toMatchObject({
+      input: 'special',
+      nextAttack: 'special',
+      requiresConnection: true,
+      requiresMeter: true,
+    });
   });
 
   it('falls back safely for malformed character, stage, tuning, and settings data', () => {

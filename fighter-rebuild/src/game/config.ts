@@ -1,5 +1,9 @@
 import type {
   AnimationName,
+  AttackAnimationMode,
+  AttackCancelRule,
+  AttackHitResult,
+  AttackInput,
   AssetManifest,
   AssetManifestAnimation,
   AssetManifestCharacter,
@@ -30,7 +34,8 @@ export const CONFIG_PATHS = {
   settings: '/configs/settings.json',
 } as const;
 
-type AttackId = 'light' | 'heavy' | 'special';
+type RequiredAttackId = (typeof REQUIRED_ATTACKS)[number];
+type AttackDefaults = Omit<AttackProfile, 'id' | 'windows' | 'cancels'> & { readonly cancels?: readonly AttackCancelRule[] };
 type JsonLoader = (path: string) => Promise<unknown>;
 type WarningList = string[];
 
@@ -83,7 +88,7 @@ const DEFAULT_INPUT: InputBindingConfig = {
   pause: 'Enter',
 };
 
-const DEFAULT_ATTACKS: Record<AttackId, Omit<AttackProfile, 'id' | 'windows'>> = {
+const DEFAULT_ATTACKS: Record<RequiredAttackId, AttackDefaults> = {
   light: {
     animation: 'light',
     damage: 6,
@@ -94,6 +99,9 @@ const DEFAULT_ATTACKS: Record<AttackId, Omit<AttackProfile, 'id' | 'windows'>> =
     meterGain: 6,
     knockbackX: 46,
     knockbackY: 0,
+    hitResult: 'normal',
+    frameInterval: 3,
+    animationMode: 'hold-final',
   },
   heavy: {
     animation: 'heavy',
@@ -105,6 +113,9 @@ const DEFAULT_ATTACKS: Record<AttackId, Omit<AttackProfile, 'id' | 'windows'>> =
     meterGain: 10,
     knockbackX: 82,
     knockbackY: -18,
+    hitResult: 'normal',
+    frameInterval: 4,
+    animationMode: 'direct',
   },
   special: {
     animation: 'special',
@@ -116,6 +127,9 @@ const DEFAULT_ATTACKS: Record<AttackId, Omit<AttackProfile, 'id' | 'windows'>> =
     meterGain: 0,
     knockbackX: 118,
     knockbackY: -36,
+    hitResult: 'normal',
+    frameInterval: 5,
+    animationMode: 'spread',
   },
 };
 
@@ -534,14 +548,28 @@ function normalizeAttacks(
   characterId: string,
   warnings: WarningList,
 ): CharacterDefinition['attacks'] {
-  const attacks = {} as Record<AttackId, AttackProfile>;
+  const attacks: Record<string, AttackProfile> = {};
+  const attackIds = new Set<string>(REQUIRED_ATTACKS);
 
-  for (const attackId of REQUIRED_ATTACKS) {
+  for (const sourceAttackId of Object.keys(source ?? {})) {
+    if (nonEmptyString(sourceAttackId)) {
+      attackIds.add(sourceAttackId);
+    }
+  }
+
+  for (const attackId of attackIds) {
     const rawAttack = asRecord(source?.[attackId]);
-    const defaultAttack = DEFAULT_ATTACKS[attackId];
-    const animation = manifestCharacter.animations.find((candidate) => candidate.name === defaultAttack.animation);
+    const defaultAttack = defaultAttackFor(attackId);
+    const animationName = normalizedAttackAnimation(rawAttack?.animation, defaultAttack.animation, manifestCharacter, `${characterId}.${attackId}`, warnings);
+    const animation = manifestCharacter.animations.find((candidate) => candidate.name === animationName);
     const frameCount = animation?.frameCount ?? 1;
-    const windows = normalizeAttackWindows(rawAttack?.windows, defaultWindowsForAttack(attackId, frameCount), frameCount, `${characterId}.${attackId}`, warnings);
+    const windows = normalizeAttackWindows(
+      rawAttack?.windows,
+      defaultWindowsForAttack(attackId, frameCount),
+      frameCount,
+      `${characterId}.${attackId}`,
+      warnings,
+    );
 
     attacks[attackId] = {
       id: stringOr(rawAttack?.id, `${characterId}-${attackId}`),
@@ -555,10 +583,125 @@ function normalizeAttacks(
       knockbackX: finiteNumber(rawAttack?.knockbackX, defaultAttack.knockbackX),
       knockbackY: finiteNumber(rawAttack?.knockbackY, defaultAttack.knockbackY),
       windows,
+      hitResult: normalizeAttackHitResult(rawAttack?.hitResult, defaultAttack.hitResult, `${characterId}.${attackId}.hitResult`, warnings),
+      frameInterval:
+        rawAttack?.frameInterval === undefined
+          ? defaultAttack.frameInterval
+          : rangedIntWithWarning(rawAttack.frameInterval, 1, 20, defaultAttack.frameInterval, `${characterId}.${attackId}.frameInterval`, warnings),
+      animationMode: normalizeAttackAnimationMode(rawAttack?.animationMode, defaultAttack.animationMode, `${characterId}.${attackId}.animationMode`, warnings),
+      cancels: normalizeAttackCancels(rawAttack?.cancels, defaultAttack.cancels ?? [], `${characterId}.${attackId}.cancels`, warnings),
     };
   }
 
-  return attacks;
+  return attacks as CharacterDefinition['attacks'];
+}
+
+function defaultAttackFor(attackId: string): AttackDefaults {
+  if (attackId === 'special') {
+    return DEFAULT_ATTACKS.special;
+  }
+
+  if (attackId === 'heavy' || attackId === 'target' || attackId === 'sweep') {
+    return DEFAULT_ATTACKS.heavy;
+  }
+
+  return DEFAULT_ATTACKS.light;
+}
+
+function normalizedAttackAnimation(
+  source: unknown,
+  fallback: AnimationName,
+  manifestCharacter: AssetManifestCharacter,
+  label: string,
+  warnings: WarningList,
+): AnimationName {
+  const requested = nonEmptyString(source);
+
+  if (!requested) {
+    return fallback;
+  }
+
+  if (manifestCharacter.animations.some((animation) => animation.name === requested)) {
+    return requested;
+  }
+
+  warnings.push(`${label}.animation referenced missing animation "${requested}"; using "${fallback}".`);
+  return fallback;
+}
+
+function normalizeAttackHitResult(source: unknown, fallback: AttackHitResult, label: string, warnings: WarningList): AttackHitResult {
+  if (source === undefined) {
+    return fallback;
+  }
+
+  if (source === 'normal' || source === 'knockdown') {
+    return source;
+  }
+
+  warnings.push(`${label} was invalid; using "${fallback}".`);
+  return fallback;
+}
+
+function normalizeAttackAnimationMode(
+  source: unknown,
+  fallback: AttackAnimationMode,
+  label: string,
+  warnings: WarningList,
+): AttackAnimationMode {
+  if (source === undefined) {
+    return fallback;
+  }
+
+  if (source === 'direct' || source === 'spread' || source === 'hold-final') {
+    return source;
+  }
+
+  warnings.push(`${label} was invalid; using "${fallback}".`);
+  return fallback;
+}
+
+function normalizeAttackCancels(
+  source: unknown,
+  fallback: readonly AttackCancelRule[],
+  label: string,
+  warnings: WarningList,
+): readonly AttackCancelRule[] {
+  const cancels: AttackCancelRule[] = [];
+
+  for (const [index, rawCancel] of arrayRecords(source).entries()) {
+    const input = normalizeAttackInput(rawCancel.input, `${label}.${index}.input`, warnings);
+    const nextAttack = nonEmptyString(rawCancel.nextAttack);
+    const rawStart = finiteNumber(rawCancel.startFrame, Number.NaN);
+    const rawEnd = finiteNumber(rawCancel.endFrame, Number.NaN);
+
+    if (!input || !nextAttack || !Number.isFinite(rawStart) || !Number.isFinite(rawEnd)) {
+      warnings.push(`Skipped invalid ${label}.${index} cancel rule.`);
+      continue;
+    }
+
+    const startFrame = Math.max(0, Math.floor(Math.min(rawStart, rawEnd)));
+    const endFrame = Math.max(startFrame, Math.floor(Math.max(rawStart, rawEnd)));
+
+    cancels.push({
+      input,
+      nextAttack,
+      startFrame,
+      endFrame,
+      requiresConnection: Boolean(rawCancel.requiresConnection),
+      requiresMeter: Boolean(rawCancel.requiresMeter),
+    });
+  }
+
+  return cancels.length > 0 ? cancels : fallback;
+}
+
+function normalizeAttackInput(source: unknown, label: string, warnings: WarningList): AttackInput | null {
+  if (source === 'light' || source === 'heavy' || source === 'special') {
+    return source;
+  }
+
+  warnings.push(`${label} was invalid.`);
+  return null;
 }
 
 function normalizeAttackWindows(
@@ -733,7 +876,7 @@ function createMatchConfig(
   };
 }
 
-function defaultWindowsForAttack(attackId: AttackId, frameCount: number): readonly AttackWindow[] {
+function defaultWindowsForAttack(attackId: string, frameCount: number): readonly AttackWindow[] {
   if (attackId === 'special') {
     return [
       { startFrame: clampInt(1, 0, frameCount - 1, 0), endFrame: clampInt(1, 0, frameCount - 1, 0), hitbox: { x: 190, y: 92, width: 88, height: 76 } },

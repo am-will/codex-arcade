@@ -2,6 +2,8 @@ import {
   advanceFighterForFrame,
   anyRectOverlaps,
   beginDefeatFall,
+  canCancelWithInput,
+  chooseAttackKind,
   clampHealth,
   clampMeter,
   createFighterState,
@@ -13,10 +15,12 @@ import {
   getWorldHurtBoxes,
 } from './fighter';
 import type { ActiveAttackState, FighterInput, FighterSlot, FighterState } from './fighter';
+import type { AttackInput } from './types';
 import type { StageDefinition } from './types';
 
 export const SIMULATION_FPS = 60;
 export const FIXED_TIMESTEP_SECONDS = 1 / SIMULATION_FPS;
+export const ATTACK_INPUT_BUFFER_FRAMES = 12;
 
 export type CombatEventType = 'hit' | 'blocked' | 'finisher';
 
@@ -37,11 +41,36 @@ export interface CombatState {
   readonly player: FighterState;
   readonly cpu: FighterState;
   readonly events: readonly CombatEvent[];
+  readonly inputBuffers: CombatInputBuffers;
+  readonly previousAttackInputs: CombatPreviousInputs;
 }
 
 export interface CombatInputFrame {
   readonly player?: FighterInput;
   readonly cpu?: FighterInput;
+}
+
+interface BufferedAttackCommand {
+  readonly input: AttackInput;
+  readonly crouch: boolean;
+  readonly specialMeterPaid: boolean;
+  readonly framesRemaining: number;
+}
+
+interface AttackButtonSnapshot {
+  readonly light: boolean;
+  readonly heavy: boolean;
+  readonly special: boolean;
+}
+
+interface CombatInputBuffers {
+  readonly player: readonly BufferedAttackCommand[];
+  readonly cpu: readonly BufferedAttackCommand[];
+}
+
+interface CombatPreviousInputs {
+  readonly player: AttackButtonSnapshot;
+  readonly cpu: AttackButtonSnapshot;
 }
 
 export interface CreateCombatStateOptions {
@@ -81,6 +110,8 @@ export function createCombatState(options: CreateCombatStateOptions): CombatStat
       facing: 'left',
     }),
     events: [],
+    inputBuffers: emptyInputBuffers(),
+    previousAttackInputs: emptyPreviousAttackInputs(),
   };
 }
 
@@ -95,10 +126,28 @@ export function stepCombatFrames(state: CombatState, frames: number, inputs: Com
 }
 
 export function stepCombat(state: CombatState, inputs: CombatInputFrame = {}): CombatState {
+  const rawPlayerInput = inputs.player ?? {};
+  const rawCpuInput = inputs.cpu ?? {};
+  const inputBuffers = state.inputBuffers ?? emptyInputBuffers();
+  const previousAttackInputs = state.previousAttackInputs ?? emptyPreviousAttackInputs();
   const facedPlayer = faceToward(state.player, state.cpu.position.x);
   const facedCpu = faceToward(state.cpu, state.player.position.x);
-  const advancedPlayer = advanceFighterForFrame(facedPlayer, inputs.player ?? {}, state.stage, FIXED_TIMESTEP_SECONDS);
-  const advancedCpu = advanceFighterForFrame(facedCpu, inputs.cpu ?? {}, state.stage, FIXED_TIMESTEP_SECONDS);
+  const playerBuffer = enqueueAttackInputs(inputBuffers.player, rawPlayerInput, previousAttackInputs.player);
+  const cpuBuffer = enqueueAttackInputs(inputBuffers.cpu, rawCpuInput, previousAttackInputs.cpu);
+  const playerSelection = selectBufferedCommand(facedPlayer, playerBuffer);
+  const cpuSelection = selectBufferedCommand(facedCpu, cpuBuffer);
+  const advancedPlayer = advanceFighterForFrame(
+    facedPlayer,
+    composeBufferedInput(rawPlayerInput, playerSelection.command),
+    state.stage,
+    FIXED_TIMESTEP_SECONDS,
+  );
+  const advancedCpu = advanceFighterForFrame(
+    facedCpu,
+    composeBufferedInput(rawCpuInput, cpuSelection.command),
+    state.stage,
+    FIXED_TIMESTEP_SECONDS,
+  );
   const resolved = resolveCombatFrame(advancedPlayer, advancedCpu, state.frame);
 
   return {
@@ -107,6 +156,14 @@ export function stepCombat(state: CombatState, inputs: CombatInputFrame = {}): C
     player: finalizeFighterFrame(resolved.player),
     cpu: finalizeFighterFrame(resolved.cpu),
     events: [...state.events, ...resolved.events],
+    inputBuffers: {
+      player: ageBufferedCommands(playerBuffer, playerSelection.consumedIndex),
+      cpu: ageBufferedCommands(cpuBuffer, cpuSelection.consumedIndex),
+    },
+    previousAttackInputs: {
+      player: attackButtonSnapshot(rawPlayerInput),
+      cpu: attackButtonSnapshot(rawCpuInput),
+    },
   };
 }
 
@@ -257,6 +314,21 @@ function applyHit(target: FighterState, attacker: FighterState, damage: number, 
     return clampHealth(target, nextHealth);
   }
 
+  if (attack.profile.hitResult === 'knockdown') {
+    return {
+      ...clampHealth(target, nextHealth),
+      status: 'knockdown',
+      animationFrame: 0,
+      animationTick: 0,
+      stunFrames: attack.profile.hitstunFrames,
+      activeAttack: undefined,
+      velocity: {
+        x: direction * knockback.x,
+        y: knockback.y,
+      },
+    };
+  }
+
   return {
     ...clampHealth(target, nextHealth),
     status: 'hitstun',
@@ -354,7 +426,138 @@ function markWindowConnected(attacker: FighterState, windowIndex: number): Fight
     activeAttack: {
       ...attacker.activeAttack,
       connectedWindowIndexes: [...attacker.activeAttack.connectedWindowIndexes, windowIndex],
+      hasConnected: true,
     },
+  };
+}
+
+function emptyInputBuffers(): CombatInputBuffers {
+  return {
+    player: [],
+    cpu: [],
+  };
+}
+
+function emptyPreviousAttackInputs(): CombatPreviousInputs {
+  const emptySnapshot = attackButtonSnapshot({});
+
+  return {
+    player: emptySnapshot,
+    cpu: emptySnapshot,
+  };
+}
+
+function enqueueAttackInputs(
+  buffer: readonly BufferedAttackCommand[],
+  input: FighterInput,
+  previous: AttackButtonSnapshot,
+): readonly BufferedAttackCommand[] {
+  const next = [...buffer];
+
+  if (input.special && !previous.special) {
+    next.push(createBufferedCommand('special', input));
+  }
+
+  if (input.heavy && !previous.heavy) {
+    next.push(createBufferedCommand('heavy', input));
+  }
+
+  if (input.light && !previous.light) {
+    next.push(createBufferedCommand('light', input));
+  }
+
+  return next.slice(-8);
+}
+
+function createBufferedCommand(inputName: AttackInput, input: FighterInput): BufferedAttackCommand {
+  return {
+    input: inputName,
+    crouch: Boolean(input.crouch),
+    specialMeterPaid: Boolean(input.specialMeterPaid),
+    framesRemaining: ATTACK_INPUT_BUFFER_FRAMES,
+  };
+}
+
+function selectBufferedCommand(
+  fighter: FighterState,
+  buffer: readonly BufferedAttackCommand[],
+): { readonly command?: BufferedAttackCommand; readonly consumedIndex: number | null } {
+  for (let index = 0; index < buffer.length; index += 1) {
+    const command = buffer[index];
+
+    if (command && canUseBufferedCommand(fighter, command)) {
+      return { command, consumedIndex: index };
+    }
+  }
+
+  return { consumedIndex: null };
+}
+
+function canUseBufferedCommand(fighter: FighterState, command: BufferedAttackCommand): boolean {
+  if (fighter.isFinished || fighter.stunFrames > 0) {
+    return false;
+  }
+
+  const input = fighterInputFromCommand(command);
+
+  if (fighter.activeAttack) {
+    return canCancelWithInput(fighter, input);
+  }
+
+  return chooseAttackKind(input, fighter.character) !== undefined;
+}
+
+function composeBufferedInput(input: FighterInput, command?: BufferedAttackCommand): FighterInput {
+  const baseInput = {
+    ...input,
+    light: false,
+    heavy: false,
+    special: false,
+    specialMeterPaid: false,
+  };
+
+  if (!command) {
+    return baseInput;
+  }
+
+  return {
+    ...baseInput,
+    crouch: baseInput.crouch || command.crouch,
+    light: command.input === 'light',
+    heavy: command.input === 'heavy',
+    special: command.input === 'special',
+    specialMeterPaid: command.specialMeterPaid,
+  };
+}
+
+function fighterInputFromCommand(command: BufferedAttackCommand): FighterInput {
+  return {
+    crouch: command.crouch,
+    light: command.input === 'light',
+    heavy: command.input === 'heavy',
+    special: command.input === 'special',
+    specialMeterPaid: command.specialMeterPaid,
+  };
+}
+
+function ageBufferedCommands(
+  buffer: readonly BufferedAttackCommand[],
+  consumedIndex: number | null,
+): readonly BufferedAttackCommand[] {
+  return buffer
+    .filter((_, index) => index !== consumedIndex)
+    .map((command) => ({
+      ...command,
+      framesRemaining: command.framesRemaining - 1,
+    }))
+    .filter((command) => command.framesRemaining > 0);
+}
+
+function attackButtonSnapshot(input: FighterInput): AttackButtonSnapshot {
+  return {
+    light: Boolean(input.light),
+    heavy: Boolean(input.heavy),
+    special: Boolean(input.special),
   };
 }
 

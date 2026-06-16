@@ -58,6 +58,76 @@ describe('fighter combat core', () => {
     expect(afterBlock.events.some((event) => event.type === 'blocked' && event.attackId === 'sama-jab')).toBe(true);
   });
 
+  it('buffers quick Tibo J,J into a jab then opposite-hand cross', () => {
+    let state = makeCombatState({ playerId: 'tibo', cpuId: 'boris', playerX: 220, cpuX: 330 });
+
+    state = runFrames(state, 1, { player: { light: true } });
+    state = runFrames(state, 4);
+    state = runFrames(state, 1, { player: { light: true } });
+    state = runFrames(state, 30);
+
+    const tiboHits = state.events.filter((event) => event.sourceId === 'player' && event.type === 'hit');
+    expect(tiboHits.map((event) => event.attackId)).toContain('tibo-jab');
+    expect(tiboHits.map((event) => event.attackId)).toContain('tibo-cross');
+  });
+
+  it('keeps slow Tibo J,J as separate jabs instead of a chained cross', () => {
+    let state = makeCombatState({ playerId: 'tibo', cpuId: 'boris', playerX: 220, cpuX: 330 });
+
+    state = runFrames(state, 1, { player: { light: true } });
+    state = runFrames(state, 42);
+    state = runFrames(state, 1, { player: { light: true } });
+
+    expect(state.player.activeAttack?.kind).toBe('light');
+    expect(state.events.some((event) => event.attackId === 'tibo-cross')).toBe(false);
+  });
+
+  it('buffers Tibo J,K into a target combo finisher inside the cancel window', () => {
+    let state = makeCombatState({ playerId: 'tibo', cpuId: 'boris', playerX: 220, cpuX: 330 });
+
+    state = runFrames(state, 1, { player: { light: true } });
+    state = runFrames(state, 4);
+    state = runFrames(state, 1, { player: { heavy: true } });
+    state = runFrames(state, 30);
+
+    expect(state.events.some((event) => event.type === 'hit' && event.attackId === 'tibo-target-combo')).toBe(true);
+  });
+
+  it('uses Down+K for Tibo sweep and causes trip knockdown', () => {
+    const state = makeCombatState({ playerId: 'tibo', cpuId: 'boris', playerX: 220, cpuX: 330 });
+    const attacking = runFrames(state, 1, { player: { crouch: true, heavy: true } });
+    const tripped = runFrames(attacking, 18);
+
+    expect(attacking.player.activeAttack?.kind).toBe('sweep');
+    expect(tripped.events.some((event) => event.type === 'hit' && event.attackId === 'tibo-low-sweep')).toBe(true);
+    expect(tripped.cpu.status).toBe('knockdown');
+    expect(tripped.cpu.isFinished).toBe(false);
+  });
+
+  it('requires full meter and a connected hit before Tibo can special-cancel', () => {
+    const base = makeCombatState({ playerId: 'tibo', cpuId: 'boris', playerX: 220, cpuX: 330 });
+    const ready: CombatState = {
+      ...base,
+      player: {
+        ...base.player,
+        meter: base.player.tuning.meterMax,
+      },
+    };
+
+    let canceled = runFrames(ready, 1, { player: { light: true } });
+    canceled = runFrames(canceled, 5);
+    canceled = runFrames(canceled, 1, { player: { special: true } });
+
+    let denied = runFrames(base, 1, { player: { light: true } });
+    denied = runFrames(denied, 5);
+    denied = runFrames(denied, 1, { player: { special: true } });
+
+    expect(canceled.player.activeAttack?.kind).toBe('special');
+    expect(canceled.player.meter).toBe(0);
+    expect(denied.player.activeAttack?.kind).toBe('light');
+    expect(denied.events.some((event) => event.attackId === 'tibo-circuit-punch')).toBe(false);
+  });
+
   it('allows multi-hit special windows to connect independently', () => {
     const state = makeCombatState({ playerX: 220, cpuX: 330 });
 
@@ -299,11 +369,19 @@ describe('fighter combat core', () => {
   });
 });
 
-function makeCombatState(options: { readonly playerX?: number; readonly cpuX?: number; readonly seed?: number } = {}): CombatState {
+function makeCombatState(
+  options: {
+    readonly playerX?: number;
+    readonly cpuX?: number;
+    readonly seed?: number;
+    readonly playerId?: string;
+    readonly cpuId?: string;
+  } = {},
+): CombatState {
   const config = normalizeGameConfig(readFixtureSources());
   const stage = config.stagesById[config.match.stageId] ?? config.stages[0];
-  const player = config.charactersById.sama ?? config.characters[0];
-  const cpu = config.charactersById.amodi ?? config.characters[1] ?? config.characters[0];
+  const player = config.charactersById[options.playerId ?? 'sama'] ?? config.characters[0];
+  const cpu = config.charactersById[options.cpuId ?? 'amodi'] ?? config.characters[1] ?? config.characters[0];
 
   if (!stage || !player || !cpu) {
     throw new Error('Combat fixture config did not normalize required stage and characters.');
