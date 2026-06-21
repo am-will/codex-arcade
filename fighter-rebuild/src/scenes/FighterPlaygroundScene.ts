@@ -12,7 +12,7 @@ import {
   getWorldHurtBoxes,
   createFighterState,
 } from '../game/fighter';
-import type { FighterInput, FighterState } from '../game/fighter';
+import type { AttackKind, FighterInput, FighterState } from '../game/fighter';
 import type { AssetManifestAnimation, CharacterDefinition, GameConfig, InputBindingConfig, Rect, StageDefinition } from '../game/types';
 import {
   type DebugPanelMount,
@@ -31,9 +31,7 @@ const OVERLAY_COLORS: Readonly<Record<FighterPlaygroundOverlayKey, number>> = {
   guard: 0x62e06f,
 };
 
-type BasicAttackKind = 'light' | 'heavy' | 'special';
-
-const ATTACK_LABELS: Readonly<Record<BasicAttackKind, string>> = {
+const ATTACK_LABELS: Readonly<Record<AttackKind, string>> = {
   light: 'Light Punch',
   heavy: 'Heavy Kick',
   special: 'Special Combo',
@@ -307,7 +305,7 @@ export class FighterPlaygroundScene extends BaseScene {
     width: number,
     height: number,
     label: string,
-    action: BasicAttackKind | 'reset',
+    action: AttackKind | 'reset',
   ): void {
     const background = this.add.rectangle(x, y, width, height, 0x2b2517, 0.88).setStrokeStyle(1, 0xffd36a, 0.62).setDepth(82);
     this.add

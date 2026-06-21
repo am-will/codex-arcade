@@ -1,21 +1,12 @@
 import { resolveCharacterFrameBoxes } from './config';
-import type {
-  AttackCancelRule,
-  AttackInput,
-  AttackProfile,
-  CharacterDefinition,
-  FighterTuning,
-  Rect,
-  ResolvedFrameBoxes,
-  StageDefinition,
-} from './types';
+import type { AttackProfile, CharacterDefinition, FighterTuning, Rect, ResolvedFrameBoxes, StageDefinition } from './types';
 
 export const FIGHTER_FRAME_WIDTH = 320;
 export const FIGHTER_FRAME_HEIGHT = 320;
 
 export type FighterSlot = 'player' | 'cpu';
 export type Facing = 'left' | 'right';
-export type AttackKind = string;
+export type AttackKind = 'light' | 'heavy' | 'special';
 export type FighterStatus = 'idle' | 'walk' | 'jump' | 'crouch' | 'block' | 'attack' | 'hitstun' | 'blockstun' | 'knockdown';
 
 export interface FighterInput {
@@ -27,7 +18,6 @@ export interface FighterInput {
   readonly light?: boolean;
   readonly heavy?: boolean;
   readonly special?: boolean;
-  readonly specialMeterPaid?: boolean;
 }
 
 export interface Vector2 {
@@ -42,7 +32,6 @@ export interface ActiveAttackState {
   readonly actionTick: number;
   readonly totalFrames: number;
   readonly connectedWindowIndexes: readonly number[];
-  readonly hasConnected: boolean;
 }
 
 export interface FighterState {
@@ -105,21 +94,17 @@ export function createFighterState(options: CreateFighterOptions): FighterState 
   };
 }
 
-export function chooseAttackKind(input: FighterInput, character: CharacterDefinition): AttackKind | undefined {
+export function chooseAttackKind(input: FighterInput): AttackKind | undefined {
   if (input.special) {
-    return character.attacks.special ? 'special' : undefined;
-  }
-
-  if (input.heavy && input.crouch && character.attacks.sweep) {
-    return 'sweep';
+    return 'special';
   }
 
   if (input.heavy) {
-    return character.attacks.heavy ? 'heavy' : undefined;
+    return 'heavy';
   }
 
   if (input.light) {
-    return character.attacks.light ? 'light' : undefined;
+    return 'light';
   }
 
   return undefined;
@@ -127,11 +112,6 @@ export function chooseAttackKind(input: FighterInput, character: CharacterDefini
 
 export function createActiveAttack(kind: AttackKind, character: CharacterDefinition): ActiveAttackState {
   const profile = character.attacks[kind];
-
-  if (!profile) {
-    throw new Error(`Character "${character.id}" is missing attack profile "${kind}".`);
-  }
-
   const lastWindowFrame = profile.windows.reduce((max, window) => Math.max(max, window.endFrame), 0);
 
   return {
@@ -141,36 +121,7 @@ export function createActiveAttack(kind: AttackKind, character: CharacterDefinit
     actionTick: 0,
     totalFrames: Math.max(lastWindowFrame + profile.recoveryFrames, 1),
     connectedWindowIndexes: [],
-    hasConnected: false,
   };
-}
-
-export function findAttackCancel(fighter: FighterState, input: FighterInput): AttackCancelRule | undefined {
-  if (!fighter.activeAttack || fighter.isFinished || fighter.stunFrames > 0) {
-    return undefined;
-  }
-
-  const requestedInput = attackInputFromFighterInput(input);
-
-  if (!requestedInput) {
-    return undefined;
-  }
-
-  return fighter.activeAttack.profile.cancels.find((cancel) => {
-    return (
-      cancel.input === requestedInput &&
-      fighter.activeAttack !== undefined &&
-      fighter.activeAttack.actionFrame >= cancel.startFrame &&
-      fighter.activeAttack.actionFrame <= cancel.endFrame &&
-      Boolean(fighter.character.attacks[cancel.nextAttack]) &&
-      (!cancel.requiresConnection || fighter.activeAttack.hasConnected) &&
-      (!cancel.requiresMeter || input.specialMeterPaid || fighter.meter >= fighter.tuning.meterMax)
-    );
-  });
-}
-
-export function canCancelWithInput(fighter: FighterState, input: FighterInput): boolean {
-  return findAttackCancel(fighter, input) !== undefined;
 }
 
 export function getResolvedFighterBoxes(fighter: FighterState): ResolvedFrameBoxes {
@@ -296,23 +247,6 @@ export function advanceFighterForFrame(
   }
 
   if (fighter.activeAttack) {
-    const cancel = findAttackCancel(fighter, input);
-
-    if (cancel) {
-      const attackingFighter = cancel.requiresMeter && !input.specialMeterPaid ? clampMeter(stopGroundedDrift(fighter), fighter.meter - fighter.tuning.meterMax) : stopGroundedDrift(fighter);
-      return advancePhysics(
-        {
-          ...attackingFighter,
-          status: 'attack',
-          animationFrame: 0,
-          animationTick: 0,
-          activeAttack: createActiveAttack(cancel.nextAttack, attackingFighter.character),
-        },
-        stage,
-        deltaSeconds,
-      );
-    }
-
     const attackingFighter = stopGroundedDrift(fighter);
     return advancePhysics(
       {
@@ -335,7 +269,7 @@ export function advanceFighterForFrame(
     );
   }
 
-  const attackKind = chooseAttackKind(input, fighter.character);
+  const attackKind = chooseAttackKind(input);
 
   if (attackKind) {
     const attackingFighter = stopGroundedDrift(fighter);
@@ -415,7 +349,7 @@ export function finalizeFighterFrame(fighter: FighterState): FighterState {
   }
 
   const nextActionTick = fighter.activeAttack.actionTick + 1;
-  const actionFrameInterval = fighter.activeAttack.profile.frameInterval;
+  const actionFrameInterval = attackActionFrameInterval(fighter.activeAttack.kind);
   if (nextActionTick < actionFrameInterval) {
     return {
       ...fighter,
@@ -455,11 +389,11 @@ function attackAnimationFrame(activeAttack: ActiveAttackState, character: Charac
   const boxes = character.frameBoxes[activeAttack.profile.animation] ?? character.frameBoxes.idle;
   const frameCount = Math.max(boxes?.length ?? 1, 1);
 
-  if (activeAttack.profile.animationMode === 'hold-final') {
+  if (activeAttack.kind === 'light') {
     return lightAttackAnimationFrame(activeAttack, actionFrame, frameCount);
   }
 
-  if (activeAttack.profile.animationMode === 'spread') {
+  if (activeAttack.kind === 'special') {
     return spreadAttackAnimationFrame(activeAttack, actionFrame, frameCount);
   }
 
@@ -664,6 +598,17 @@ function animationFrameInterval(animationName: string): number {
   }
 }
 
+function attackActionFrameInterval(kind: AttackKind): number {
+  switch (kind) {
+    case 'light':
+      return 3;
+    case 'heavy':
+      return 4;
+    case 'special':
+      return 5;
+  }
+}
+
 function applyStatus(fighter: FighterState, nextStatus: FighterStatus, previousStatus: FighterStatus): FighterState {
   if (nextStatus === previousStatus) {
     return {
@@ -684,20 +629,4 @@ function applyStatus(fighter: FighterState, nextStatus: FighterStatus, previousS
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
-}
-
-function attackInputFromFighterInput(input: FighterInput): AttackInput | undefined {
-  if (input.special) {
-    return 'special';
-  }
-
-  if (input.heavy) {
-    return 'heavy';
-  }
-
-  if (input.light) {
-    return 'light';
-  }
-
-  return undefined;
 }

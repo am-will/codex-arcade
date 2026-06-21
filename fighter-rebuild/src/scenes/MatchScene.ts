@@ -4,10 +4,10 @@ import { createCpuController, type CpuController } from '../game/cpu';
 import {
   FIGHTER_FRAME_WIDTH,
   beginDefeatFall,
-  canCancelWithInput,
   clampMeter,
   finalAnimationFrameFor,
   fighterAnimationName,
+  type AttackKind,
   type FighterInput,
   type FighterSlot,
   type FighterState,
@@ -51,9 +51,7 @@ type RuntimeStage = StageDefinition & {
   readonly sourceStageId: string;
 };
 
-type BasicAttackKind = 'light' | 'heavy' | 'special';
-
-const ATTACK_LABELS: Readonly<Record<BasicAttackKind, string>> = {
+const ATTACK_LABELS: Readonly<Record<AttackKind, string>> = {
   light: 'Light Punch',
   heavy: 'Heavy Kick',
   special: 'Special Combo',
@@ -82,7 +80,7 @@ export class MatchScene extends BaseScene {
   private accumulatedSeconds = 0;
   private inputByCode: Partial<Record<string, TestHookInputAction>> = {};
   private readonly heldInput: Partial<Record<TestHookInputAction, boolean>> = {};
-  private readonly pulseInput = new Set<BasicAttackKind>();
+  private readonly pulseInput = new Set<AttackKind>();
   private readonly scriptedInputFrames: Partial<Record<TestHookInputAction, number>> = {};
   private debugOverlay = false;
   private cpuEnabled = true;
@@ -418,20 +416,17 @@ export class MatchScene extends BaseScene {
     this.pendingSuperSlot = null;
 
     return slot === 'player'
-      ? { player: { special: true, specialMeterPaid: true } }
-      : { cpu: { special: true, specialMeterPaid: true } };
+      ? { player: { special: true } }
+      : { cpu: { special: true } };
   }
 
   private canStartSuper(fighter: FighterState): boolean {
-    if (fighter.isFinished || fighter.stunFrames > 0 || fighter.meter < fighter.tuning.meterMax) {
-      return false;
-    }
-
-    if (!fighter.activeAttack) {
-      return true;
-    }
-
-    return canCancelWithInput(fighter, { special: true });
+    return (
+      !fighter.isFinished &&
+      !fighter.activeAttack &&
+      fighter.stunFrames <= 0 &&
+      fighter.meter >= fighter.tuning.meterMax
+    );
   }
 
   private withDeniedSpecialRemoved(input: FighterInput): FighterInput {
@@ -778,7 +773,7 @@ export class MatchScene extends BaseScene {
     width: number,
     height: number,
     label: string,
-    action: BasicAttackKind,
+    action: AttackKind,
   ): void {
     const background = this.add.rectangle(x, y, width, height, 0x2a2214, 0.9).setStrokeStyle(1, 0xffd36a, 0.64).setDepth(110).setScrollFactor(0);
     const text = this.add

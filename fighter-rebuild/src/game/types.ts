@@ -55,19 +55,6 @@ export interface AttackWindow {
   readonly hitbox: Rect;
 }
 
-export type AttackInput = 'light' | 'heavy' | 'special';
-export type AttackHitResult = 'normal' | 'knockdown';
-export type AttackAnimationMode = 'direct' | 'spread' | 'hold-final';
-
-export interface AttackCancelRule {
-  readonly input: AttackInput;
-  readonly nextAttack: string;
-  readonly startFrame: number;
-  readonly endFrame: number;
-  readonly requiresConnection: boolean;
-  readonly requiresMeter: boolean;
-}
-
 export interface AttackProfile {
   readonly id: string;
   readonly animation: AnimationName;
@@ -80,13 +67,7 @@ export interface AttackProfile {
   readonly knockbackX: number;
   readonly knockbackY: number;
   readonly windows: readonly AttackWindow[];
-  readonly hitResult: AttackHitResult;
-  readonly frameInterval: number;
-  readonly animationMode: AttackAnimationMode;
-  readonly cancels: readonly AttackCancelRule[];
 }
-
-export type RequiredAttackProfiles = Readonly<Record<'light' | 'heavy' | 'special', AttackProfile> & Record<string, AttackProfile>>;
 
 export interface FighterTuning {
   readonly id: string;
@@ -108,7 +89,7 @@ export interface CharacterDefinition {
   readonly assetId: CharacterId;
   readonly portraitKey: AssetKey;
   readonly tuningId: string;
-  readonly attacks: RequiredAttackProfiles;
+  readonly attacks: Readonly<Record<'light' | 'heavy' | 'special', AttackProfile>>;
   readonly frameBoxes: FrameBoxes;
 }
 
