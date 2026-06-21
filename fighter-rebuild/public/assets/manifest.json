@@ -237,8 +237,8 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=dario-scale-standardized-20260621",
-          "frameWidth": 320,
+          "path": "/assets/characters/amodi/special.png?v=dario-special-wide-20260621",
+          "frameWidth": 384,
           "frameHeight": 320,
           "frameCount": 6,
           "columns": 6,
