@@ -16,10 +16,6 @@ type CharacterCard = {
   readonly setState: (state: CharacterCardState) => void;
 };
 
-const SELECT_PORTRAIT_ZOOM: Partial<Record<CharacterDefinition['id'], number>> = {
-  tibo: 1.12,
-};
-
 export class CharacterSelectScene extends BaseScene {
   public constructor() {
     super(SceneKey.CharacterSelect);
@@ -247,7 +243,7 @@ export class CharacterSelectScene extends BaseScene {
     const width = compact ? 200 : 300;
     const height = compact ? 300 : 330;
     const portraitFrameSize = compact ? 168 : 212;
-    const portraitSize = compact ? 154 : 198;
+    const portraitSize = compact ? 166 : 210;
     const portraitY = compact ? -48 : -52;
     const nameY = compact ? 112 : 118;
     const container = this.add.container(x, y);
@@ -255,8 +251,7 @@ export class CharacterSelectScene extends BaseScene {
     const portraitFrame = this.add
       .rectangle(0, portraitY, portraitFrameSize, portraitFrameSize, 0x06070a, 0.96)
       .setStrokeStyle(2, 0xffffff, 0.12);
-    const portraitDisplaySize = Math.round(portraitSize * (SELECT_PORTRAIT_ZOOM[character.id] ?? 1));
-    const portrait = this.add.image(0, portraitY, character.portraitKey).setDisplaySize(portraitDisplaySize, portraitDisplaySize).setFlipX(flipPortrait);
+    const portrait = this.add.image(0, portraitY, character.selectPortraitKey).setDisplaySize(portraitSize, portraitSize).setFlipX(flipPortrait);
     const name = this.add
       .text(0, nameY, character.displayName, {
         align: 'center',

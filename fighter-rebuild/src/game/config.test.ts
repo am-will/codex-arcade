@@ -27,6 +27,7 @@ describe('game config loading and normalization', () => {
 
     for (const character of config.characters) {
       expect(character.portraitKey).toBe(`${character.assetId}-portrait`);
+      expect(character.selectPortraitKey).toBe(`${character.assetId}-select-portrait`);
       expect(character.attacks.light.windows[0]?.hitbox.x).toBeGreaterThan(190);
       expect(character.attacks.heavy.windows[0]?.hitbox.width).toBeGreaterThan(100);
       expect(character.attacks.special.windows).toHaveLength(4);

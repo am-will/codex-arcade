@@ -261,9 +261,16 @@ function normalizeManifestCharacter(source: Record<string, unknown>, warnings: W
   }
 
   const portraitRecord = asRecord(source.portrait);
+  const selectPortraitRecord = asRecord(source.selectPortrait);
   const animations = uniqueRecords(source.animations, `manifest character ${id} animation`, warnings)
     .map((animation) => normalizeManifestAnimation(animation, warnings))
     .filter((animation): animation is AssetManifestAnimation => animation !== null);
+  const portrait = {
+    key: stringOr(portraitRecord?.key, `${id}-portrait`),
+    path: stringOr(portraitRecord?.path, `/assets/characters/${id}/portrait.png`),
+    width: positiveInt(portraitRecord?.width, 192),
+    height: positiveInt(portraitRecord?.height, 192),
+  };
 
   for (const requiredAnimation of REQUIRED_ANIMATIONS) {
     if (!animations.some((animation) => animation.name === requiredAnimation)) {
@@ -277,12 +284,15 @@ function normalizeManifestCharacter(source: Record<string, unknown>, warnings: W
     displayName: stringOr(source.displayName, id),
     description: typeof source.description === 'string' ? source.description : undefined,
     visualCue: typeof source.visualCue === 'string' ? source.visualCue : undefined,
-    portrait: {
-      key: stringOr(portraitRecord?.key, `${id}-portrait`),
-      path: stringOr(portraitRecord?.path, `/assets/characters/${id}/portrait.png`),
-      width: positiveInt(portraitRecord?.width, 192),
-      height: positiveInt(portraitRecord?.height, 192),
-    },
+    portrait,
+    selectPortrait: selectPortraitRecord
+      ? {
+          key: stringOr(selectPortraitRecord.key, portrait.key),
+          path: stringOr(selectPortraitRecord.path, portrait.path),
+          width: positiveInt(selectPortraitRecord.width, portrait.width),
+          height: positiveInt(selectPortraitRecord.height, portrait.height),
+        }
+      : undefined,
     animations,
   };
 }
@@ -506,6 +516,7 @@ function normalizeCharacters(
       displayName: stringOr(rawCharacter.displayName, manifestCharacter.displayName),
       assetId: manifestCharacter.id,
       portraitKey: manifestCharacter.portrait.key,
+      selectPortraitKey: manifestCharacter.selectPortrait?.key ?? manifestCharacter.portrait.key,
       tuningId: resolvedTuningId,
       attacks: normalizeAttacks(asRecord(rawCharacter.attacks), manifestCharacter, rawId, warnings),
       frameBoxes: normalizeFrameBoxes(asRecord(rawCharacter.frameBoxes), manifestCharacter, warnings),
@@ -519,6 +530,7 @@ function normalizeCharacters(
       displayName: manifestCharacter.displayName,
       assetId: manifestCharacter.id,
       portraitKey: manifestCharacter.portrait.key,
+      selectPortraitKey: manifestCharacter.selectPortrait?.key ?? manifestCharacter.portrait.key,
       tuningId: firstTuningId,
       attacks: normalizeAttacks(undefined, manifestCharacter, manifestCharacter.id, warnings),
       frameBoxes: normalizeFrameBoxes(undefined, manifestCharacter, warnings),

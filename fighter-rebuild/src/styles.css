@@ -62,7 +62,6 @@ select {
   max-height: calc(100vh - 8.5rem);
   max-height: calc(100dvh - 8.5rem);
   aspect-ratio: 16 / 9;
-  image-rendering: pixelated;
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
 }

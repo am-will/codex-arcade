@@ -15,6 +15,12 @@
         "width": 192,
         "height": 192
       },
+      "selectPortrait": {
+        "key": "sama-select-portrait",
+        "path": "/assets/characters/sama/select-portrait.png?v=select-portraits-20260621",
+        "width": 512,
+        "height": 512
+      },
       "animations": [
         {
           "name": "idle",
@@ -136,6 +142,12 @@
         "path": "/assets/characters/amodi/portrait.png?v=amodei-rowgen-claude-20260608",
         "width": 192,
         "height": 192
+      },
+      "selectPortrait": {
+        "key": "amodi-select-portrait",
+        "path": "/assets/characters/amodi/select-portrait.png?v=select-portraits-20260621",
+        "width": 512,
+        "height": 512
       },
       "animations": [
         {
@@ -259,6 +271,12 @@
         "width": 192,
         "height": 192
       },
+      "selectPortrait": {
+        "key": "tibo-select-portrait",
+        "path": "/assets/characters/tibo/select-portrait.png?v=select-portraits-20260621",
+        "width": 512,
+        "height": 512
+      },
       "animations": [
         {
           "name": "idle",
@@ -380,6 +398,12 @@
         "path": "/assets/characters/boris/portrait.png?v=alpha-fill-20260607",
         "width": 192,
         "height": 192
+      },
+      "selectPortrait": {
+        "key": "boris-select-portrait",
+        "path": "/assets/characters/boris/select-portrait.png?v=select-portraits-20260621",
+        "width": 512,
+        "height": 512
       },
       "animations": [
         {

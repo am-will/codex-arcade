@@ -32,6 +32,7 @@ export type GeneratedCharacterAsset = {
   description: string;
   visualCue: string;
   portrait: GeneratedImageAsset;
+  selectPortrait?: GeneratedImageAsset;
   animations: GeneratedCharacterAnimation[];
 };
 
@@ -104,6 +105,9 @@ export function queueGeneratedAssets(scene: Phaser.Scene, manifest: GeneratedAss
 
   for (const character of manifest.characters) {
     queueImage(scene, character.portrait, queuedTextures);
+    if (character.selectPortrait) {
+      queueImage(scene, character.selectPortrait, queuedTextures);
+    }
 
     for (const animation of character.animations) {
       queueSpriteSheet(scene, animation, queuedTextures);

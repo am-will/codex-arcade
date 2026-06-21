@@ -88,6 +88,7 @@ export interface CharacterDefinition {
   readonly displayName: string;
   readonly assetId: CharacterId;
   readonly portraitKey: AssetKey;
+  readonly selectPortraitKey: AssetKey;
   readonly tuningId: string;
   readonly attacks: Readonly<Record<'light' | 'heavy' | 'special', AttackProfile>>;
   readonly frameBoxes: FrameBoxes;
@@ -162,6 +163,12 @@ export interface AssetManifestCharacter {
   readonly description?: string;
   readonly visualCue?: string;
   readonly portrait: {
+    readonly key: AssetKey;
+    readonly path: string;
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly selectPortrait?: {
     readonly key: AssetKey;
     readonly path: string;
     readonly width: number;
