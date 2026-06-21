@@ -153,7 +153,7 @@
         {
           "name": "idle",
           "key": "amodi-idle",
-          "path": "/assets/characters/amodi/idle.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/idle.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -165,7 +165,7 @@
         {
           "name": "walk",
           "key": "amodi-walk",
-          "path": "/assets/characters/amodi/walk.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/walk.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -177,7 +177,7 @@
         {
           "name": "jump",
           "key": "amodi-jump",
-          "path": "/assets/characters/amodi/jump.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/jump.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -189,7 +189,7 @@
         {
           "name": "crouch",
           "key": "amodi-crouch",
-          "path": "/assets/characters/amodi/crouch.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/crouch.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -201,7 +201,7 @@
         {
           "name": "block",
           "key": "amodi-block",
-          "path": "/assets/characters/amodi/block.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/block.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -213,7 +213,7 @@
         {
           "name": "light",
           "key": "amodi-light",
-          "path": "/assets/characters/amodi/light.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/light.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -225,7 +225,7 @@
         {
           "name": "heavy",
           "key": "amodi-heavy",
-          "path": "/assets/characters/amodi/heavy.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/heavy.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -237,7 +237,7 @@
         {
           "name": "special",
           "key": "amodi-special",
-          "path": "/assets/characters/amodi/special.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/special.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -249,7 +249,7 @@
         {
           "name": "knockdown",
           "key": "amodi-knockdown",
-          "path": "/assets/characters/amodi/knockdown.png?v=dario-sharpness-test-20260621",
+          "path": "/assets/characters/amodi/knockdown.png?v=dario-scale-standardized-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
