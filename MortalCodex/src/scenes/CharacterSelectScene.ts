@@ -266,7 +266,7 @@ export class CharacterSelectScene extends BaseScene {
     const portraitFrameSize = compact ? 168 : 212;
     const portraitSize = compact ? 168 : 212;
     const portraitY = compact ? -42 : -50;
-    const nameY = compact ? 116 : 120;
+    const nameY = compact ? 100 : 106;
 
     const container = this.add.container(x, y);
     const glow = addSoftGlow(this, 0, portraitY, width * 1.7, 0x39e0c8, 0);
