@@ -211,7 +211,10 @@ async function fetchJson(path: string): Promise<unknown> {
     throw new Error('No JSON loader was supplied and global fetch is unavailable.');
   }
 
-  const response = await globalThis.fetch(path);
+  const separator = path.includes('?') ? '&' : '?';
+  const response = await globalThis.fetch(`${path}${separator}t=${Date.now()}`, {
+    cache: 'no-store',
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load ${path}: ${response.status} ${response.statusText}`);

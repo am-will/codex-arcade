@@ -1,0 +1,455 @@
+{
+  "method": "dynamic Tibo pose templates restyled into Boris",
+  "animations": {
+    "idle": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            83,
+            31,
+            236,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            87,
+            67,
+            233,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            103,
+            27,
+            217,
+            304
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            67,
+            33,
+            252,
+            304
+          ]
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            80,
+            47,
+            239,
+            304
+          ]
+        },
+        {
+          "frame": 5,
+          "alphaBox": [
+            83,
+            31,
+            237,
+            304
+          ]
+        }
+      ]
+    },
+    "walk": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            91,
+            25,
+            228,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            91,
+            27,
+            228,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            105,
+            23,
+            214,
+            304
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            80,
+            26,
+            240,
+            304
+          ]
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            60,
+            30,
+            260,
+            304
+          ]
+        },
+        {
+          "frame": 5,
+          "alphaBox": [
+            84,
+            33,
+            236,
+            304
+          ]
+        }
+      ]
+    },
+    "jump": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            76,
+            58,
+            244,
+            231
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            76,
+            18,
+            243,
+            282
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            52,
+            58,
+            268,
+            254
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            69,
+            58,
+            251,
+            233
+          ]
+        }
+      ]
+    },
+    "crouch": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            91,
+            100,
+            228,
+            314
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            77,
+            122,
+            242,
+            314
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            39,
+            146,
+            280,
+            314
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            95,
+            100,
+            225,
+            314
+          ]
+        }
+      ]
+    },
+    "block": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 3,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            64,
+            12,
+            256,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            64,
+            12,
+            256,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            57,
+            12,
+            263,
+            304
+          ]
+        }
+      ]
+    },
+    "light": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            66,
+            12,
+            253,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            55,
+            12,
+            264,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            27,
+            12,
+            292,
+            304
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            69,
+            12,
+            250,
+            304
+          ]
+        }
+      ]
+    },
+    "heavy": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            71,
+            12,
+            248,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            95,
+            12,
+            225,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            21,
+            27,
+            299,
+            304
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            93,
+            12,
+            227,
+            304
+          ]
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            72,
+            18,
+            248,
+            304
+          ]
+        }
+      ]
+    },
+    "special": {
+      "frameWidth": 512,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            44,
+            20,
+            211,
+            304
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            44,
+            20,
+            227,
+            304
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            44,
+            20,
+            284,
+            304
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            44,
+            20,
+            307,
+            304
+          ]
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            44,
+            20,
+            365,
+            304
+          ]
+        },
+        {
+          "frame": 5,
+          "alphaBox": [
+            44,
+            20,
+            216,
+            304
+          ]
+        }
+      ]
+    },
+    "knockdown": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            92,
+            136,
+            227,
+            316
+          ]
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            53,
+            145,
+            267,
+            316
+          ]
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            60,
+            171,
+            260,
+            316
+          ]
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            36,
+            252,
+            283,
+            320
+          ]
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            82,
+            182,
+            238,
+            316
+          ]
+        }
+      ]
+    }
+  }
+}

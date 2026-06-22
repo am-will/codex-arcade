@@ -43,12 +43,9 @@ export type SelectableItem = {
   readonly setFocused: (focused: boolean) => void;
 };
 
-let cachedConfigPromise: Promise<GameConfig> | null = null;
-
 export abstract class BaseScene extends Phaser.Scene {
   protected loadSharedConfig(): Promise<GameConfig> {
-    cachedConfigPromise ??= loadGameConfig();
-    return cachedConfigPromise;
+    return loadGameConfig();
   }
 
   protected async renderWithConfig(render: (config: GameConfig) => void): Promise<void> {

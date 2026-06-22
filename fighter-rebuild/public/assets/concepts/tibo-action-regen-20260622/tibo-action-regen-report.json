@@ -1,0 +1,776 @@
+{
+  "method": "imagegen action rows, magenta chroma key, equal row slicing, shared body-scale normalization",
+  "baseScale": 0.5126353790613718,
+  "standingTargetHeight": 284,
+  "animations": {
+    "idle": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "fps": 10,
+      "loop": true,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            50,
+            134,
+            349,
+            666
+          ],
+          "runtimeBox": [
+            83,
+            31,
+            236,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            141,
+            203,
+            425,
+            666
+          ],
+          "runtimeBox": [
+            87,
+            67,
+            233,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            161,
+            96,
+            383,
+            637
+          ],
+          "runtimeBox": [
+            103,
+            27,
+            217,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            122,
+            138,
+            482,
+            666
+          ],
+          "runtimeBox": [
+            67,
+            33,
+            252,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 4,
+          "sourceBox": [
+            128,
+            164,
+            439,
+            666
+          ],
+          "runtimeBox": [
+            80,
+            47,
+            239,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 5,
+          "sourceBox": [
+            108,
+            134,
+            408,
+            666
+          ],
+          "runtimeBox": [
+            83,
+            31,
+            237,
+            304
+          ],
+          "scale": 0.5126353790613718
+        }
+      ]
+    },
+    "walk": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "fps": 8,
+      "loop": true,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            58,
+            105,
+            326,
+            649
+          ],
+          "runtimeBox": [
+            91,
+            25,
+            228,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            137,
+            108,
+            404,
+            649
+          ],
+          "runtimeBox": [
+            91,
+            27,
+            228,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            154,
+            97,
+            366,
+            646
+          ],
+          "runtimeBox": [
+            105,
+            23,
+            214,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            61,
+            105,
+            374,
+            648
+          ],
+          "runtimeBox": [
+            80,
+            26,
+            240,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 4,
+          "sourceBox": [
+            42,
+            107,
+            433,
+            641
+          ],
+          "runtimeBox": [
+            60,
+            30,
+            260,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 5,
+          "sourceBox": [
+            89,
+            113,
+            385,
+            642
+          ],
+          "runtimeBox": [
+            84,
+            33,
+            236,
+            304
+          ],
+          "scale": 0.5126353790613718
+        }
+      ]
+    },
+    "jump": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 8,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            111,
+            364,
+            438,
+            702
+          ],
+          "runtimeBox": [
+            76,
+            58,
+            244,
+            231
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            158,
+            84,
+            537,
+            682
+          ],
+          "runtimeBox": [
+            76,
+            18,
+            243,
+            282
+          ],
+          "scale": 0.4414715719063545
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            138,
+            88,
+            560,
+            470
+          ],
+          "runtimeBox": [
+            52,
+            58,
+            268,
+            254
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            135,
+            358,
+            491,
+            699
+          ],
+          "runtimeBox": [
+            69,
+            58,
+            251,
+            233
+          ],
+          "scale": 0.5126353790613718
+        }
+      ]
+    },
+    "crouch": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 8,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            81,
+            174,
+            404,
+            680
+          ],
+          "runtimeBox": [
+            91,
+            100,
+            228,
+            314
+          ],
+          "scale": 0.42292490118577075
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            143,
+            300,
+            465,
+            675
+          ],
+          "runtimeBox": [
+            77,
+            122,
+            242,
+            314
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            134,
+            349,
+            605,
+            676
+          ],
+          "runtimeBox": [
+            39,
+            146,
+            280,
+            314
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            131,
+            153,
+            451,
+            680
+          ],
+          "runtimeBox": [
+            95,
+            100,
+            225,
+            314
+          ],
+          "scale": 0.4060721062618596
+        }
+      ]
+    },
+    "block": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 3,
+      "fps": 8,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            70,
+            54,
+            551,
+            785
+          ],
+          "runtimeBox": [
+            64,
+            12,
+            256,
+            304
+          ],
+          "scale": 0.399452804377565
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            142,
+            66,
+            614,
+            785
+          ],
+          "runtimeBox": [
+            64,
+            12,
+            256,
+            304
+          ],
+          "scale": 0.40611961057023643
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            123,
+            89,
+            621,
+            795
+          ],
+          "runtimeBox": [
+            57,
+            12,
+            263,
+            304
+          ],
+          "scale": 0.41359773371104813
+        }
+      ]
+    },
+    "light": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 12,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            56,
+            98,
+            442,
+            702
+          ],
+          "runtimeBox": [
+            66,
+            12,
+            253,
+            304
+          ],
+          "scale": 0.48344370860927155
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            113,
+            118,
+            532,
+            703
+          ],
+          "runtimeBox": [
+            55,
+            12,
+            264,
+            304
+          ],
+          "scale": 0.49914529914529915
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            78,
+            121,
+            607,
+            703
+          ],
+          "runtimeBox": [
+            27,
+            12,
+            292,
+            304
+          ],
+          "scale": 0.5017182130584192
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            134,
+            112,
+            499,
+            702
+          ],
+          "runtimeBox": [
+            69,
+            12,
+            250,
+            304
+          ],
+          "scale": 0.49491525423728816
+        }
+      ]
+    },
+    "heavy": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "fps": 10,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            55,
+            66,
+            405,
+            643
+          ],
+          "runtimeBox": [
+            71,
+            12,
+            248,
+            304
+          ],
+          "scale": 0.5060658578856152
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            135,
+            64,
+            395,
+            648
+          ],
+          "runtimeBox": [
+            95,
+            12,
+            225,
+            304
+          ],
+          "scale": 0.5
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            64,
+            113,
+            606,
+            654
+          ],
+          "runtimeBox": [
+            21,
+            27,
+            299,
+            304
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            226,
+            63,
+            495,
+            651
+          ],
+          "runtimeBox": [
+            93,
+            12,
+            227,
+            304
+          ],
+          "scale": 0.4965986394557823
+        },
+        {
+          "frame": 4,
+          "sourceBox": [
+            114,
+            89,
+            457,
+            647
+          ],
+          "runtimeBox": [
+            72,
+            18,
+            248,
+            304
+          ],
+          "scale": 0.5126353790613718
+        }
+      ]
+    },
+    "special": {
+      "frameWidth": 512,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "fps": 12,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            25,
+            174,
+            273,
+            597
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            211,
+            304
+          ],
+          "scale": 0.6713947990543735
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            64,
+            176,
+            333,
+            593
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            227,
+            304
+          ],
+          "scale": 0.6810551558752997
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            60,
+            172,
+            416,
+            594
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            284,
+            304
+          ],
+          "scale": 0.6729857819905213
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            96,
+            176,
+            483,
+            594
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            307,
+            304
+          ],
+          "scale": 0.6794258373205742
+        },
+        {
+          "frame": 4,
+          "sourceBox": [
+            144,
+            202,
+            587,
+            594
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            365,
+            304
+          ],
+          "scale": 0.7244897959183674
+        },
+        {
+          "frame": 5,
+          "sourceBox": [
+            9,
+            175,
+            263,
+            595
+          ],
+          "runtimeBox": [
+            44,
+            20,
+            216,
+            304
+          ],
+          "scale": 0.6761904761904762
+        }
+      ]
+    },
+    "knockdown": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "fps": 8,
+      "loop": false,
+      "frames": [
+        {
+          "frame": 0,
+          "sourceBox": [
+            51,
+            157,
+            396,
+            618
+          ],
+          "runtimeBox": [
+            92,
+            136,
+            227,
+            316
+          ],
+          "scale": 0.39045553145336226
+        },
+        {
+          "frame": 1,
+          "sourceBox": [
+            103,
+            277,
+            521,
+            610
+          ],
+          "runtimeBox": [
+            53,
+            145,
+            267,
+            316
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 2,
+          "sourceBox": [
+            77,
+            334,
+            468,
+            617
+          ],
+          "runtimeBox": [
+            60,
+            171,
+            260,
+            316
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 3,
+          "sourceBox": [
+            48,
+            504,
+            529,
+            629
+          ],
+          "runtimeBox": [
+            36,
+            252,
+            283,
+            316
+          ],
+          "scale": 0.5126353790613718
+        },
+        {
+          "frame": 4,
+          "sourceBox": [
+            152,
+            360,
+            456,
+            622
+          ],
+          "runtimeBox": [
+            82,
+            182,
+            238,
+            316
+          ],
+          "scale": 0.5126353790613718
+        }
+      ]
+    }
+  }
+}
