@@ -414,6 +414,13 @@
           69,
           257,
           302
+        ],
+        "scaleCorrectionFactor": 0.93,
+        "correctedAlphaBox": [
+          69,
+          85,
+          250,
+          302
         ]
       },
       {
@@ -438,6 +445,13 @@
           66,
           3,
           254,
+          309
+        ],
+        "scaleCorrectionFactor": 0.93,
+        "correctedAlphaBox": [
+          72,
+          24,
+          247,
           309
         ]
       },
@@ -464,6 +478,13 @@
           11,
           242,
           302
+        ],
+        "scaleCorrectionFactor": 0.93,
+        "correctedAlphaBox": [
+          83,
+          31,
+          236,
+          302
         ]
       },
       {
@@ -489,9 +510,17 @@
           81,
           244,
           302
+        ],
+        "scaleCorrectionFactor": 0.93,
+        "correctedAlphaBox": [
+          81,
+          96,
+          238,
+          302
         ]
       }
-    ]
+    ],
+    "scaleAdjustment": "crouch/jump scale normalization after in-game review"
   },
   "crouch": {
     "frameWidth": 320,
@@ -540,6 +569,13 @@
           96,
           257,
           303
+        ],
+        "scaleCorrectionFactor": 0.88,
+        "correctedAlphaBox": [
+          74,
+          121,
+          245,
+          303
         ]
       },
       {
@@ -564,6 +600,13 @@
           70,
           102,
           250,
+          303
+        ],
+        "scaleCorrectionFactor": 0.88,
+        "correctedAlphaBox": [
+          81,
+          126,
+          239,
           303
         ]
       },
@@ -590,6 +633,13 @@
           109,
           298,
           303
+        ],
+        "scaleCorrectionFactor": 0.88,
+        "correctedAlphaBox": [
+          38,
+          132,
+          281,
+          303
         ]
       },
       {
@@ -615,9 +665,17 @@
           95,
           257,
           303
+        ],
+        "scaleCorrectionFactor": 0.88,
+        "correctedAlphaBox": [
+          74,
+          120,
+          245,
+          303
         ]
       }
-    ]
+    ],
+    "scaleAdjustment": "crouch/jump scale normalization after in-game review"
   },
   "block": {
     "frameWidth": 320,
