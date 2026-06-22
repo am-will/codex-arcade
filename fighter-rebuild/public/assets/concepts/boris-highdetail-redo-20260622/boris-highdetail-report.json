@@ -1,0 +1,452 @@
+{
+  "idle": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          70,
+          24,
+          250,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          70,
+          22,
+          251,
+          303
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          71,
+          18,
+          251,
+          301
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          70,
+          21,
+          250,
+          304
+        ]
+      },
+      {
+        "frame": 4,
+        "alphaBox": [
+          69,
+          25,
+          249,
+          307
+        ]
+      },
+      {
+        "frame": 5,
+        "alphaBox": [
+          70,
+          22,
+          250,
+          304
+        ]
+      }
+    ]
+  },
+  "walk": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          63,
+          26,
+          243,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          67,
+          22,
+          247,
+          304
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          74,
+          22,
+          251,
+          306
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          80,
+          23,
+          251,
+          305
+        ]
+      },
+      {
+        "frame": 4,
+        "alphaBox": [
+          75,
+          25,
+          253,
+          306
+        ]
+      },
+      {
+        "frame": 5,
+        "alphaBox": [
+          68,
+          25,
+          248,
+          307
+        ]
+      }
+    ]
+  },
+  "jump": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          79,
+          75,
+          241,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          80,
+          32,
+          250,
+          286
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          81,
+          58,
+          239,
+          276
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          79,
+          77,
+          241,
+          306
+        ]
+      }
+    ]
+  },
+  "crouch": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          80,
+          140,
+          239,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          81,
+          153,
+          239,
+          306
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          81,
+          157,
+          251,
+          306
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          80,
+          140,
+          239,
+          306
+        ]
+      }
+    ]
+  },
+  "block": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 3,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          70,
+          24,
+          250,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          69,
+          35,
+          247,
+          308
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          68,
+          37,
+          246,
+          309
+        ]
+      }
+    ]
+  },
+  "light": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          70,
+          24,
+          250,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          72,
+          24,
+          271,
+          306
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          76,
+          24,
+          276,
+          306
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          72,
+          23,
+          252,
+          306
+        ]
+      }
+    ]
+  },
+  "heavy": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 5,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          70,
+          24,
+          250,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          77,
+          43,
+          253,
+          306
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          74,
+          50,
+          287,
+          306
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          77,
+          45,
+          251,
+          306
+        ]
+      },
+      {
+        "frame": 4,
+        "alphaBox": [
+          70,
+          24,
+          250,
+          306
+        ]
+      }
+    ]
+  },
+  "special": {
+    "frameWidth": 384,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          102,
+          24,
+          282,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          104,
+          24,
+          291,
+          306
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          106,
+          24,
+          303,
+          306
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          105,
+          24,
+          340,
+          306
+        ]
+      },
+      {
+        "frame": 4,
+        "alphaBox": [
+          105,
+          24,
+          376,
+          306
+        ]
+      },
+      {
+        "frame": 5,
+        "alphaBox": [
+          102,
+          24,
+          282,
+          306
+        ]
+      }
+    ]
+  },
+  "knockdown": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 5,
+    "frames": [
+      {
+        "frame": 0,
+        "alphaBox": [
+          60,
+          26,
+          260,
+          306
+        ]
+      },
+      {
+        "frame": 1,
+        "alphaBox": [
+          32,
+          56,
+          272,
+          310
+        ]
+      },
+      {
+        "frame": 2,
+        "alphaBox": [
+          43,
+          144,
+          277,
+          300
+        ]
+      },
+      {
+        "frame": 3,
+        "alphaBox": [
+          53,
+          148,
+          267,
+          285
+        ]
+      },
+      {
+        "frame": 4,
+        "alphaBox": [
+          86,
+          140,
+          241,
+          306
+        ]
+      }
+    ]
+  }
+}
