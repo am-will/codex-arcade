@@ -281,19 +281,19 @@
         {
           "name": "idle",
           "key": "tibo-idle",
-          "path": "/assets/characters/tibo/idle.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/idle.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
-          "frameCount": 12,
-          "columns": 12,
+          "frameCount": 6,
+          "columns": 6,
           "rows": 1,
-          "fps": 12,
+          "fps": 10,
           "loop": true
         },
         {
           "name": "walk",
           "key": "tibo-walk",
-          "path": "/assets/characters/tibo/walk.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/walk.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -305,7 +305,7 @@
         {
           "name": "jump",
           "key": "tibo-jump",
-          "path": "/assets/characters/tibo/jump.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/jump.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -317,7 +317,7 @@
         {
           "name": "crouch",
           "key": "tibo-crouch",
-          "path": "/assets/characters/tibo/crouch.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/crouch.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -329,7 +329,7 @@
         {
           "name": "block",
           "key": "tibo-block",
-          "path": "/assets/characters/tibo/block.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/block.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -341,7 +341,7 @@
         {
           "name": "light",
           "key": "tibo-light",
-          "path": "/assets/characters/tibo/light.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/light.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -353,7 +353,7 @@
         {
           "name": "heavy",
           "key": "tibo-heavy",
-          "path": "/assets/characters/tibo/heavy.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/heavy.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -365,8 +365,8 @@
         {
           "name": "special",
           "key": "tibo-special",
-          "path": "/assets/characters/tibo/special.png?v=tibo-sharp-wide-20260621",
-          "frameWidth": 384,
+          "path": "/assets/characters/tibo/special.png?v=tibo-standard-scale-20260622",
+          "frameWidth": 512,
           "frameHeight": 320,
           "frameCount": 6,
           "columns": 6,
@@ -377,7 +377,7 @@
         {
           "name": "knockdown",
           "key": "tibo-knockdown",
-          "path": "/assets/characters/tibo/knockdown.png?v=tibo-sharp-wide-20260621",
+          "path": "/assets/characters/tibo/knockdown.png?v=tibo-standard-scale-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -409,7 +409,7 @@
         {
           "name": "idle",
           "key": "boris-idle",
-          "path": "/assets/characters/boris/idle.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/idle.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -421,7 +421,7 @@
         {
           "name": "walk",
           "key": "boris-walk",
-          "path": "/assets/characters/boris/walk.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/walk.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -433,7 +433,7 @@
         {
           "name": "jump",
           "key": "boris-jump",
-          "path": "/assets/characters/boris/jump.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/jump.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -445,7 +445,7 @@
         {
           "name": "crouch",
           "key": "boris-crouch",
-          "path": "/assets/characters/boris/crouch.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/crouch.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -457,7 +457,7 @@
         {
           "name": "block",
           "key": "boris-block",
-          "path": "/assets/characters/boris/block.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/block.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -469,7 +469,7 @@
         {
           "name": "light",
           "key": "boris-light",
-          "path": "/assets/characters/boris/light.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/light.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -481,7 +481,7 @@
         {
           "name": "heavy",
           "key": "boris-heavy",
-          "path": "/assets/characters/boris/heavy.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/heavy.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -493,11 +493,11 @@
         {
           "name": "special",
           "key": "boris-special",
-          "path": "/assets/characters/boris/special.png?v=boris-highdetail-redo-20260622",
-          "frameWidth": 384,
+          "path": "/assets/characters/boris/special.png?v=boris-imagegen-rebuild-20260622",
+          "frameWidth": 512,
           "frameHeight": 320,
-          "frameCount": 6,
-          "columns": 6,
+          "frameCount": 5,
+          "columns": 5,
           "rows": 1,
           "fps": 12,
           "loop": false
@@ -505,7 +505,7 @@
         {
           "name": "knockdown",
           "key": "boris-knockdown",
-          "path": "/assets/characters/boris/knockdown.png?v=boris-highdetail-redo-20260622",
+          "path": "/assets/characters/boris/knockdown.png?v=boris-imagegen-rebuild-20260622",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,

@@ -1,0 +1,500 @@
+{
+  "source": "/Users/am.will/.codex/generated_images/019ea028-f3e5-7b32-9964-11ed74195dc2/ig_093f3643bdfc56cd016a38cdf1caf08198b9bd4c9ba2608cbc.png",
+  "method": "fresh Imagegen sheet sliced by detected grid, magenta removed, normalized with one global body scale",
+  "globalScale": 1.7841726618705036,
+  "heavyScale": 0.5391304347826087,
+  "animations": {
+    "idle": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "fps": 12,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            66,
+            12,
+            253,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            68,
+            12,
+            252,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            72,
+            12,
+            249,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            66,
+            14,
+            255,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            66,
+            12,
+            255,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 5,
+          "alphaBox": [
+            66,
+            12,
+            255,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "walk": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "fps": 8,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            61,
+            46,
+            259,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            58,
+            48,
+            263,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            74,
+            44,
+            247,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            72,
+            44,
+            249,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            84,
+            42,
+            237,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 5,
+          "alphaBox": [
+            76,
+            44,
+            245,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "jump": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 8,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            67,
+            69,
+            253,
+            267
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            58,
+            62,
+            263,
+            273
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            86,
+            72,
+            234,
+            263
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            74,
+            87,
+            245,
+            249
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "crouch": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 8,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            72,
+            103,
+            249,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            37,
+            108,
+            283,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            76,
+            101,
+            245,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            77,
+            105,
+            243,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "block": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 3,
+      "fps": 8,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            74,
+            94,
+            247,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            53,
+            94,
+            267,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            68,
+            98,
+            252,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "light": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "fps": 12,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            80,
+            67,
+            241,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            56,
+            65,
+            265,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            14,
+            75,
+            306,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            72,
+            67,
+            247,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "heavy": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "fps": 10,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            77,
+            44,
+            243,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            96,
+            38,
+            225,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            28,
+            46,
+            291,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            44,
+            50,
+            277,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            78,
+            45,
+            241,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "special": {
+      "frameWidth": 512,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "fps": 12,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            70,
+            114,
+            282,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            66,
+            114,
+            285,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            19,
+            117,
+            333,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            12,
+            147,
+            496,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            87,
+            115,
+            265,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    },
+    "knockdown": {
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "fps": 8,
+      "frames": [
+        {
+          "frame": 0,
+          "alphaBox": [
+            72,
+            151,
+            247,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 1,
+          "alphaBox": [
+            46,
+            155,
+            273,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 2,
+          "alphaBox": [
+            24,
+            197,
+            295,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 3,
+          "alphaBox": [
+            14,
+            219,
+            306,
+            292
+          ],
+          "touchesEdge": false
+        },
+        {
+          "frame": 4,
+          "alphaBox": [
+            74,
+            149,
+            247,
+            292
+          ],
+          "touchesEdge": false
+        }
+      ]
+    }
+  }
+}

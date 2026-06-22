@@ -2177,114 +2177,6 @@
               "width": 94,
               "height": 162
             }
-          },
-          {
-            "frame": 6,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
-          },
-          {
-            "frame": 7,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
-          },
-          {
-            "frame": 8,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
-          },
-          {
-            "frame": 9,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
-          },
-          {
-            "frame": 10,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
-          },
-          {
-            "frame": 11,
-            "hurt": [
-              {
-                "x": 107,
-                "y": 52,
-                "width": 102,
-                "height": 236
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 112,
-              "y": 118,
-              "width": 94,
-              "height": 162
-            }
           }
         ],
         "walk": [
@@ -3090,12 +2982,12 @@
             },
             {
               "startFrame": 4,
-              "endFrame": 5,
+              "endFrame": 4,
               "hitbox": {
-                "x": 204,
-                "y": 68,
-                "width": 156,
-                "height": 98
+                "x": 248,
+                "y": 84,
+                "width": 236,
+                "height": 86
               }
             }
           ]
@@ -3801,24 +3693,6 @@
               "x": 134,
               "y": 116,
               "width": 112,
-              "height": 164
-            }
-          },
-          {
-            "frame": 5,
-            "hurt": [
-              {
-                "x": 134,
-                "y": 58,
-                "width": 150,
-                "height": 222
-              }
-            ],
-            "guard": [],
-            "collision": {
-              "x": 138,
-              "y": 116,
-              "width": 108,
               "height": 164
             }
           }
