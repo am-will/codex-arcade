@@ -1,0 +1,654 @@
+{
+  "character": "tibo",
+  "variant": "tibo-sharp-wide-20260621",
+  "animations": {
+    "idle": {
+      "path": "public/assets/characters/tibo/idle.png",
+      "size": [
+        3840,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 12,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            79,
+            18,
+            240,
+            297
+          ],
+          "bboxWidth": 161,
+          "bboxHeight": 279
+        },
+        {
+          "index": 1,
+          "bbox": [
+            83,
+            17,
+            235,
+            297
+          ],
+          "bboxWidth": 152,
+          "bboxHeight": 280
+        },
+        {
+          "index": 2,
+          "bbox": [
+            80,
+            17,
+            239,
+            297
+          ],
+          "bboxWidth": 159,
+          "bboxHeight": 280
+        },
+        {
+          "index": 3,
+          "bbox": [
+            83,
+            17,
+            237,
+            297
+          ],
+          "bboxWidth": 154,
+          "bboxHeight": 280
+        },
+        {
+          "index": 4,
+          "bbox": [
+            85,
+            19,
+            236,
+            297
+          ],
+          "bboxWidth": 151,
+          "bboxHeight": 278
+        },
+        {
+          "index": 5,
+          "bbox": [
+            84,
+            17,
+            236,
+            297
+          ],
+          "bboxWidth": 152,
+          "bboxHeight": 280
+        },
+        {
+          "index": 6,
+          "bbox": [
+            84,
+            17,
+            236,
+            297
+          ],
+          "bboxWidth": 152,
+          "bboxHeight": 280
+        },
+        {
+          "index": 7,
+          "bbox": [
+            85,
+            19,
+            236,
+            297
+          ],
+          "bboxWidth": 151,
+          "bboxHeight": 278
+        },
+        {
+          "index": 8,
+          "bbox": [
+            83,
+            17,
+            237,
+            297
+          ],
+          "bboxWidth": 154,
+          "bboxHeight": 280
+        },
+        {
+          "index": 9,
+          "bbox": [
+            80,
+            17,
+            239,
+            297
+          ],
+          "bboxWidth": 159,
+          "bboxHeight": 280
+        },
+        {
+          "index": 10,
+          "bbox": [
+            83,
+            17,
+            235,
+            297
+          ],
+          "bboxWidth": 152,
+          "bboxHeight": 280
+        },
+        {
+          "index": 11,
+          "bbox": [
+            79,
+            18,
+            240,
+            297
+          ],
+          "bboxWidth": 161,
+          "bboxHeight": 279
+        }
+      ]
+    },
+    "walk": {
+      "path": "public/assets/characters/tibo/walk.png",
+      "size": [
+        1920,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            82,
+            18,
+            237,
+            297
+          ],
+          "bboxWidth": 155,
+          "bboxHeight": 279
+        },
+        {
+          "index": 1,
+          "bbox": [
+            85,
+            17,
+            234,
+            297
+          ],
+          "bboxWidth": 149,
+          "bboxHeight": 280
+        },
+        {
+          "index": 2,
+          "bbox": [
+            93,
+            17,
+            227,
+            297
+          ],
+          "bboxWidth": 134,
+          "bboxHeight": 280
+        },
+        {
+          "index": 3,
+          "bbox": [
+            83,
+            17,
+            236,
+            297
+          ],
+          "bboxWidth": 153,
+          "bboxHeight": 280
+        },
+        {
+          "index": 4,
+          "bbox": [
+            95,
+            17,
+            224,
+            297
+          ],
+          "bboxWidth": 129,
+          "bboxHeight": 280
+        },
+        {
+          "index": 5,
+          "bbox": [
+            80,
+            23,
+            238,
+            297
+          ],
+          "bboxWidth": 158,
+          "bboxHeight": 274
+        }
+      ]
+    },
+    "jump": {
+      "path": "public/assets/characters/tibo/jump.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            86,
+            127,
+            232,
+            295
+          ],
+          "bboxWidth": 146,
+          "bboxHeight": 168
+        },
+        {
+          "index": 1,
+          "bbox": [
+            88,
+            18,
+            230,
+            295
+          ],
+          "bboxWidth": 142,
+          "bboxHeight": 277
+        },
+        {
+          "index": 2,
+          "bbox": [
+            94,
+            104,
+            225,
+            295
+          ],
+          "bboxWidth": 131,
+          "bboxHeight": 191
+        },
+        {
+          "index": 3,
+          "bbox": [
+            85,
+            139,
+            234,
+            295
+          ],
+          "bboxWidth": 149,
+          "bboxHeight": 156
+        }
+      ]
+    },
+    "crouch": {
+      "path": "public/assets/characters/tibo/crouch.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            63,
+            53,
+            256,
+            297
+          ],
+          "bboxWidth": 193,
+          "bboxHeight": 244
+        },
+        {
+          "index": 1,
+          "bbox": [
+            83,
+            103,
+            237,
+            297
+          ],
+          "bboxWidth": 154,
+          "bboxHeight": 194
+        },
+        {
+          "index": 2,
+          "bbox": [
+            29,
+            105,
+            291,
+            297
+          ],
+          "bboxWidth": 262,
+          "bboxHeight": 192
+        },
+        {
+          "index": 3,
+          "bbox": [
+            82,
+            103,
+            237,
+            297
+          ],
+          "bboxWidth": 155,
+          "bboxHeight": 194
+        }
+      ]
+    },
+    "block": {
+      "path": "public/assets/characters/tibo/block.png",
+      "size": [
+        960,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 3,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            71,
+            16,
+            249,
+            298
+          ],
+          "bboxWidth": 178,
+          "bboxHeight": 282
+        },
+        {
+          "index": 1,
+          "bbox": [
+            69,
+            18,
+            251,
+            298
+          ],
+          "bboxWidth": 182,
+          "bboxHeight": 280
+        },
+        {
+          "index": 2,
+          "bbox": [
+            67,
+            23,
+            253,
+            298
+          ],
+          "bboxWidth": 186,
+          "bboxHeight": 275
+        }
+      ]
+    },
+    "light": {
+      "path": "public/assets/characters/tibo/light.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            80,
+            39,
+            240,
+            297
+          ],
+          "bboxWidth": 160,
+          "bboxHeight": 258
+        },
+        {
+          "index": 1,
+          "bbox": [
+            40,
+            44,
+            280,
+            297
+          ],
+          "bboxWidth": 240,
+          "bboxHeight": 253
+        },
+        {
+          "index": 2,
+          "bbox": [
+            25,
+            43,
+            290,
+            297
+          ],
+          "bboxWidth": 265,
+          "bboxHeight": 254
+        },
+        {
+          "index": 3,
+          "bbox": [
+            79,
+            39,
+            240,
+            297
+          ],
+          "bboxWidth": 161,
+          "bboxHeight": 258
+        }
+      ]
+    },
+    "heavy": {
+      "path": "public/assets/characters/tibo/heavy.png",
+      "size": [
+        1600,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            75,
+            20,
+            243,
+            297
+          ],
+          "bboxWidth": 168,
+          "bboxHeight": 277
+        },
+        {
+          "index": 1,
+          "bbox": [
+            83,
+            16,
+            236,
+            296
+          ],
+          "bboxWidth": 153,
+          "bboxHeight": 280
+        },
+        {
+          "index": 2,
+          "bbox": [
+            31,
+            35,
+            286,
+            297
+          ],
+          "bboxWidth": 255,
+          "bboxHeight": 262
+        },
+        {
+          "index": 3,
+          "bbox": [
+            30,
+            18,
+            288,
+            297
+          ],
+          "bboxWidth": 258,
+          "bboxHeight": 279
+        },
+        {
+          "index": 4,
+          "bbox": [
+            75,
+            20,
+            243,
+            297
+          ],
+          "bboxWidth": 168,
+          "bboxHeight": 277
+        }
+      ]
+    },
+    "special": {
+      "path": "public/assets/characters/tibo/special.png",
+      "size": [
+        2304,
+        320
+      ],
+      "frameWidth": 384,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            111,
+            19,
+            273,
+            297
+          ],
+          "bboxWidth": 162,
+          "bboxHeight": 278
+        },
+        {
+          "index": 1,
+          "bbox": [
+            97,
+            21,
+            286,
+            297
+          ],
+          "bboxWidth": 189,
+          "bboxHeight": 276
+        },
+        {
+          "index": 2,
+          "bbox": [
+            66,
+            47,
+            317,
+            297
+          ],
+          "bboxWidth": 251,
+          "bboxHeight": 250
+        },
+        {
+          "index": 3,
+          "bbox": [
+            49,
+            27,
+            334,
+            297
+          ],
+          "bboxWidth": 285,
+          "bboxHeight": 270
+        },
+        {
+          "index": 4,
+          "bbox": [
+            49,
+            27,
+            334,
+            297
+          ],
+          "bboxWidth": 285,
+          "bboxHeight": 270
+        },
+        {
+          "index": 5,
+          "bbox": [
+            111,
+            19,
+            273,
+            297
+          ],
+          "bboxWidth": 162,
+          "bboxHeight": 278
+        }
+      ]
+    },
+    "knockdown": {
+      "path": "public/assets/characters/tibo/knockdown.png",
+      "size": [
+        1600,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            66,
+            51,
+            253,
+            297
+          ],
+          "bboxWidth": 187,
+          "bboxHeight": 246
+        },
+        {
+          "index": 1,
+          "bbox": [
+            46,
+            112,
+            273,
+            297
+          ],
+          "bboxWidth": 227,
+          "bboxHeight": 185
+        },
+        {
+          "index": 2,
+          "bbox": [
+            40,
+            161,
+            278,
+            297
+          ],
+          "bboxWidth": 238,
+          "bboxHeight": 136
+        },
+        {
+          "index": 3,
+          "bbox": [
+            16,
+            231,
+            303,
+            297
+          ],
+          "bboxWidth": 287,
+          "bboxHeight": 66
+        },
+        {
+          "index": 4,
+          "bbox": [
+            65,
+            130,
+            253,
+            297
+          ],
+          "bboxWidth": 188,
+          "bboxHeight": 167
+        }
+      ]
+    }
+  },
+  "errors": []
+}
