@@ -998,7 +998,7 @@
     ]
   },
   "special": {
-    "frameWidth": 512,
+    "frameWidth": 384,
     "frameHeight": 320,
     "frameCount": 6,
     "scale": 0.8597560975609756,
