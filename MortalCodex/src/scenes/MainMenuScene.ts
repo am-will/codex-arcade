@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import type { CharacterDefinition, GameConfig } from '../game/types';
-import { BaseScene, type MenuFlowData, type MenuSettingsSelection, type SelectableItem } from './BaseScene';
+import { BaseScene, type MenuFlowData, type SelectableItem } from './BaseScene';
 import { SceneKey } from './sceneKeys';
 import { addEmberField, addNeonLogo, addSoftGlow, drawArenaBackdrop } from './titleFx';
 import { requestArcadeExit } from '../arcadeBridge';
@@ -54,8 +54,6 @@ export class MainMenuScene extends BaseScene {
       })
       .setOrigin(0.5)
       .setShadow(0, 0, '#1a7d70', 8, false, true);
-
-    this.addConfigReadout(width - 18, 18, settings);
 
     const chips: MenuChip[] = [
       this.createMenuChip(width / 2 - 134, 436, 250, 54, 'PLAY VS CPU', 'primary', () => {
@@ -175,26 +173,6 @@ export class MainMenuScene extends BaseScene {
     });
   }
 
-  private addConfigReadout(rightX: number, topY: number, settings: MenuSettingsSelection): void {
-    const lines = [
-      `ROUNDS   ${settings.roundsToWin}`,
-      `TIMER    ${settings.roundTimeSeconds}s`,
-      `CPU      ${settings.cpuDifficulty.toUpperCase()}`,
-    ].join('\n');
-
-    const panel = this.add.rectangle(rightX, topY, 168, 74, 0x070b14, 0.62).setOrigin(1, 0).setStrokeStyle(1, 0x39c5e0, 0.45);
-    this.add.rectangle(rightX - panel.width, topY, panel.width, 3, 0x39c5e0, 0.8).setOrigin(0, 0);
-    this.add
-      .text(rightX - 12, topY + 13, lines, {
-        align: 'right',
-        color: '#a9c6cc',
-        fontFamily: 'monospace',
-        fontSize: '13px',
-        lineSpacing: 6,
-      })
-      .setOrigin(1, 0);
-  }
-
   private createMenuChip(
     centerX: number,
     centerY: number,
@@ -282,9 +260,15 @@ export class MainMenuScene extends BaseScene {
     this.add
       .text(16, height - 18, '© 2026 CODEX ARCADE', { color: '#5c6e74', fontFamily: 'monospace', fontSize: '11px' })
       .setOrigin(0, 0.5);
-    this.add
+    const insertCoin = this.add
       .text(width - 16, height - 18, 'INSERT COIN', { color: '#c7a24a', fontFamily: 'monospace', fontSize: '11px', fontStyle: 'bold' })
       .setOrigin(1, 0.5);
+    // Blink "INSERT COIN" once per second (500ms on / 500ms off).
+    this.time.addEvent({
+      delay: 500,
+      loop: true,
+      callback: () => insertCoin.setVisible(!insertCoin.visible),
+    });
   }
 
   private randomStageId(config: GameConfig): string {

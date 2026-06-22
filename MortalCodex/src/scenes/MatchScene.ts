@@ -12,6 +12,7 @@ import {
   type FighterSlot,
   type FighterState,
 } from '../game/fighter';
+import { fighterSpriteRenderScale } from '../game/renderScale';
 import { MatchHud, formatRoundWinner } from '../game/hud';
 import {
   ROUND_POLICY,
@@ -661,6 +662,7 @@ export class MatchScene extends BaseScene {
     sprite
       .setPosition(fighter.position.x, fighter.position.y)
       .setFlipX(fighter.facing === 'left')
+      .setScale(fighterSpriteRenderScale(fighter.character.id, animationName))
       .setAlpha(fighter.isFinished ? 0.82 : 1);
   }
 

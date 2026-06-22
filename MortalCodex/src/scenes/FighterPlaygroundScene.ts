@@ -12,6 +12,7 @@ import {
   getWorldHurtBoxes,
   createFighterState,
 } from '../game/fighter';
+import { fighterSpriteRenderScale } from '../game/renderScale';
 import type { AttackKind, FighterInput, FighterState } from '../game/fighter';
 import type { AssetManifestAnimation, CharacterDefinition, GameConfig, InputBindingConfig, Rect, StageDefinition } from '../game/types';
 import {
@@ -504,6 +505,7 @@ export class FighterPlaygroundScene extends BaseScene {
     sprite
       .setPosition(this.worldToScreenX(fighter.position.x), this.worldToScreenY(fighter.position.y))
       .setFlipX(fighter.facing === 'left')
+      .setScale(fighterSpriteRenderScale(fighter.character.id, animationName))
       .setAlpha(fighter.isFinished ? 0.82 : 1);
   }
 
