@@ -572,12 +572,12 @@
         {
           "index": 5,
           "bbox": [
-            86,
+            76,
             108,
-            372,
+            355,
             306
           ],
-          "bboxWidth": 286,
+          "bboxWidth": 279,
           "bboxHeight": 198
         }
       ]
