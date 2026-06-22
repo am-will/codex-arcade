@@ -83,10 +83,15 @@ type QueueResult = {
   audioKeys: string[];
 };
 
+const loadedTextureSignatures = new Map<string, string>();
+const loadedAudioSources = new Map<string, string>();
+
 export function queueGeneratedAssetManifest(scene: Phaser.Scene): void {
-  if (!scene.cache.json.exists(GENERATED_ASSET_MANIFEST_KEY)) {
-    scene.load.json(GENERATED_ASSET_MANIFEST_KEY, GENERATED_ASSET_MANIFEST_PATH);
+  if (scene.cache.json.exists(GENERATED_ASSET_MANIFEST_KEY)) {
+    scene.cache.json.remove(GENERATED_ASSET_MANIFEST_KEY);
   }
+
+  scene.load.json(GENERATED_ASSET_MANIFEST_KEY, withCacheBuster(GENERATED_ASSET_MANIFEST_PATH));
 }
 
 export function getGeneratedAssetManifest(scene: Phaser.Scene): GeneratedAssetManifest {
@@ -167,11 +172,19 @@ function queueImage(
   asset: Pick<GeneratedImageAsset, 'key' | 'path'>,
   queuedTextures: Set<string>,
 ): void {
-  if (scene.textures.exists(asset.key) || queuedTextures.has(asset.key)) {
+  const signature = textureSignature(asset.path);
+
+  if (queuedTextures.has(asset.key)) {
     return;
   }
 
+  if (scene.textures.exists(asset.key) && loadedTextureSignatures.get(asset.key) === signature) {
+    return;
+  }
+
+  removeTexture(scene, asset.key);
   scene.load.image(asset.key, asset.path);
+  loadedTextureSignatures.set(asset.key, signature);
   queuedTextures.add(asset.key);
 }
 
@@ -180,25 +193,42 @@ function queueSpriteSheet(
   asset: Pick<GeneratedSpriteSheetAsset, 'key' | 'path' | 'frameWidth' | 'frameHeight' | 'frameCount'>,
   queuedTextures: Set<string>,
 ): void {
-  if (scene.textures.exists(asset.key) || queuedTextures.has(asset.key)) {
+  const signature = textureSignature(asset.path, asset.frameWidth, asset.frameHeight, asset.frameCount);
+
+  if (queuedTextures.has(asset.key)) {
     return;
   }
 
+  if (scene.textures.exists(asset.key) && loadedTextureSignatures.get(asset.key) === signature) {
+    return;
+  }
+
+  removeTexture(scene, asset.key);
   scene.load.spritesheet(asset.key, asset.path, {
     frameWidth: asset.frameWidth,
     frameHeight: asset.frameHeight,
     startFrame: 0,
     endFrame: Math.max(0, asset.frameCount - 1),
   });
+  loadedTextureSignatures.set(asset.key, signature);
   queuedTextures.add(asset.key);
 }
 
 function queueAudio(scene: Phaser.Scene, asset: GeneratedAudioAsset, queuedAudio: Set<string>): void {
-  if (scene.cache.audio.exists(asset.key) || queuedAudio.has(asset.key)) {
+  if (queuedAudio.has(asset.key)) {
     return;
   }
 
+  if (scene.cache.audio.exists(asset.key) && loadedAudioSources.get(asset.key) === asset.path) {
+    return;
+  }
+
+  if (scene.cache.audio.exists(asset.key)) {
+    scene.cache.audio.remove(asset.key);
+  }
+
   scene.load.audio(asset.key, asset.path);
+  loadedAudioSources.set(asset.key, asset.path);
   queuedAudio.add(asset.key);
 }
 
@@ -215,7 +245,7 @@ function createSpriteSheetAnimation(
   const existingAnimation = scene.anims.get(config.animationKey) as Phaser.Animations.Animation | undefined;
 
   if (existingAnimation) {
-    return;
+    scene.anims.remove(config.animationKey);
   }
 
   scene.anims.create({
@@ -227,6 +257,25 @@ function createSpriteSheetAnimation(
     frameRate: config.fps,
     repeat: config.loop ? -1 : 0,
   });
+}
+
+function removeTexture(scene: Phaser.Scene, key: string): void {
+  if (!scene.textures.exists(key)) {
+    return;
+  }
+
+  scene.textures.remove(key);
+  loadedTextureSignatures.delete(key);
+}
+
+function textureSignature(path: string, frameWidth?: number, frameHeight?: number, frameCount?: number): string {
+  return [path, frameWidth ?? '', frameHeight ?? '', frameCount ?? ''].join('|');
+}
+
+function withCacheBuster(path: string): string {
+  const separator = path.includes('?') ? '&' : '?';
+
+  return `${path}${separator}t=${Date.now()}`;
 }
 
 function isGeneratedAssetManifest(value: unknown): value is GeneratedAssetManifest {
