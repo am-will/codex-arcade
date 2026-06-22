@@ -1,0 +1,654 @@
+{
+  "character": "boris",
+  "variant": "sharp-wide-20260621",
+  "animations": {
+    "idle": {
+      "path": "public/assets/characters/boris/idle.png",
+      "size": [
+        3840,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 12,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            71,
+            13,
+            249,
+            303
+          ],
+          "bboxWidth": 178,
+          "bboxHeight": 290
+        },
+        {
+          "index": 1,
+          "bbox": [
+            76,
+            14,
+            243,
+            303
+          ],
+          "bboxWidth": 167,
+          "bboxHeight": 289
+        },
+        {
+          "index": 2,
+          "bbox": [
+            70,
+            17,
+            250,
+            303
+          ],
+          "bboxWidth": 180,
+          "bboxHeight": 286
+        },
+        {
+          "index": 3,
+          "bbox": [
+            73,
+            14,
+            247,
+            303
+          ],
+          "bboxWidth": 174,
+          "bboxHeight": 289
+        },
+        {
+          "index": 4,
+          "bbox": [
+            74,
+            14,
+            246,
+            303
+          ],
+          "bboxWidth": 172,
+          "bboxHeight": 289
+        },
+        {
+          "index": 5,
+          "bbox": [
+            70,
+            16,
+            250,
+            303
+          ],
+          "bboxWidth": 180,
+          "bboxHeight": 287
+        },
+        {
+          "index": 6,
+          "bbox": [
+            69,
+            15,
+            250,
+            303
+          ],
+          "bboxWidth": 181,
+          "bboxHeight": 288
+        },
+        {
+          "index": 7,
+          "bbox": [
+            70,
+            17,
+            250,
+            303
+          ],
+          "bboxWidth": 180,
+          "bboxHeight": 286
+        },
+        {
+          "index": 8,
+          "bbox": [
+            69,
+            14,
+            251,
+            303
+          ],
+          "bboxWidth": 182,
+          "bboxHeight": 289
+        },
+        {
+          "index": 9,
+          "bbox": [
+            60,
+            21,
+            259,
+            303
+          ],
+          "bboxWidth": 199,
+          "bboxHeight": 282
+        },
+        {
+          "index": 10,
+          "bbox": [
+            70,
+            14,
+            249,
+            303
+          ],
+          "bboxWidth": 179,
+          "bboxHeight": 289
+        },
+        {
+          "index": 11,
+          "bbox": [
+            65,
+            19,
+            255,
+            303
+          ],
+          "bboxWidth": 190,
+          "bboxHeight": 284
+        }
+      ]
+    },
+    "walk": {
+      "path": "public/assets/characters/boris/walk.png",
+      "size": [
+        1920,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            62,
+            20,
+            257,
+            304
+          ],
+          "bboxWidth": 195,
+          "bboxHeight": 284
+        },
+        {
+          "index": 1,
+          "bbox": [
+            72,
+            19,
+            248,
+            304
+          ],
+          "bboxWidth": 176,
+          "bboxHeight": 285
+        },
+        {
+          "index": 2,
+          "bbox": [
+            49,
+            18,
+            271,
+            304
+          ],
+          "bboxWidth": 222,
+          "bboxHeight": 286
+        },
+        {
+          "index": 3,
+          "bbox": [
+            42,
+            21,
+            217,
+            304
+          ],
+          "bboxWidth": 175,
+          "bboxHeight": 283
+        },
+        {
+          "index": 4,
+          "bbox": [
+            40,
+            22,
+            279,
+            304
+          ],
+          "bboxWidth": 239,
+          "bboxHeight": 282
+        },
+        {
+          "index": 5,
+          "bbox": [
+            79,
+            19,
+            240,
+            304
+          ],
+          "bboxWidth": 161,
+          "bboxHeight": 285
+        }
+      ]
+    },
+    "jump": {
+      "path": "public/assets/characters/boris/jump.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            81,
+            90,
+            239,
+            304
+          ],
+          "bboxWidth": 158,
+          "bboxHeight": 214
+        },
+        {
+          "index": 1,
+          "bbox": [
+            86,
+            16,
+            233,
+            292
+          ],
+          "bboxWidth": 147,
+          "bboxHeight": 276
+        },
+        {
+          "index": 2,
+          "bbox": [
+            81,
+            107,
+            239,
+            292
+          ],
+          "bboxWidth": 158,
+          "bboxHeight": 185
+        },
+        {
+          "index": 3,
+          "bbox": [
+            81,
+            119,
+            239,
+            304
+          ],
+          "bboxWidth": 158,
+          "bboxHeight": 185
+        }
+      ]
+    },
+    "crouch": {
+      "path": "public/assets/characters/boris/crouch.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            57,
+            20,
+            262,
+            304
+          ],
+          "bboxWidth": 205,
+          "bboxHeight": 284
+        },
+        {
+          "index": 1,
+          "bbox": [
+            63,
+            81,
+            256,
+            304
+          ],
+          "bboxWidth": 193,
+          "bboxHeight": 223
+        },
+        {
+          "index": 2,
+          "bbox": [
+            24,
+            102,
+            296,
+            304
+          ],
+          "bboxWidth": 272,
+          "bboxHeight": 202
+        },
+        {
+          "index": 3,
+          "bbox": [
+            60,
+            32,
+            260,
+            304
+          ],
+          "bboxWidth": 200,
+          "bboxHeight": 272
+        }
+      ]
+    },
+    "block": {
+      "path": "public/assets/characters/boris/block.png",
+      "size": [
+        960,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 3,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            53,
+            18,
+            266,
+            304
+          ],
+          "bboxWidth": 213,
+          "bboxHeight": 286
+        },
+        {
+          "index": 1,
+          "bbox": [
+            54,
+            20,
+            266,
+            304
+          ],
+          "bboxWidth": 212,
+          "bboxHeight": 284
+        },
+        {
+          "index": 2,
+          "bbox": [
+            55,
+            33,
+            265,
+            304
+          ],
+          "bboxWidth": 210,
+          "bboxHeight": 271
+        }
+      ]
+    },
+    "light": {
+      "path": "public/assets/characters/boris/light.png",
+      "size": [
+        1280,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 4,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            58,
+            38,
+            261,
+            304
+          ],
+          "bboxWidth": 203,
+          "bboxHeight": 266
+        },
+        {
+          "index": 1,
+          "bbox": [
+            18,
+            45,
+            302,
+            304
+          ],
+          "bboxWidth": 284,
+          "bboxHeight": 259
+        },
+        {
+          "index": 2,
+          "bbox": [
+            10,
+            49,
+            310,
+            304
+          ],
+          "bboxWidth": 300,
+          "bboxHeight": 255
+        },
+        {
+          "index": 3,
+          "bbox": [
+            38,
+            36,
+            281,
+            304
+          ],
+          "bboxWidth": 243,
+          "bboxHeight": 268
+        }
+      ]
+    },
+    "heavy": {
+      "path": "public/assets/characters/boris/heavy.png",
+      "size": [
+        1600,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            59,
+            25,
+            261,
+            304
+          ],
+          "bboxWidth": 202,
+          "bboxHeight": 279
+        },
+        {
+          "index": 1,
+          "bbox": [
+            13,
+            22,
+            306,
+            304
+          ],
+          "bboxWidth": 293,
+          "bboxHeight": 282
+        },
+        {
+          "index": 2,
+          "bbox": [
+            8,
+            31,
+            311,
+            304
+          ],
+          "bboxWidth": 303,
+          "bboxHeight": 273
+        },
+        {
+          "index": 3,
+          "bbox": [
+            13,
+            33,
+            307,
+            304
+          ],
+          "bboxWidth": 294,
+          "bboxHeight": 271
+        },
+        {
+          "index": 4,
+          "bbox": [
+            47,
+            26,
+            272,
+            304
+          ],
+          "bboxWidth": 225,
+          "bboxHeight": 278
+        }
+      ]
+    },
+    "special": {
+      "path": "public/assets/characters/boris/special.png",
+      "size": [
+        2304,
+        320
+      ],
+      "frameWidth": 384,
+      "frameHeight": 320,
+      "frameCount": 6,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            111,
+            88,
+            270,
+            306
+          ],
+          "bboxWidth": 159,
+          "bboxHeight": 218
+        },
+        {
+          "index": 1,
+          "bbox": [
+            93,
+            88,
+            291,
+            306
+          ],
+          "bboxWidth": 198,
+          "bboxHeight": 218
+        },
+        {
+          "index": 2,
+          "bbox": [
+            105,
+            92,
+            286,
+            306
+          ],
+          "bboxWidth": 181,
+          "bboxHeight": 214
+        },
+        {
+          "index": 3,
+          "bbox": [
+            101,
+            125,
+            353,
+            306
+          ],
+          "bboxWidth": 252,
+          "bboxHeight": 181
+        },
+        {
+          "index": 4,
+          "bbox": [
+            42,
+            114,
+            311,
+            306
+          ],
+          "bboxWidth": 269,
+          "bboxHeight": 192
+        },
+        {
+          "index": 5,
+          "bbox": [
+            86,
+            108,
+            372,
+            306
+          ],
+          "bboxWidth": 286,
+          "bboxHeight": 198
+        }
+      ]
+    },
+    "knockdown": {
+      "path": "public/assets/characters/boris/knockdown.png",
+      "size": [
+        1600,
+        320
+      ],
+      "frameWidth": 320,
+      "frameHeight": 320,
+      "frameCount": 5,
+      "frames": [
+        {
+          "index": 0,
+          "bbox": [
+            39,
+            30,
+            280,
+            304
+          ],
+          "bboxWidth": 241,
+          "bboxHeight": 274
+        },
+        {
+          "index": 1,
+          "bbox": [
+            13,
+            98,
+            306,
+            304
+          ],
+          "bboxWidth": 293,
+          "bboxHeight": 206
+        },
+        {
+          "index": 2,
+          "bbox": [
+            16,
+            180,
+            303,
+            304
+          ],
+          "bboxWidth": 287,
+          "bboxHeight": 124
+        },
+        {
+          "index": 3,
+          "bbox": [
+            7,
+            207,
+            313,
+            304
+          ],
+          "bboxWidth": 306,
+          "bboxHeight": 97
+        },
+        {
+          "index": 4,
+          "bbox": [
+            8,
+            133,
+            311,
+            304
+          ],
+          "bboxWidth": 303,
+          "bboxHeight": 171
+        }
+      ]
+    }
+  },
+  "errors": []
+}

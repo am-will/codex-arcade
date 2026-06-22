@@ -3170,7 +3170,7 @@
               "startFrame": 1,
               "endFrame": 1,
               "hitbox": {
-                "x": 186,
+                "x": 218,
                 "y": 92,
                 "width": 88,
                 "height": 76
@@ -3180,7 +3180,7 @@
               "startFrame": 2,
               "endFrame": 2,
               "hitbox": {
-                "x": 202,
+                "x": 234,
                 "y": 106,
                 "width": 96,
                 "height": 68
@@ -3190,7 +3190,7 @@
               "startFrame": 3,
               "endFrame": 3,
               "hitbox": {
-                "x": 212,
+                "x": 244,
                 "y": 96,
                 "width": 100,
                 "height": 74
@@ -3200,7 +3200,7 @@
               "startFrame": 4,
               "endFrame": 5,
               "hitbox": {
-                "x": 172,
+                "x": 204,
                 "y": 68,
                 "width": 156,
                 "height": 98
@@ -3934,7 +3934,7 @@
             "frame": 0,
             "hurt": [
               {
-                "x": 102,
+                "x": 134,
                 "y": 54,
                 "width": 124,
                 "height": 226
@@ -3942,7 +3942,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 106,
+              "x": 138,
               "y": 116,
               "width": 108,
               "height": 164
@@ -3952,7 +3952,7 @@
             "frame": 1,
             "hurt": [
               {
-                "x": 94,
+                "x": 126,
                 "y": 50,
                 "width": 154,
                 "height": 230
@@ -3960,7 +3960,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 104,
+              "x": 136,
               "y": 116,
               "width": 110,
               "height": 164
@@ -3970,7 +3970,7 @@
             "frame": 2,
             "hurt": [
               {
-                "x": 90,
+                "x": 122,
                 "y": 50,
                 "width": 186,
                 "height": 230
@@ -3978,7 +3978,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 102,
+              "x": 134,
               "y": 116,
               "width": 112,
               "height": 164
@@ -3988,7 +3988,7 @@
             "frame": 3,
             "hurt": [
               {
-                "x": 88,
+                "x": 120,
                 "y": 52,
                 "width": 202,
                 "height": 228
@@ -3996,7 +3996,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 102,
+              "x": 134,
               "y": 116,
               "width": 112,
               "height": 164
@@ -4006,7 +4006,7 @@
             "frame": 4,
             "hurt": [
               {
-                "x": 90,
+                "x": 122,
                 "y": 46,
                 "width": 212,
                 "height": 234
@@ -4014,7 +4014,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 102,
+              "x": 134,
               "y": 116,
               "width": 112,
               "height": 164
@@ -4024,7 +4024,7 @@
             "frame": 5,
             "hurt": [
               {
-                "x": 102,
+                "x": 134,
                 "y": 58,
                 "width": 150,
                 "height": 222
@@ -4032,7 +4032,7 @@
             ],
             "guard": [],
             "collision": {
-              "x": 106,
+              "x": 138,
               "y": 116,
               "width": 108,
               "height": 164

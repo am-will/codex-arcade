@@ -409,7 +409,7 @@
         {
           "name": "idle",
           "key": "boris-idle",
-          "path": "/assets/characters/boris/idle.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/idle.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 12,
@@ -421,7 +421,7 @@
         {
           "name": "walk",
           "key": "boris-walk",
-          "path": "/assets/characters/boris/walk.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/walk.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 6,
@@ -433,7 +433,7 @@
         {
           "name": "jump",
           "key": "boris-jump",
-          "path": "/assets/characters/boris/jump.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/jump.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -445,7 +445,7 @@
         {
           "name": "crouch",
           "key": "boris-crouch",
-          "path": "/assets/characters/boris/crouch.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/crouch.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -457,7 +457,7 @@
         {
           "name": "block",
           "key": "boris-block",
-          "path": "/assets/characters/boris/block.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/block.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 3,
@@ -469,7 +469,7 @@
         {
           "name": "light",
           "key": "boris-light",
-          "path": "/assets/characters/boris/light.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/light.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 4,
@@ -481,7 +481,7 @@
         {
           "name": "heavy",
           "key": "boris-heavy",
-          "path": "/assets/characters/boris/heavy.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/heavy.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
@@ -493,8 +493,8 @@
         {
           "name": "special",
           "key": "boris-special",
-          "path": "/assets/characters/boris/special.png?v=alpha-fill-20260607",
-          "frameWidth": 320,
+          "path": "/assets/characters/boris/special.png?v=boris-sharp-wide-20260621",
+          "frameWidth": 384,
           "frameHeight": 320,
           "frameCount": 6,
           "columns": 6,
@@ -505,7 +505,7 @@
         {
           "name": "knockdown",
           "key": "boris-knockdown",
-          "path": "/assets/characters/boris/knockdown.png?v=alpha-fill-20260607",
+          "path": "/assets/characters/boris/knockdown.png?v=boris-sharp-wide-20260621",
           "frameWidth": 320,
           "frameHeight": 320,
           "frameCount": 5,
