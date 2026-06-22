@@ -1,0 +1,16 @@
+{
+  "name": "codex-arcade",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A neon arcade cabinet that boots into a pick-your-game menu for Mortal Codex and Flamethrow.",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "build": "node scripts/build-games.mjs",
+    "build:games": "node scripts/build-games.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

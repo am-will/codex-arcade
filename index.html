@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0612" />
+    <meta
+      name="description"
+      content="Codex Arcade — a neon cabinet that boots straight into a pick-your-game menu."
+    />
+    <title>Codex Arcade</title>
+    <link rel="icon" type="image/svg+xml" href="/arcade/assets/favicon.svg" />
+    <link rel="stylesheet" href="/arcade/arcade.css" />
+    <!-- Injected by the launcher: window.__ARCADE__ = { games:[...] } -->
+    <script src="/arcade/runtime.js"></script>
+  </head>
+  <body>
+    <div id="arcade" class="arcade" data-state="menu">
+      <!-- Animated synthwave backdrop -->
+      <canvas id="bg" class="bg" aria-hidden="true"></canvas>
+      <div class="bg-haze" aria-hidden="true"></div>
+
+      <!-- ===== ATTRACT / SELECT SCREEN ===== -->
+      <section id="scene" class="scene" aria-label="Game selection">
+        <header class="marquee">
+          <h1 class="logo" aria-label="Codex Arcade">
+            <span class="logo-codex">CODEX</span><span class="logo-arcade">ARCADE</span>
+          </h1>
+          <p class="marquee-sub">
+            <span class="dot"></span> SELECT YOUR GAME <span class="dot"></span>
+          </p>
+        </header>
+
+        <main id="cabinet" class="cabinet" role="listbox" aria-label="Games">
+          <!-- Game cards injected by arcade.js -->
+        </main>
+
+        <footer class="legend">
+          <span class="key"><b>&#9664; &#9654;</b> / <b>A D</b> SELECT</span>
+          <span class="key"><b>&#9166; ENTER</b> PLAY</span>
+          <span class="key"><b>ESC</b> BACK</span>
+          <span class="coin" id="coin">INSERT COIN</span>
+        </footer>
+      </section>
+
+      <!-- ===== GAME RUNTIME (cabinet screen) ===== -->
+      <section id="player" class="player" aria-label="Now playing" hidden>
+        <div class="bezel">
+          <span class="bezel-brand">CODEX&nbsp;ARCADE</span>
+          <span class="bezel-title" id="bezelTitle">&nbsp;</span>
+          <button class="exit-btn" id="exitBtn" type="button" title="Quit to the arcade menu">
+            <span class="exit-glyph">&#11150;</span> EXIT <kbd>Esc</kbd>
+          </button>
+        </div>
+        <div class="screen" id="screen"><!-- game iframe injected here --></div>
+      </section>
+
+      <!-- Overlays -->
+      <div id="transition" class="transition" aria-hidden="true"></div>
+      <div class="crt" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+    </div>
+
+    <script type="module" src="/arcade/arcade.js"></script>
+  </body>
+</html>

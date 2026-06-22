@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "codex-arcade",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "NO_OPEN=1 node server.mjs"],
+      "port": 4321
+    }
+  ]
+}

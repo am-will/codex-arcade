@@ -3,6 +3,7 @@ import type { CharacterDefinition, GameConfig } from '../game/types';
 import { BaseScene, type MenuFlowData, type MenuSettingsSelection, type SelectableItem } from './BaseScene';
 import { SceneKey } from './sceneKeys';
 import { addEmberField, addNeonLogo, addSoftGlow, drawArenaBackdrop } from './titleFx';
+import { requestArcadeExit } from '../arcadeBridge';
 
 const PLAY_STAGE_IDS = ['neon-metropolis', 'tropic-cove'] as const;
 const TITLE_STAGE_ID = 'neon-metropolis';
@@ -75,6 +76,12 @@ export class MainMenuScene extends BaseScene {
     );
     this.addPressPrompt(width / 2, 392);
     this.addArcadeFooter();
+
+    // From the top menu, ESC backs all the way out to the Codex Arcade picker
+    // (when embedded). Deeper scenes already use ESC to return here first.
+    this.input.keyboard?.on('keydown-ESC', () => {
+      requestArcadeExit();
+    });
 
     this.publishMenuState(SceneKey.MainMenu, {
       labels: ['Play vs CPU', 'Settings'],

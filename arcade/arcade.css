@@ -1,0 +1,589 @@
+/* =========================================================================
+   CODEX ARCADE — neon cabinet shell
+   ========================================================================= */
+
+:root {
+  --bg-0: #0a0612;
+  --bg-1: #140a24;
+  --ink: #eaf6ff;
+  --ink-dim: #8aa0bf;
+
+  --magenta: #ff2d95;
+  --cyan: #16e0ff;
+  --violet: #9b5cff;
+  --gold: #ffd23f;
+
+  --ui-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --ui-black: "Arial Black", "Helvetica Neue", Impact, system-ui, sans-serif;
+
+  --bezel-h: 46px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #04030a;
+  color: var(--ink);
+  font-family: var(--ui-mono);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hide focus rings for mouse users but keep them for keyboard a11y */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+.arcade {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ---- Animated backdrop ---- */
+.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+}
+.bg-haze {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 70% at 50% 8%, rgba(255, 45, 149, 0.18), transparent 60%),
+    radial-gradient(90% 60% at 50% 120%, rgba(22, 224, 255, 0.12), transparent 55%);
+  mix-blend-mode: screen;
+}
+
+/* =========================================================================
+   SCENE (attract / select screen)
+   ========================================================================= */
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(16px, 3.2vh, 40px) clamp(16px, 4vw, 64px);
+  transition: opacity 0.4s ease, transform 0.5s ease, filter 0.5s ease;
+}
+.arcade[data-state="playing"] .scene {
+  opacity: 0;
+  transform: scale(1.08);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* Entrance reveal lives on the scene's children (not .scene itself) so it never
+   conflicts with the opacity:0 we apply to .scene while a game is playing.
+   Transform-only (no opacity) so content is always visible even if the
+   animation never advances (e.g. the tab starts hidden and pauses animations). */
+.marquee { animation: rise 0.6s ease-out both; }
+.cabinet { animation: rise 0.7s ease-out 0.08s both; }
+.legend { animation: rise 0.6s ease-out 0.16s both; }
+@keyframes rise {
+  from { transform: translateY(18px); }
+  to { transform: none; }
+}
+
+/* ---- Marquee / logo ---- */
+.marquee {
+  text-align: center;
+  flex: 0 0 auto;
+  margin-bottom: clamp(10px, 2.4vh, 30px);
+}
+.logo {
+  margin: 0;
+  font-family: var(--ui-black);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  font-size: clamp(38px, 8.2vw, 110px);
+  line-height: 0.92;
+  display: inline-flex;
+  gap: 0.32em;
+  filter: drop-shadow(0 6px 26px rgba(0, 0, 0, 0.6));
+}
+.logo span { display: inline-block; }
+.logo-codex {
+  color: #d8fbff;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 14px var(--cyan),
+    0 0 34px var(--cyan),
+    0 0 70px rgba(22, 224, 255, 0.55);
+  animation: flicker 6.5s infinite steps(1);
+}
+.logo-arcade {
+  color: #ffe3f3;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 14px var(--magenta),
+    0 0 34px var(--magenta),
+    0 0 72px rgba(255, 45, 149, 0.55);
+}
+@keyframes flicker {
+  0%, 100%, 18%, 22%, 64%, 70% { opacity: 1; }
+  19%, 21% { opacity: 0.45; }
+  20% { opacity: 0.85; }
+  66%, 68% { opacity: 0.6; }
+}
+.marquee-sub {
+  margin: 0.7em 0 0;
+  font-size: clamp(11px, 1.5vw, 16px);
+  letter-spacing: 0.62em;
+  text-indent: 0.62em;
+  color: var(--ink-dim);
+  font-weight: 700;
+}
+.marquee-sub .dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0 0.6em;
+  border-radius: 50%;
+  background: var(--gold);
+  vertical-align: middle;
+  box-shadow: 0 0 10px var(--gold);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.25 } }
+
+/* ---- Cabinet / cards row ---- */
+.cabinet {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 1180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 48px);
+  min-height: 0;
+}
+
+.card {
+  --theme: var(--magenta);
+  --theme2: var(--cyan);
+  position: relative;
+  flex: 1 1 0;
+  max-width: 460px;
+  height: min(62vh, 560px);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: linear-gradient(180deg, #120a22 0%, #0a0715 100%);
+  border-radius: 18px;
+  overflow: hidden;
+  font-family: inherit;
+  color: var(--ink);
+  text-align: left;
+  transform: translateZ(0) scale(0.94);
+  filter: saturate(0.7) brightness(0.74);
+  opacity: 0.82;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1), filter 0.35s ease,
+    opacity 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+/* Neon frame */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(160deg, var(--theme), var(--theme2));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+  z-index: 4;
+  pointer-events: none;
+}
+.card:hover,
+.card.is-selected {
+  transform: translateZ(0) scale(1.02);
+  filter: saturate(1.1) brightness(1.05);
+  opacity: 1;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--theme) 60%, transparent),
+    0 22px 60px rgba(0, 0, 0, 0.6),
+    0 0 60px -8px var(--theme),
+    0 0 120px -30px var(--theme2);
+}
+.card.is-selected::before { opacity: 1; }
+.card.is-selected::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 20px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 30%, color-mix(in srgb, var(--theme2) 70%, transparent) 50%, transparent 70%);
+  background-size: 250% 250%;
+  animation: sheen 2.6s linear infinite;
+  mix-blend-mode: screen;
+}
+@keyframes sheen {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+/* ---- Card art stage ---- */
+.card-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.card-art .floor {
+  position: absolute;
+  left: -10%; right: -10%; bottom: 0;
+  height: 46%;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--theme) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--theme2) 45%, transparent) 1px, transparent 1px);
+  background-size: 100% 34px, 9% 100%;
+  transform: perspective(420px) rotateX(68deg);
+  transform-origin: bottom center;
+  opacity: 0.5;
+  mask-image: linear-gradient(to top, #000 0%, transparent 92%);
+}
+.card-art .ambient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(75% 55% at 50% 30%, color-mix(in srgb, var(--theme) 40%, transparent), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+/* Mortal Codex fighters */
+.fighters { position: absolute; inset: 0; }
+.fighters img {
+  position: absolute;
+  bottom: 14%;
+  width: 62%;
+  max-width: 300px;
+  filter: drop-shadow(0 12px 22px rgba(0,0,0,0.7));
+  image-rendering: auto;
+}
+.fighters .f-left  { left: -8%; transform: scaleX(1); filter: drop-shadow(0 0 24px var(--theme2)) drop-shadow(0 12px 22px rgba(0,0,0,.7)); }
+.fighters .f-right { right: -8%; transform: scaleX(-1); filter: drop-shadow(0 0 24px var(--theme)) drop-shadow(0 12px 22px rgba(0,0,0,.7)); }
+.card:hover .fighters .f-left,
+.card.is-selected .fighters .f-left { animation: hover-l 3.4s ease-in-out infinite; }
+.card:hover .fighters .f-right,
+.card.is-selected .fighters .f-right { animation: hover-r 3.4s ease-in-out infinite; }
+@keyframes hover-l { 0%,100%{ transform: translateY(0) scaleX(1)} 50%{ transform: translateY(-8px) scaleX(1)} }
+@keyframes hover-r { 0%,100%{ transform: translateY(0) scaleX(-1)} 50%{ transform: translateY(-8px) scaleX(-1)} }
+
+.vs-badge {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  font-family: var(--ui-black);
+  font-size: clamp(34px, 7vw, 58px);
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 6px #fff, 0 0 18px var(--theme), 0 4px 0 #5a0410;
+  letter-spacing: -0.04em;
+  z-index: 2;
+}
+.card.is-selected .vs-badge { animation: vs-pop 1.1s ease-in-out infinite; }
+@keyframes vs-pop { 0%,100%{ transform: translate(-50%,-50%) rotate(-8deg) scale(1)} 50%{ transform: translate(-50%,-50%) rotate(-8deg) scale(1.1)} }
+
+/* Flamethrow art — neon hoop + flaming basketball on a predicted swish arc */
+.flame-court {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 1px rgba(0,0,0,0.4));
+}
+.flame-court .ft-hoop { filter: drop-shadow(0 0 10px var(--theme2)); }
+.flame-court .ft-arc { stroke-dasharray: 3 13; animation: ft-dash 1.1s linear infinite; }
+@keyframes ft-dash { to { stroke-dashoffset: -32; } }
+
+/* The ball's flight bob is on an inner group so it never overrides the
+   positioning transform on its parent. */
+.flame-court .ft-ball { transform-box: fill-box; transform-origin: center; }
+.card:hover .flame-court .ft-ball,
+.card.is-selected .flame-court .ft-ball { animation: ft-bob 2.6s ease-in-out infinite; }
+@keyframes ft-bob {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  50% { transform: translate(7px, -9px) rotate(4deg); }
+}
+.flame-court .ft-trail { animation: ft-flick 0.42s steps(2) infinite; transform-box: fill-box; transform-origin: 70% 100%; }
+.flame-court .ft-trail-2 { animation-duration: 0.33s; }
+.flame-court .ft-licks { animation: ft-flick 0.36s steps(2) infinite; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes ft-flick {
+  0% { opacity: 0.72; transform: scaleY(0.94); }
+  100% { opacity: 1; transform: scaleY(1.06); }
+}
+.flame-court .ft-spark { animation: ft-twinkle 1.4s ease-in-out infinite; }
+@keyframes ft-twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
+
+/* ---- Card info plate ---- */
+.card-info {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 3;
+  padding: 60px 22px 64px;
+  background: linear-gradient(to top, #05030c 8%, rgba(5,3,12,0.85) 46%, transparent 100%);
+}
+.card-kicker {
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  color: var(--theme2);
+  font-weight: 700;
+  margin: 0 0 6px;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--theme2) 70%, transparent);
+}
+.card-title {
+  margin: 0;
+  font-family: var(--ui-black);
+  font-weight: 900;
+  font-size: clamp(26px, 3.6vw, 42px);
+  letter-spacing: 0.02em;
+  line-height: 0.96;
+  color: #fff;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--theme) 80%, transparent), 0 2px 0 rgba(0,0,0,0.5);
+}
+.card-tag {
+  margin: 10px 0 0;
+  font-size: clamp(12px, 1.35vw, 14px);
+  line-height: 1.45;
+  color: #c7d6ea;
+  max-width: 38ch;
+}
+.card-meta {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-dim);
+}
+.card-meta b {
+  color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--theme) 50%, #33425e);
+  border-radius: 99px;
+  padding: 3px 9px;
+  background: rgba(255,255,255,0.03);
+}
+
+.card-play {
+  position: absolute;
+  bottom: 20px; left: 22px;
+  z-index: 3;
+  font-family: var(--ui-black);
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0.16em;
+  color: #05030c;
+  background: linear-gradient(90deg, var(--theme), var(--theme2));
+  padding: 8px 18px;
+  border-radius: 99px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 24px -4px var(--theme);
+}
+.card:hover .card-play,
+.card.is-selected .card-play { opacity: 1; transform: translateY(0); }
+.card.is-selected .card-play { animation: play-pulse 1.2s ease-in-out infinite; }
+@keyframes play-pulse { 0%,100%{ box-shadow: 0 0 24px -4px var(--theme) } 50%{ box-shadow: 0 0 38px 0 var(--theme2) } }
+
+/* ---- Footer legend ---- */
+.legend {
+  flex: 0 0 auto;
+  margin-top: clamp(10px, 2.2vh, 26px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 3vw, 40px);
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(10px, 1.2vw, 13px);
+  letter-spacing: 0.16em;
+  color: var(--ink-dim);
+}
+.legend .key b {
+  color: var(--ink);
+  font-family: var(--ui-mono);
+}
+.legend .coin {
+  color: var(--gold);
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(255, 210, 63, 0.6);
+  animation: pulse 1.3s steps(1) infinite;
+}
+
+/* =========================================================================
+   PLAYER (in-game cabinet view)
+   ========================================================================= */
+.player {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+/* The player is fully opaque, so when shown it simply covers the menu — no
+   opacity transition to depend on (transitions freeze in a hidden tab). */
+.player[hidden] { display: none; }
+
+.bezel {
+  flex: 0 0 var(--bezel-h);
+  height: var(--bezel-h);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 14px;
+  background: linear-gradient(180deg, #16091f, #0a0612);
+  border-bottom: 1px solid rgba(255, 45, 149, 0.35);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(22,224,255,0.18);
+  z-index: 2;
+}
+.bezel-brand {
+  font-family: var(--ui-black);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: #d8fbff;
+  text-shadow: 0 0 10px var(--cyan);
+}
+.bezel-title {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+}
+.exit-btn {
+  flex: 0 0 auto;
+  font-family: var(--ui-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(90deg, #ff2d4a, #ff2d95);
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 20px -4px #ff2d95;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.exit-btn:hover { transform: translateY(-1px); filter: brightness(1.12); box-shadow: 0 0 30px -2px #ff2d95; }
+.exit-btn:active { transform: translateY(0); }
+.exit-btn .exit-glyph { font-size: 13px; }
+.exit-btn kbd {
+  font-family: var(--ui-mono);
+  font-size: 10px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.screen {
+  flex: 1 1 auto;
+  position: relative;
+  background: #000;
+  min-height: 0;
+}
+.screen iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* =========================================================================
+   OVERLAYS — CRT scanlines, vignette, power transitions
+   ========================================================================= */
+.crt {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.16) 3px,
+    rgba(0, 0, 0, 0.16) 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  animation: crt-roll 9s linear infinite;
+}
+@keyframes crt-roll { 0% { background-position: 0 0; } 100% { background-position: 0 -100px; } }
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 110% at 50% 50%, transparent 58%, rgba(0,0,0,0.55) 100%);
+  box-shadow: inset 0 0 160px rgba(0,0,0,0.7);
+}
+
+/* power on/off flash */
+.transition {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  background: #eafcff;
+  opacity: 0;
+  transform: scaleY(0.004);
+  transform-origin: center;
+}
+.transition.power-on {
+  animation: power-on 0.55s ease-out forwards;
+}
+.transition.power-off {
+  animation: power-off 0.5s ease-in forwards;
+}
+@keyframes power-on {
+  0%   { opacity: 1; transform: scaleY(0.004) scaleX(1.2); }
+  35%  { opacity: 0.9; transform: scaleY(1) scaleX(1); }
+  100% { opacity: 0; transform: scaleY(1) scaleX(1); }
+}
+@keyframes power-off {
+  0%   { opacity: 0; transform: scaleY(1) scaleX(1); }
+  35%  { opacity: 0.95; transform: scaleY(1) scaleX(1); }
+  70%  { opacity: 1; transform: scaleY(0.01) scaleX(1.2); }
+  100% { opacity: 0; transform: scaleY(0.002) scaleX(0.02); }
+}
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 760px) {
+  .cabinet { flex-direction: column; gap: 16px; overflow-y: auto; padding: 6px; }
+  .card { height: 44vh; min-height: 280px; width: 100%; max-width: 520px; }
+  .legend { gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  .bg { display: none; }
+  html, body { background: var(--bg-0); }
+}
