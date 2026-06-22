@@ -70,7 +70,6 @@ export class MatchScene extends BaseScene {
   private playerSprite: Phaser.GameObjects.Sprite | null = null;
   private cpuSprite: Phaser.GameObjects.Sprite | null = null;
   private stageObjects: Phaser.GameObjects.GameObject[] = [];
-  private pointerObjects: Phaser.GameObjects.GameObject[] = [];
   private phase: MatchPhase = 'roundIntro';
   private score: RoundScore = createInitialRoundScore();
   private roundIndex = 1;
@@ -156,7 +155,7 @@ export class MatchScene extends BaseScene {
 
     this.drawStage(this.stageDefinition);
     this.hud = new MatchHud(this);
-    this.createPointerControls();
+    this.createControlLegend();
     this.installRuntimeHooks();
     this.resetMatchState(this.matchConfig.seed, true);
     this.publishMenuState(SceneKey.Match, {
@@ -714,89 +713,64 @@ export class MatchScene extends BaseScene {
     this.cameras.main.shake(event.type === 'blocked' ? 60 : 110, event.type === 'blocked' ? 0.002 : 0.004);
   }
 
-  private createPointerControls(): void {
-    this.pointerObjects.forEach((object) => object.destroy());
-    this.pointerObjects = [];
-    const y = this.scale.height - 34;
-    this.createHoldButton(40, y, 58, 38, 'Left', 'left');
-    this.createHoldButton(106, y, 58, 38, 'Right', 'right');
-    this.createHoldButton(172, y, 58, 38, 'Jump', 'jump');
-    this.createHoldButton(238, y, 58, 38, 'Duck', 'crouch');
-    this.createHoldButton(304, y, 58, 38, 'Guard', 'block');
-    this.createActionButton(430, y, 110, 38, ATTACK_LABELS.light, 'light');
-    this.createActionButton(558, y, 110, 38, ATTACK_LABELS.heavy, 'heavy');
-    this.createActionButton(700, y, 132, 38, ATTACK_LABELS.special, 'special');
-  }
+  /** Bottom-of-screen keyboard legend. Controls are keyboard-only; no touch buttons. */
+  private createControlLegend(): void {
+    const { width, height } = this.scale;
+    const stripHeight = 32;
+    const centerY = height - stripHeight / 2;
+    const cyan = 0x39c5e0;
+    const gold = 0xffd36a;
 
-  private createHoldButton(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    label: string,
-    action: Exclude<TestHookInputAction, 'light' | 'heavy' | 'special' | 'pause'>,
-  ): void {
-    const background = this.add.rectangle(x, y, width, height, 0x0e1d20, 0.9).setStrokeStyle(1, 0x5bd7cb, 0.58).setDepth(110).setScrollFactor(0);
-    const text = this.add
-      .text(x, y, label, {
-        align: 'center',
-        color: '#f5fbf9',
-        fixedWidth: width - 6,
-        fontFamily: 'monospace',
-        fontSize: '10px',
-        fontStyle: '700',
-      })
-      .setOrigin(0.5)
-      .setDepth(111)
-      .setScrollFactor(0);
-    const zone = this.add.zone(x, y, width, height).setOrigin(0.5).setInteractive().setDepth(112).setScrollFactor(0);
-    const press = (): void => {
-      this.heldInput[action] = true;
-      this.applyImmediateHeldPose(action);
-      background.setFillStyle(0x21494d, 0.98);
-    };
-    const release = (): void => {
-      this.heldInput[action] = false;
-      background.setFillStyle(0x0e1d20, 0.9);
+    this.add.rectangle(width / 2, centerY, width, stripHeight, 0x05080f, 0.84).setScrollFactor(0).setDepth(90);
+    this.add.rectangle(width / 2, height - stripHeight, width, 2, cyan, 0.45).setScrollFactor(0).setDepth(90);
+
+    const legend = this.add.container(0, centerY).setScrollFactor(0).setDepth(91);
+    const capSize = 22;
+    const capGap = 6;
+    const groupGap = 24;
+    let cursor = 0;
+
+    const addCap = (letter: string, accent: number): void => {
+      const cx = cursor + capSize / 2;
+      const cap = this.add.rectangle(cx, 0, capSize, capSize, 0x111a24, 0.95).setStrokeStyle(1.5, accent, 0.9);
+      const glyph = this.add
+        .text(cx, 0, letter, { color: '#f4f8f7', fontFamily: 'monospace', fontSize: '13px', fontStyle: 'bold' })
+        .setOrigin(0.5);
+      legend.add([cap, glyph]);
+      cursor += capSize + capGap;
     };
 
-    zone.on('pointerdown', press);
-    zone.on('pointerup', release);
-    zone.on('pointerout', release);
-    zone.on('pointerupoutside', release);
-    this.pointerObjects.push(background, text, zone);
-  }
+    const addLabel = (text: string, color: string): void => {
+      const label = this.add
+        .text(cursor, 0, text, { color, fontFamily: 'monospace', fontSize: '12px', fontStyle: 'bold' })
+        .setOrigin(0, 0.5);
+      legend.add(label);
+      cursor += label.width + groupGap;
+    };
 
-  private createActionButton(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    label: string,
-    action: AttackKind,
-  ): void {
-    const background = this.add.rectangle(x, y, width, height, 0x2a2214, 0.9).setStrokeStyle(1, 0xffd36a, 0.64).setDepth(110).setScrollFactor(0);
-    const text = this.add
-      .text(x, y, label, {
-        align: 'center',
-        color: '#fff8dd',
-        fixedWidth: width - 8,
-        fontFamily: 'monospace',
-        fontSize: '10px',
-        fontStyle: '700',
-      })
-      .setOrigin(0.5)
-      .setDepth(111)
-      .setScrollFactor(0);
-    const zone = this.add.zone(x, y, width, height).setOrigin(0.5).setInteractive().setDepth(112).setScrollFactor(0);
+    const addDivider = (): void => {
+      legend.add(this.add.rectangle(cursor, 0, 1, 16, 0x5bd7cb, 0.3).setOrigin(0.5));
+      cursor += 1 + groupGap;
+    };
 
-    zone.on('pointerdown', () => {
-      this.pulseInput.add(action);
-      background.setFillStyle(0x5b4821, 0.98);
-    });
-    zone.on('pointerup', () => background.setFillStyle(0x2a2214, 0.9));
-    zone.on('pointerout', () => background.setFillStyle(0x2a2214, 0.9));
-    this.pointerObjects.push(background, text, zone);
+    addCap('W', cyan);
+    addCap('A', cyan);
+    addCap('S', cyan);
+    addCap('D', cyan);
+    addLabel('MOVE', '#a9c6cc');
+    addDivider();
+    addCap('J', gold);
+    addLabel('LIGHT', '#ffe6a3');
+    addCap('K', gold);
+    addLabel('HEAVY', '#ffe6a3');
+    addCap('L', gold);
+    addLabel('SPECIAL', '#ffe6a3');
+    addDivider();
+    addCap('E', cyan);
+    addLabel('BLOCK', '#a9c6cc');
+
+    const totalWidth = cursor - groupGap;
+    legend.setX(Math.round((width - totalWidth) / 2));
   }
 
   private installRuntimeHooks(): void {
@@ -1084,7 +1058,6 @@ export class MatchScene extends BaseScene {
     this.playerSprite = null;
     this.cpuSprite = null;
     this.combatState = null;
-    this.pointerObjects = [];
     this.stageObjects = [];
   }
 }
