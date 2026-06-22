@@ -1,0 +1,1339 @@
+{
+  "idle": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "scale": 0.5412667946257198,
+    "ranges": [
+      [
+        29,
+        347
+      ],
+      [
+        390,
+        695
+      ],
+      [
+        742,
+        1050
+      ],
+      [
+        1087,
+        1402
+      ],
+      [
+        1439,
+        1748
+      ],
+      [
+        1792,
+        2112
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          27,
+          103,
+          351,
+          632
+        ],
+        "sourceRange": [
+          29,
+          347
+        ],
+        "placed": {
+          "x": 72,
+          "y": 20,
+          "width": 175,
+          "height": 286
+        },
+        "alphaBox": [
+          75,
+          23,
+          244,
+          303
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          388,
+          106,
+          700,
+          632
+        ],
+        "sourceRange": [
+          390,
+          695
+        ],
+        "placed": {
+          "x": 75,
+          "y": 21,
+          "width": 169,
+          "height": 285
+        },
+        "alphaBox": [
+          78,
+          24,
+          241,
+          303
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          740,
+          117,
+          1055,
+          632
+        ],
+        "sourceRange": [
+          742,
+          1050
+        ],
+        "placed": {
+          "x": 75,
+          "y": 27,
+          "width": 170,
+          "height": 279
+        },
+        "alphaBox": [
+          78,
+          30,
+          242,
+          303
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1086,
+          114,
+          1407,
+          632
+        ],
+        "sourceRange": [
+          1087,
+          1402
+        ],
+        "placed": {
+          "x": 73,
+          "y": 26,
+          "width": 174,
+          "height": 280
+        },
+        "alphaBox": [
+          76,
+          29,
+          244,
+          303
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceBox": [
+          1438,
+          115,
+          1753,
+          632
+        ],
+        "sourceRange": [
+          1439,
+          1748
+        ],
+        "placed": {
+          "x": 75,
+          "y": 26,
+          "width": 170,
+          "height": 280
+        },
+        "alphaBox": [
+          78,
+          29,
+          242,
+          303
+        ]
+      },
+      {
+        "frame": 5,
+        "sourceBox": [
+          1791,
+          108,
+          2117,
+          632
+        ],
+        "sourceRange": [
+          1792,
+          2112
+        ],
+        "placed": {
+          "x": 72,
+          "y": 22,
+          "width": 176,
+          "height": 284
+        },
+        "alphaBox": [
+          75,
+          25,
+          245,
+          303
+        ]
+      }
+    ]
+  },
+  "walk": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "scale": 0.5617529880478087,
+    "ranges": [
+      [
+        42,
+        345
+      ],
+      [
+        410,
+        689
+      ],
+      [
+        742,
+        1041
+      ],
+      [
+        1096,
+        1431
+      ],
+      [
+        1470,
+        1764
+      ],
+      [
+        1857,
+        2126
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          41,
+          104,
+          347,
+          605
+        ],
+        "sourceRange": [
+          42,
+          345
+        ],
+        "placed": {
+          "x": 74,
+          "y": 25,
+          "width": 172,
+          "height": 281
+        },
+        "alphaBox": [
+          77,
+          28,
+          243,
+          303
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          406,
+          112,
+          691,
+          616
+        ],
+        "sourceRange": [
+          410,
+          689
+        ],
+        "placed": {
+          "x": 80,
+          "y": 23,
+          "width": 160,
+          "height": 283
+        },
+        "alphaBox": [
+          83,
+          26,
+          237,
+          303
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          741,
+          115,
+          1042,
+          617
+        ],
+        "sourceRange": [
+          742,
+          1041
+        ],
+        "placed": {
+          "x": 75,
+          "y": 24,
+          "width": 169,
+          "height": 282
+        },
+        "alphaBox": [
+          78,
+          27,
+          241,
+          303
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1095,
+          118,
+          1436,
+          618
+        ],
+        "sourceRange": [
+          1096,
+          1431
+        ],
+        "placed": {
+          "x": 64,
+          "y": 25,
+          "width": 192,
+          "height": 281
+        },
+        "alphaBox": [
+          67,
+          28,
+          253,
+          303
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceBox": [
+          1470,
+          116,
+          1766,
+          618
+        ],
+        "sourceRange": [
+          1470,
+          1764
+        ],
+        "placed": {
+          "x": 77,
+          "y": 24,
+          "width": 166,
+          "height": 282
+        },
+        "alphaBox": [
+          80,
+          27,
+          240,
+          303
+        ]
+      },
+      {
+        "frame": 5,
+        "sourceBox": [
+          1856,
+          119,
+          2128,
+          622
+        ],
+        "sourceRange": [
+          1857,
+          2126
+        ],
+        "placed": {
+          "x": 83,
+          "y": 23,
+          "width": 153,
+          "height": 283
+        },
+        "alphaBox": [
+          86,
+          26,
+          233,
+          303
+        ]
+      }
+    ]
+  },
+  "jump": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "scale": 0.6074240719910011,
+    "ranges": [
+      [
+        147,
+        476
+      ],
+      [
+        644,
+        967
+      ],
+      [
+        1175,
+        1455
+      ],
+      [
+        1707,
+        1997
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          144,
+          293,
+          478,
+          690
+        ],
+        "sourceRange": [
+          147,
+          476
+        ],
+        "placed": {
+          "x": 58,
+          "y": 65,
+          "width": 203,
+          "height": 241
+        },
+        "alphaBox": [
+          62,
+          69,
+          257,
+          302
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          643,
+          115,
+          973,
+          645
+        ],
+        "sourceRange": [
+          644,
+          967
+        ],
+        "placed": {
+          "x": 63,
+          "y": 0,
+          "width": 194,
+          "height": 312
+        },
+        "alphaBox": [
+          66,
+          3,
+          254,
+          309
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          1173,
+          32,
+          1458,
+          524
+        ],
+        "sourceRange": [
+          1175,
+          1455
+        ],
+        "placed": {
+          "x": 73,
+          "y": 7,
+          "width": 173,
+          "height": 299
+        },
+        "alphaBox": [
+          77,
+          11,
+          242,
+          302
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1706,
+          317,
+          1998,
+          694
+        ],
+        "sourceRange": [
+          1707,
+          1997
+        ],
+        "placed": {
+          "x": 71,
+          "y": 77,
+          "width": 177,
+          "height": 229
+        },
+        "alphaBox": [
+          75,
+          81,
+          244,
+          302
+        ]
+      }
+    ]
+  },
+  "crouch": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "scale": 0.5483028720626631,
+    "ranges": [
+      [
+        63,
+        425
+      ],
+      [
+        598,
+        936
+      ],
+      [
+        1106,
+        1615
+      ],
+      [
+        1697,
+        2059
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          62,
+          166,
+          426,
+          555
+        ],
+        "sourceRange": [
+          63,
+          425
+        ],
+        "placed": {
+          "x": 60,
+          "y": 93,
+          "width": 200,
+          "height": 213
+        },
+        "alphaBox": [
+          63,
+          96,
+          257,
+          303
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          597,
+          185,
+          937,
+          562
+        ],
+        "sourceRange": [
+          598,
+          936
+        ],
+        "placed": {
+          "x": 67,
+          "y": 99,
+          "width": 186,
+          "height": 207
+        },
+        "alphaBox": [
+          70,
+          102,
+          250,
+          303
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          1104,
+          195,
+          1619,
+          559
+        ],
+        "sourceRange": [
+          1106,
+          1615
+        ],
+        "placed": {
+          "x": 19,
+          "y": 106,
+          "width": 282,
+          "height": 200
+        },
+        "alphaBox": [
+          22,
+          109,
+          298,
+          303
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1696,
+          167,
+          2060,
+          558
+        ],
+        "sourceRange": [
+          1697,
+          2059
+        ],
+        "placed": {
+          "x": 60,
+          "y": 92,
+          "width": 200,
+          "height": 214
+        },
+        "alphaBox": [
+          63,
+          95,
+          257,
+          303
+        ]
+      }
+    ]
+  },
+  "block": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 3,
+    "scale": 0.4153846153846154,
+    "ranges": [
+      [
+        132,
+        580
+      ],
+      [
+        739,
+        1187
+      ],
+      [
+        1411,
+        1834
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          130,
+          65,
+          583,
+          745
+        ],
+        "sourceRange": [
+          132,
+          580
+        ],
+        "placed": {
+          "x": 66,
+          "y": 24,
+          "width": 188,
+          "height": 282
+        },
+        "alphaBox": [
+          68,
+          26,
+          252,
+          304
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          737,
+          95,
+          1191,
+          745
+        ],
+        "sourceRange": [
+          739,
+          1187
+        ],
+        "placed": {
+          "x": 65,
+          "y": 36,
+          "width": 189,
+          "height": 270
+        },
+        "alphaBox": [
+          67,
+          38,
+          252,
+          304
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          1410,
+          102,
+          1837,
+          745
+        ],
+        "sourceRange": [
+          1411,
+          1834
+        ],
+        "placed": {
+          "x": 71,
+          "y": 39,
+          "width": 177,
+          "height": 267
+        },
+        "alphaBox": [
+          73,
+          41,
+          246,
+          304
+        ]
+      }
+    ]
+  },
+  "light": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 4,
+    "scale": 0.4878048780487805,
+    "ranges": [
+      [
+        59,
+        422
+      ],
+      [
+        563,
+        1053
+      ],
+      [
+        1126,
+        1655
+      ],
+      [
+        1729,
+        2092
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          57,
+          87,
+          426,
+          647
+        ],
+        "sourceRange": [
+          59,
+          422
+        ],
+        "placed": {
+          "x": 70,
+          "y": 33,
+          "width": 180,
+          "height": 273
+        },
+        "alphaBox": [
+          72,
+          35,
+          248,
+          304
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          561,
+          102,
+          1056,
+          642
+        ],
+        "sourceRange": [
+          563,
+          1053
+        ],
+        "placed": {
+          "x": 39,
+          "y": 43,
+          "width": 241,
+          "height": 263
+        },
+        "alphaBox": [
+          41,
+          45,
+          278,
+          304
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          1123,
+          93,
+          1657,
+          643
+        ],
+        "sourceRange": [
+          1126,
+          1655
+        ],
+        "placed": {
+          "x": 30,
+          "y": 38,
+          "width": 260,
+          "height": 268
+        },
+        "alphaBox": [
+          32,
+          40,
+          288,
+          304
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1727,
+          90,
+          2096,
+          647
+        ],
+        "sourceRange": [
+          1729,
+          2092
+        ],
+        "placed": {
+          "x": 70,
+          "y": 34,
+          "width": 180,
+          "height": 272
+        },
+        "alphaBox": [
+          72,
+          36,
+          248,
+          304
+        ]
+      }
+    ]
+  },
+  "heavy": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 5,
+    "scale": 0.531496062992126,
+    "ranges": [
+      [
+        49,
+        382
+      ],
+      [
+        506,
+        736
+      ],
+      [
+        853,
+        1369
+      ],
+      [
+        1437,
+        1742
+      ],
+      [
+        1786,
+        2108
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          47,
+          116,
+          386,
+          625
+        ],
+        "sourceRange": [
+          49,
+          382
+        ],
+        "placed": {
+          "x": 70,
+          "y": 35,
+          "width": 180,
+          "height": 271
+        },
+        "alphaBox": [
+          73,
+          38,
+          247,
+          303
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          504,
+          102,
+          739,
+          625
+        ],
+        "sourceRange": [
+          506,
+          736
+        ],
+        "placed": {
+          "x": 97,
+          "y": 28,
+          "width": 125,
+          "height": 278
+        },
+        "alphaBox": [
+          100,
+          31,
+          219,
+          303
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          851,
+          123,
+          1371,
+          621
+        ],
+        "sourceRange": [
+          853,
+          1369
+        ],
+        "placed": {
+          "x": 22,
+          "y": 41,
+          "width": 276,
+          "height": 265
+        },
+        "alphaBox": [
+          25,
+          44,
+          295,
+          303
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1436,
+          119,
+          1745,
+          623
+        ],
+        "sourceRange": [
+          1437,
+          1742
+        ],
+        "placed": {
+          "x": 78,
+          "y": 38,
+          "width": 164,
+          "height": 268
+        },
+        "alphaBox": [
+          81,
+          41,
+          239,
+          303
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceBox": [
+          1785,
+          117,
+          2112,
+          625
+        ],
+        "sourceRange": [
+          1786,
+          2108
+        ],
+        "placed": {
+          "x": 73,
+          "y": 36,
+          "width": 174,
+          "height": 270
+        },
+        "alphaBox": [
+          76,
+          39,
+          244,
+          303
+        ]
+      }
+    ]
+  },
+  "special": {
+    "frameWidth": 512,
+    "frameHeight": 320,
+    "frameCount": 6,
+    "scale": 0.8597560975609756,
+    "ranges": [
+      [
+        30,
+        229
+      ],
+      [
+        352,
+        599
+      ],
+      [
+        674,
+        956
+      ],
+      [
+        1029,
+        1337
+      ],
+      [
+        1397,
+        1749
+      ],
+      [
+        1862,
+        2059
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          28,
+          232,
+          239,
+          561
+        ],
+        "sourceRange": [
+          30,
+          229
+        ],
+        "placed": {
+          "x": 10,
+          "y": 23,
+          "width": 181,
+          "height": 283
+        },
+        "alphaBox": [
+          16,
+          29,
+          186,
+          300
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          349,
+          246,
+          600,
+          561
+        ],
+        "sourceRange": [
+          352,
+          599
+        ],
+        "placed": {
+          "x": 10,
+          "y": 35,
+          "width": 216,
+          "height": 271
+        },
+        "alphaBox": [
+          16,
+          41,
+          220,
+          300
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          671,
+          207,
+          966,
+          563
+        ],
+        "sourceRange": [
+          674,
+          956
+        ],
+        "placed": {
+          "x": 10,
+          "y": 0,
+          "width": 254,
+          "height": 306
+        },
+        "alphaBox": [
+          16,
+          6,
+          258,
+          300
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1026,
+          222,
+          1347,
+          565
+        ],
+        "sourceRange": [
+          1029,
+          1337
+        ],
+        "placed": {
+          "x": 10,
+          "y": 11,
+          "width": 276,
+          "height": 295
+        },
+        "alphaBox": [
+          16,
+          17,
+          282,
+          300
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceBox": [
+          1394,
+          243,
+          1759,
+          564
+        ],
+        "sourceRange": [
+          1397,
+          1749
+        ],
+        "placed": {
+          "x": 10,
+          "y": 30,
+          "width": 314,
+          "height": 276
+        },
+        "alphaBox": [
+          16,
+          36,
+          324,
+          300
+        ]
+      },
+      {
+        "frame": 5,
+        "sourceBox": [
+          1859,
+          235,
+          2069,
+          562
+        ],
+        "sourceRange": [
+          1862,
+          2059
+        ],
+        "placed": {
+          "x": 10,
+          "y": 25,
+          "width": 181,
+          "height": 281
+        },
+        "alphaBox": [
+          16,
+          31,
+          187,
+          300
+        ]
+      }
+    ]
+  },
+  "knockdown": {
+    "frameWidth": 320,
+    "frameHeight": 320,
+    "frameCount": 5,
+    "scale": 0.698019801980198,
+    "ranges": [
+      [
+        116,
+        391
+      ],
+      [
+        478,
+        864
+      ],
+      [
+        911,
+        1293
+      ],
+      [
+        1327,
+        1749
+      ],
+      [
+        1795,
+        2082
+      ]
+    ],
+    "frames": [
+      {
+        "frame": 0,
+        "sourceBox": [
+          115,
+          165,
+          397,
+          569
+        ],
+        "sourceRange": [
+          116,
+          391
+        ],
+        "placed": {
+          "x": 61,
+          "y": 24,
+          "width": 197,
+          "height": 282
+        },
+        "alphaBox": [
+          65,
+          28,
+          254,
+          302
+        ]
+      },
+      {
+        "frame": 1,
+        "sourceBox": [
+          476,
+          281,
+          868,
+          553
+        ],
+        "sourceRange": [
+          478,
+          864
+        ],
+        "placed": {
+          "x": 23,
+          "y": 116,
+          "width": 274,
+          "height": 190
+        },
+        "alphaBox": [
+          27,
+          121,
+          293,
+          302
+        ]
+      },
+      {
+        "frame": 2,
+        "sourceBox": [
+          909,
+          396,
+          1298,
+          571
+        ],
+        "sourceRange": [
+          911,
+          1293
+        ],
+        "placed": {
+          "x": 24,
+          "y": 184,
+          "width": 272,
+          "height": 122
+        },
+        "alphaBox": [
+          28,
+          189,
+          292,
+          302
+        ]
+      },
+      {
+        "frame": 3,
+        "sourceBox": [
+          1323,
+          465,
+          1751,
+          573
+        ],
+        "sourceRange": [
+          1327,
+          1749
+        ],
+        "placed": {
+          "x": 10,
+          "y": 231,
+          "width": 299,
+          "height": 75
+        },
+        "alphaBox": [
+          14,
+          235,
+          305,
+          302
+        ]
+      },
+      {
+        "frame": 4,
+        "sourceBox": [
+          1794,
+          346,
+          2092,
+          573
+        ],
+        "sourceRange": [
+          1795,
+          2082
+        ],
+        "placed": {
+          "x": 56,
+          "y": 148,
+          "width": 208,
+          "height": 158
+        },
+        "alphaBox": [
+          60,
+          152,
+          263,
+          302
+        ]
+      }
+    ]
+  }
+}
