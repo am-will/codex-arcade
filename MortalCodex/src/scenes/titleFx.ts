@@ -165,11 +165,7 @@ export function addNeonLogo(
     .setOrigin(0.5)
     .setShadow(0, Math.round(fontSize * 0.06), '#150103', 8, false, true);
 
-  const underline = scene.add
-    .rectangle(0, fontSize * 0.62, base.width * 0.9, 3, 0xffd23f, 0.85)
-    .setOrigin(0.5);
-
-  container.add([glow, base, underline]);
+  container.add([glow, base]);
 
   if (options.animate) {
     container.setScale(1.35).setAlpha(0);
