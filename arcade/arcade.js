@@ -136,7 +136,7 @@ const host = config.host || location.hostname || '127.0.0.1';
 const proto = config.protocol || location.protocol;
 const games = (config.games && config.games.length ? config.games : DEFAULT_GAMES).map((g) => ({
   ...g,
-  origin: g.origin || `${proto}//${host}:${g.port}`,
+  origin: g.origin || g.path || `${proto}//${host}:${g.port}`,
   pres: PRESENTATION[g.id] || {
     kicker: 'ARCADE',
     title: (g.title || g.id).toUpperCase(),
@@ -340,8 +340,8 @@ function startBackdrop() {
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = canvas.clientWidth = window.innerWidth;
-    h = canvas.clientHeight = window.innerHeight;
+    w = window.innerWidth;
+    h = window.innerHeight;
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

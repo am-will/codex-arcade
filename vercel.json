@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "vercel-static",
+  "functions": {
+    "server.mjs": {
+      "includeFiles": "{index.html,arcade/**,vercel-static/**}"
+    }
+  }
+}

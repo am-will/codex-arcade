@@ -1,18 +1,18 @@
-# 🕹 Codex Arcade
+# Codex Arcade
 
 A neon arcade cabinet that boots straight into a **pick-your-game** menu. Choose
 a game, play it full-screen, and press **Esc** (or the on-screen **EXIT**) to
 return to the cabinet.
+
+## Play
+
+Live URL: <https://codex-arcade-henna.vercel.app/>
 
 ## Games on the cabinet
 
 - **Mortal Codex** (`MortalCodex/`) — a Phaser neon-dojo fighting game.
 - **Flamethrow** (`flamethrow/`) — a Three.js arcade basketball game about
   chaining made shots into a firestorm of multipliers.
-
-> `drift/` (a Three.js time-trial racer) also lives in this repo and is ready to
-> go — add it to the cabinet by uncommenting its entry in
-> [`arcade.config.mjs`](arcade.config.mjs).
 
 ## Install and launch
 
@@ -64,7 +64,6 @@ reload:
 ```sh
 cd MortalCodex && npm install && npm run dev
 cd flamethrow  && npm install && npm run dev
-cd drift       && npm install && npm run dev
 ```
 
 ## Layout
@@ -74,8 +73,7 @@ index.html          arcade picker shell (the repo's front door)
 arcade/             shell styles, logic, art, and generated runtime config
 server.mjs          launcher: serves the picker + each game on its own port
 arcade.config.mjs   single source of truth for which games ship
-scripts/            build-games.mjs (builds every shipped game)
+scripts/            build-games.mjs and build-vercel.mjs
 MortalCodex/        fighting game (Phaser)
 flamethrow/         basketball game (Three.js)
-drift/              racing game (Three.js, not on the cabinet by default)
 ```
