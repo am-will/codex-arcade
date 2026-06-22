@@ -686,6 +686,55 @@
       "type": "sfx",
       "format": "wav",
       "durationMs": 420
+    },
+    {
+      "key": "music-fight-loop",
+      "path": "/assets/audio/music-fight-loop.mp3",
+      "type": "music",
+      "format": "mp3",
+      "durationMs": 81946
+    },
+    {
+      "key": "sfx-punch",
+      "path": "/assets/audio/sfx-punch.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 320
+    },
+    {
+      "key": "sfx-kick",
+      "path": "/assets/audio/sfx-kick.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 420
+    },
+    {
+      "key": "sfx-jump",
+      "path": "/assets/audio/sfx-jump.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 340
+    },
+    {
+      "key": "sfx-get-hit",
+      "path": "/assets/audio/sfx-get-hit.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 380
+    },
+    {
+      "key": "sfx-super",
+      "path": "/assets/audio/sfx-super.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 920
+    },
+    {
+      "key": "sfx-ko",
+      "path": "/assets/audio/sfx-ko.wav",
+      "type": "sfx",
+      "format": "wav",
+      "durationMs": 700
     }
   ]
 }

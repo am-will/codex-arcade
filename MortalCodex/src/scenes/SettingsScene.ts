@@ -1,3 +1,4 @@
+import { isMortalCodexAudioMuted, setMortalCodexAudioMuted } from '../game/audio';
 import type { GameConfig } from '../game/types';
 import { BaseScene, type MenuFlowData, type SelectableItem } from './BaseScene';
 import { SceneKey } from './sceneKeys';
@@ -29,29 +30,33 @@ export class SettingsScene extends BaseScene {
     this.addTitle('Settings', 'Applies to Play vs CPU');
 
     const rows: SelectableItem[] = [
-      this.createSettingRow(480, 162, 'Rounds', `First to ${settings.roundsToWin}`, () => {
+      this.createSettingRow(480, 132, 'Rounds', `First to ${settings.roundsToWin}`, () => {
         settings = { ...settings, roundsToWin: nextValue(ROUND_OPTIONS, settings.roundsToWin) };
         refresh();
       }),
-      this.createSettingRow(480, 234, 'Timer', `${settings.roundTimeSeconds}s`, () => {
+      this.createSettingRow(480, 198, 'Timer', `${settings.roundTimeSeconds}s`, () => {
         settings = { ...settings, roundTimeSeconds: nextValue(TIMER_OPTIONS, settings.roundTimeSeconds) };
         refresh();
       }),
-      this.createSettingRow(480, 306, 'CPU', settings.cpuDifficulty, () => {
+      this.createSettingRow(480, 264, 'CPU', settings.cpuDifficulty, () => {
         settings = { ...settings, cpuDifficulty: nextValue(CPU_OPTIONS, settings.cpuDifficulty) };
         refresh();
       }),
-      this.createToggleRow(480, 378, 'Debug overlay', settings.debugEnabled, () => {
+      this.createToggleRow(480, 330, 'Audio', !isMortalCodexAudioMuted(), () => {
+        setMortalCodexAudioMuted(this, !isMortalCodexAudioMuted());
+        refresh();
+      }),
+      this.createToggleRow(480, 396, 'Debug overlay', settings.debugEnabled, () => {
         settings = { ...settings, debugEnabled: !settings.debugEnabled };
         refresh();
       }),
-      this.createButton(480, 456, 320, 58, 'Back', 'Return to main menu', back, 'primary'),
+      this.createButton(480, 468, 320, 58, 'Back', 'Return to main menu', back, 'primary'),
     ];
 
     this.bindSelection(rows, 0, back);
     this.addFooter('Arrow keys choose setting   Enter changes   Esc main menu');
     this.publishMenuState(SceneKey.Settings, {
-      labels: ['Rounds', 'Timer', 'CPU', 'Debug overlay', 'Back'],
+      labels: ['Rounds', 'Timer', 'CPU', 'Audio', 'Debug overlay', 'Back'],
       selectedStageId: stage?.id,
     });
   }

@@ -3,6 +3,8 @@ import * as THREE from 'three'
 import { BACKBOARD_Z, BALL_RADIUS, LAUNCH_POSITION, RIM_RADIUS } from './config'
 import type { LevelConfig } from './types'
 
+export type HoopContactEvent = 'rim' | 'backboard'
+
 const NET_STRANDS = 18
 const NET_ROWS = 7
 const NET_LENGTH = 1.02
@@ -23,6 +25,7 @@ const NET_IDLE_SWAY = 0.12
 type NetHitKind = 'rim' | 'net' | 'through'
 
 type NetImpactState = {
+  touchedBackboard: boolean
   touchedRim: boolean
   touchedNet: boolean
   passedThrough: boolean
@@ -133,17 +136,19 @@ export class PhysicsWorld {
     this.hoopBody.setNextKinematicTranslation({ x, y: 3.05, z })
   }
 
-  updateNetForShot(id: number, position: THREE.Vector3, velocity: THREE.Vector3): void {
+  updateNetForShot(id: number, position: THREE.Vector3, velocity: THREE.Vector3): readonly HoopContactEvent[] {
     const localX = position.x - this.hoopPosition.x
     const localY = position.y - this.hoopPosition.y
     const localZ = position.z - this.hoopPosition.z
     const radialDistance = Math.hypot(localX, localZ)
     const speed = velocity.length()
     const impactScale = THREE.MathUtils.clamp(speed / 8, 0.35, 1.65)
+    const events: HoopContactEvent[] = []
 
     let state = this.netImpactStates.get(id)
     if (!state) {
       state = {
+        touchedBackboard: false,
         touchedRim: false,
         touchedNet: false,
         passedThrough: false,
@@ -155,10 +160,18 @@ export class PhysicsWorld {
 
     state.wasAboveRim ||= localY > 0.18
 
+    const nearBackboardPlane = Math.abs(localZ - BACKBOARD_Z) < BALL_RADIUS * 0.9
+    const withinBackboardFace = Math.abs(localX) < 1.38 && localY > -0.24 && localY < 1.38
+    if (!state.touchedBackboard && nearBackboardPlane && withinBackboardFace) {
+      state.touchedBackboard = true
+      events.push('backboard')
+    }
+
     const nearRimHeight = Math.abs(localY) < BALL_RADIUS * 0.62
     const nearRimTube = Math.abs(radialDistance - RIM_RADIUS) < BALL_RADIUS * 0.5
     if (!state.touchedRim && nearRimHeight && nearRimTube) {
       state.touchedRim = true
+      events.push('rim')
       this.applyNetImpact(position, velocity, 'rim', 0.55 * impactScale)
     }
 
@@ -185,6 +198,8 @@ export class PhysicsWorld {
       this.applyNetImpact(position, velocity, 'through', 0.1 * impactScale)
       this.applySwishPull(position, velocity, 0.16 * impactScale)
     }
+
+    return events
   }
 
   releaseNetShot(id: number): void {

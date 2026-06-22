@@ -1,6 +1,7 @@
 import type { GamePhase, ScoreState, ShotMode } from './types'
 
 type HudCallbacks = {
+  onAudioToggle: () => boolean
   onModeChange: (mode: ShotMode) => void
   onRestart: () => void
 }
@@ -9,6 +10,7 @@ export class Hud {
   private readonly modeButtons: HTMLButtonElement[]
   private readonly restartButton: HTMLButtonElement
   private readonly quickRestartButton: HTMLButtonElement
+  private readonly audioButton: HTMLButtonElement
   private readonly score: HTMLElement
   private readonly timer: HTMLElement
   private readonly streak: HTMLElement
@@ -50,6 +52,7 @@ export class Hud {
           <button class="mode active" type="button" data-mode="pullback">Pullback</button>
           <button class="mode" type="button" data-mode="flick">Flick</button>
           <button class="mode restart-mode" id="quick-restart" type="button">Restart</button>
+          <button class="mode audio-mode" id="audio-toggle" type="button" aria-pressed="true">Audio</button>
         </div>
         <p id="status">Drag the ball back or switch to flick. First launch starts the 90 second run.</p>
       </div>
@@ -64,6 +67,7 @@ export class Hud {
     this.modeButtons = [...root.querySelectorAll<HTMLButtonElement>('.mode[data-mode]')]
     this.restartButton = root.querySelector<HTMLButtonElement>('#restart')!
     this.quickRestartButton = root.querySelector<HTMLButtonElement>('#quick-restart')!
+    this.audioButton = root.querySelector<HTMLButtonElement>('#audio-toggle')!
     this.score = root.querySelector<HTMLElement>('#score')!
     this.timer = root.querySelector<HTMLElement>('#timer')!
     this.streak = root.querySelector<HTMLElement>('#streak')!
@@ -84,12 +88,19 @@ export class Hud {
     }
     this.restartButton.addEventListener('click', () => this.callbacks.onRestart())
     this.quickRestartButton.addEventListener('click', () => this.callbacks.onRestart())
+    this.audioButton.addEventListener('click', () => this.setAudioMuted(this.callbacks.onAudioToggle()))
   }
 
   setMode(mode: ShotMode): void {
     for (const button of this.modeButtons) {
       button.classList.toggle('active', button.dataset.mode === mode && button.dataset.mode !== undefined)
     }
+  }
+
+  setAudioMuted(muted: boolean): void {
+    this.audioButton.textContent = muted ? 'Muted' : 'Audio'
+    this.audioButton.classList.toggle('muted', muted)
+    this.audioButton.setAttribute('aria-pressed', String(!muted))
   }
 
   update(state: ScoreState, timeRemaining: number, phase: GamePhase, levelLabel: string, levelId: number, highScore: number): void {

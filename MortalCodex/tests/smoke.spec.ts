@@ -144,15 +144,25 @@ test('character select remains usable after leaving a match with Escape', async 
 });
 
 test('test hooks drive deterministic damage, block, and special behavior', async ({ page }) => {
+  test.setTimeout(45_000);
   await launchMatchViaMenu(page);
   await setCpuEnabled(page, false);
+  await press(page, 'jump', 8);
+  await waitForAudioEvent(page, 'jump');
+  await waitFrames(page, 82);
   await movePlayerIntoRange(page);
 
   const beforeLight = await requireMatchState(page);
   await press(page, 'light');
+  await waitForAudioEvent(page, 'punch');
   const afterLight = await waitForCpuHealthBelow(page, beforeLight.cpu.health);
   expect(afterLight.cpu.health).toBeLessThan(beforeLight.cpu.health);
   expect(afterLight.player.meter).toBeGreaterThan(beforeLight.player.meter);
+  expect(afterLight.audioEvents).toContain('get-hit');
+
+  await waitFrames(page, 36);
+  await press(page, 'heavy');
+  await waitForAudioEvent(page, 'kick');
 
   await waitFrames(page, 36);
   await startHookMatch(page, { seed: 17, match: { roundsToWin: 1, roundTimeSeconds: 30 } });
@@ -182,6 +192,7 @@ test('test hooks drive deterministic damage, block, and special behavior', async
   const beforeSpecial = await requireMatchState(page);
   expect(beforeSpecial.player.meter).toBe(100);
   await press(page, 'special');
+  await waitForAudioEvent(page, 'super');
   const afterFirstSpecialHit = await waitForCpuHealthBelow(page, beforeSpecial.cpu.health, 120);
   expect(afterFirstSpecialHit.cpu.health).toBeLessThan(beforeSpecial.cpu.health);
   expect(afterFirstSpecialHit.cpu.health).toBeGreaterThan(0);
@@ -190,6 +201,7 @@ test('test hooks drive deterministic damage, block, and special behavior', async
   expect(afterSpecial.phase).toBe('fighting');
   expect(afterSpecial.player.animation).toBe('special');
   expect(afterSpecial.player.meter).toBeLessThan(beforeSpecial.player.meter);
+  expect(afterSpecial.audioEvents).toContain('ko');
   await waitForKnockdownBounce(page, 'cpu', afterSpecial.cpu.y);
   await expect.poll(() => readMatchPhase(page), { timeout: 5_000 }).toBe('roundOver');
 });
@@ -414,6 +426,19 @@ async function waitForKnockdownBounce(page: Page, slot: 'player' | 'cpu', ground
   }
 
   throw new Error(`Expected ${slot} to bounce into knockdown before landing.`);
+}
+
+async function waitForAudioEvent(page: Page, eventName: string, maxFrames = 120): Promise<TestHookMatchState> {
+  for (let frame = 0; frame < maxFrames; frame += 1) {
+    await waitFrames(page, 1);
+    const state = await requireMatchState(page);
+
+    if (state.audioEvents.includes(eventName)) {
+      return state;
+    }
+  }
+
+  throw new Error(`Expected audio event "${eventName}".`);
 }
 
 async function waitFrames(page: Page, frames: number): Promise<void> {

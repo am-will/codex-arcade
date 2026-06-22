@@ -222,7 +222,7 @@ export interface AssetManifestVfx {
 export interface AssetManifestAudio {
   readonly key: AssetKey;
   readonly path: string;
-  readonly type: 'sfx' | string;
+  readonly type: 'sfx' | 'music' | string;
   readonly format: string;
   readonly durationMs: number;
 }

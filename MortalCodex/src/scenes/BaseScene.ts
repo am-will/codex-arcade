@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { installMortalCodexAudioUnlock } from '../game/audio';
 import { loadGameConfig } from '../game/config';
 import type { CharacterId, GameConfig, MatchConfig, StageDefinition, StageId } from '../game/types';
 
@@ -59,6 +60,7 @@ export abstract class BaseScene extends Phaser.Scene {
       }
 
       this.children.removeAll();
+      installMortalCodexAudioUnlock(this);
       render(config);
     } catch (error) {
       this.children.removeAll();

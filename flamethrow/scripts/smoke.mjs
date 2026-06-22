@@ -166,6 +166,9 @@ async function verifyViewport(page, viewport, label) {
     if (!afterPull.readyBallAvailable || afterPull.activeShots < 1) {
       throw new Error(`Ready ball did not respawn while the first shot was still active: ${JSON.stringify(afterPull)}`)
     }
+    if (!afterPull.audioEvents.includes('shot')) {
+      throw new Error(`Pullback shot did not emit shot audio event: ${JSON.stringify(afterPull.audioEvents)}`)
+    }
 
     await page.getByRole('button', { name: 'Flick' }).click()
     await page.waitForTimeout(150)
@@ -186,7 +189,8 @@ async function verifyViewport(page, viewport, label) {
       redTier.state.streak !== 3 ||
       redTier.state.multiplier !== 2 ||
       redTier.state.highScore !== redTier.state.score ||
-      redTier.hudTier !== '3'
+      redTier.hudTier !== '3' ||
+      !redTier.state.audioEvents.includes('made')
     ) {
       throw new Error(`Three-make multiplier start failed: ${JSON.stringify(redTier)}`)
     }
@@ -275,6 +279,9 @@ async function verifyBasketCounterRule(page) {
   if (!made || made.score <= (before?.score ?? 0) || made.streak < 1) {
     throw new Error(`Top-to-bottom hoop drop did not increment score: before=${JSON.stringify(before)} after=${JSON.stringify(made)}`)
   }
+  if (!made.audioEvents.includes('made')) {
+    throw new Error(`Top-to-bottom hoop drop did not emit made audio: ${JSON.stringify(made.audioEvents)}`)
+  }
 
   await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
   await page.locator('canvas').waitFor({ state: 'visible' })
@@ -291,6 +298,18 @@ async function verifyBasketCounterRule(page) {
 
   if ((boardAfter?.score ?? 0) > (boardBefore?.score ?? 0)) {
     throw new Error(`Backboard-side drop incorrectly scored: before=${JSON.stringify(boardBefore)} after=${JSON.stringify(boardAfter)}`)
+  }
+  if (!boardAfter?.audioEvents.includes('backboard')) {
+    throw new Error(`Backboard-side drop did not emit backboard audio: ${JSON.stringify(boardAfter?.audioEvents)}`)
+  }
+
+  await page.goto(`${baseUrl}/?test=1`, { waitUntil: 'networkidle' })
+  await page.locator('canvas').waitFor({ state: 'visible' })
+  await page.waitForTimeout(1000)
+  await page.evaluate(() => window.__FLAMETHROW_TEST__?.dropAtRim())
+  const rimAfter = await waitForFlamethrowAudio(page, 'rim')
+  if (!rimAfter.audioEvents.includes('rim')) {
+    throw new Error(`Rim drop did not emit rim audio: ${JSON.stringify(rimAfter.audioEvents)}`)
   }
 }
 
@@ -339,6 +358,16 @@ async function verifyTimerLevels(page) {
   if (!after || after.score - (before?.score ?? 0) !== 5) {
     throw new Error(`Level 3 make did not score 5 base points: before=${JSON.stringify(before)} after=${JSON.stringify(after)}`)
   }
+}
+
+async function waitForFlamethrowAudio(page, eventName) {
+  let state
+  for (let index = 0; index < 30; index += 1) {
+    await page.waitForTimeout(100)
+    state = await page.evaluate(() => window.__FLAMETHROW_TEST__?.snapshot())
+    if (state?.audioEvents.includes(eventName)) return state
+  }
+  throw new Error(`Expected Flamethrow audio event "${eventName}": ${JSON.stringify(state?.audioEvents)}`)
 }
 
 let browser

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getRecentMortalCodexAudioEvents, playMortalCodexSfx } from '../game/audio';
 import { consumeFixedTimestep, createCombatState, stepCombat, toSimulationFrames, type CombatEvent, type CombatState } from '../game/combat';
 import { createCpuController, type CpuController } from '../game/cpu';
 import {
@@ -328,6 +329,8 @@ export class MatchScene extends BaseScene {
 
     let state = this.combatState;
     const previousEventCount = state.events.length;
+    const previousPlayer = state.player;
+    const previousCpu = state.cpu;
     const cpuInput = this.cpuController?.decide(state) ?? {};
     let playerInput = this.createPlayerInput(allowPulse);
     let resolvedCpuInput = this.cpuEnabled ? cpuInput : {};
@@ -352,7 +355,10 @@ export class MatchScene extends BaseScene {
       cpu: resolvedCpuInput,
     });
 
+    this.playFighterAudioTransitions(previousPlayer, previousCpu, state);
+
     const newEvents = state.events.slice(previousEventCount);
+    this.playCombatAudioEvents(newEvents);
 
     for (const event of newEvents) {
       this.spawnHitSpark(event, state);
@@ -403,6 +409,7 @@ export class MatchScene extends BaseScene {
     };
     this.pendingSuperSlot = slot;
     this.superPauseFrames = ROUND_POLICY.superCutInInputPauseFrames;
+    playMortalCodexSfx(this, 'super', `super:${this.combatState.frame}:${slot}`);
     this.hud?.showSuperCutIn(fighter.character.displayName);
     this.cameras.main.shake(ROUND_POLICY.superCutInInputPauseFrames * 16, 0.004);
   }
@@ -700,6 +707,43 @@ export class MatchScene extends BaseScene {
     });
   }
 
+  private playFighterAudioTransitions(previousPlayer: FighterState, previousCpu: FighterState, next: CombatState): void {
+    this.playFighterStateAudio(previousPlayer, next.player, next.frame);
+    this.playFighterStateAudio(previousCpu, next.cpu, next.frame);
+  }
+
+  private playFighterStateAudio(previous: FighterState, next: FighterState, frame: number): void {
+    if (!previous.activeAttack && next.activeAttack) {
+      if (next.activeAttack.kind === 'light') {
+        playMortalCodexSfx(this, 'punch', `attack:${frame}:${next.slot}:light`);
+      } else if (next.activeAttack.kind === 'heavy') {
+        playMortalCodexSfx(this, 'kick', `attack:${frame}:${next.slot}:heavy`);
+      }
+    }
+
+    if (previous.isGrounded && !next.isGrounded && next.velocity.y < 0 && !next.isFinished) {
+      playMortalCodexSfx(this, 'jump', `jump:${frame}:${next.slot}`);
+    }
+  }
+
+  private playCombatAudioEvents(events: readonly CombatEvent[]): void {
+    const finisherKeys = new Set(
+      events
+        .filter((event) => event.type === 'finisher')
+        .map((event) => `${event.frame}:${event.targetId}:${event.windowIndex}`),
+    );
+
+    for (const event of events) {
+      const eventKey = `${event.frame}:${event.targetId}:${event.windowIndex}`;
+
+      if (event.type === 'finisher') {
+        playMortalCodexSfx(this, 'ko', `ko:${eventKey}`);
+      } else if (event.type === 'hit' && !finisherKeys.has(eventKey)) {
+        playMortalCodexSfx(this, 'get-hit', `hit:${eventKey}`);
+      }
+    }
+  }
+
   private spawnHitSpark(event: CombatEvent, state: CombatState): void {
     if (event.type === 'finisher') {
       return;
@@ -835,6 +879,7 @@ export class MatchScene extends BaseScene {
       timerSeconds: Math.max(0, Math.ceil(this.timerFrames / 60)),
       player: this.createHookFighterState(this.combatState.player),
       cpu: this.createHookFighterState(this.combatState.cpu),
+      audioEvents: getRecentMortalCodexAudioEvents(),
       winnerId: resolveMatchWinnerId(this.winner, {
         player: this.matchConfig.playerCharacterId,
         cpu: this.matchConfig.cpuCharacterId,

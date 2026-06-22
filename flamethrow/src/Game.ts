@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
+import { AudioManager } from './AudioManager'
 import { CourtScene, type ShotVisual } from './CourtScene'
-import { BACKBOARD_Z, getLevelForElapsedSeconds, LAUNCH_POSITION, RIM_HEIGHT, SHOT_CLOCK_SECONDS } from './config'
+import { BACKBOARD_Z, getLevelForElapsedSeconds, LAUNCH_POSITION, RIM_HEIGHT, RIM_RADIUS, SHOT_CLOCK_SECONDS } from './config'
 import { Hud } from './Hud'
 import { PhysicsWorld } from './PhysicsWorld'
 import { ScoringSystem, type ShotScoreTracker } from './ScoringSystem'
@@ -29,6 +30,7 @@ declare global {
       resetHighScore: () => void
       dropThroughHoop: () => void
       dropAtBackboard: () => void
+      dropAtRim: () => void
       setElapsedSeconds: (elapsedSeconds: number) => void
       snapshot: () => {
         phase: GamePhase
@@ -46,6 +48,7 @@ declare global {
         timeRemaining: number
         activeShots: number
         readyBallAvailable: boolean
+        audioEvents: readonly string[]
         shots: Array<{ x: number; y: number; z: number; vy: number; enteredHoopOpening: boolean }>
       }
     }
@@ -71,12 +74,17 @@ export class Game {
   private nextShotId = 1
   private activeShots: ActiveShot[] = []
   private highScore = 0
+  private readonly audio: AudioManager
   private readonly ballPosition = new THREE.Vector3()
   private readonly ballRotation = new THREE.Quaternion()
   private readonly app: HTMLElement
+  private readonly handleAudioUnlock = (): void => {
+    void this.audio.unlock().then(() => this.audio.startMusic())
+  }
 
   constructor(app: HTMLElement) {
     this.app = app
+    this.audio = new AudioManager(new URLSearchParams(window.location.search).has('test'))
   }
 
   async start(): Promise<void> {
@@ -95,12 +103,14 @@ export class Game {
     this.court = new CourtScene(threeHost)
     this.physics = await PhysicsWorld.create()
     this.hud = new Hud(hudRoot, {
+      onAudioToggle: () => this.toggleAudio(),
       onModeChange: (mode) => {
         this.shotMode = mode
         this.shotController.mode = mode
       },
       onRestart: () => this.restart(),
     })
+    this.hud.setAudioMuted(this.audio.isMuted())
     this.shotController = new ShotController(this.court.renderer.domElement)
     this.shotController.onLaunch = ({ velocity }) => this.launch(velocity)
     this.shotController.onAim = (velocity) => {
@@ -110,6 +120,7 @@ export class Game {
     this.applyLevel(getLevelForElapsedSeconds(0))
     this.resetBall()
     this.installTestHooks()
+    this.installAudioGestureUnlock()
     this.bindResize()
     this.running = true
     this.lastFrame = performance.now()
@@ -119,6 +130,8 @@ export class Game {
   dispose(): void {
     this.running = false
     cancelAnimationFrame(this.animationFrame)
+    this.removeAudioGestureUnlock()
+    this.audio.dispose()
     this.shotController?.dispose()
     this.court?.dispose()
   }
@@ -165,6 +178,7 @@ export class Game {
   private launch(velocity: THREE.Vector3): void {
     if (this.phase === 'roundOver' || !this.readyBallAvailable) return
     if (this.phase === 'ready') this.phase = 'playing'
+    this.audio.play('shot')
     this.court.clearAim()
     this.spawnActiveShot(this.applyAimAssist(velocity))
     this.readyBallAvailable = false
@@ -180,7 +194,9 @@ export class Game {
       this.physics.getBodyPosition(shot.body, shot.position)
       this.physics.getBodyRotation(shot.body, shot.rotation)
       this.physics.getBodyVelocity(shot.body, shot.velocity)
-      this.physics.updateNetForShot(shot.id, shot.position, shot.velocity)
+      for (const event of this.physics.updateNetForShot(shot.id, shot.position, shot.velocity)) {
+        this.audio.play(event)
+      }
       this.court.updateShotVisual(shot.visual, shot.position, shot.rotation)
 
       const result = this.scoring.checkShot(
@@ -192,6 +208,7 @@ export class Game {
       )
       if (result === 'made') {
         const isHighScore = this.updateHighScore()
+        this.audio.play('made')
         this.hud.showMake(this.scoring.state, isHighScore)
         this.physics.swishNetForMake(shot.position, shot.velocity)
         this.court.celebrateMake(this.scoring.state.tier)
@@ -250,6 +267,7 @@ export class Game {
         }
         const isHighScore = this.updateHighScore()
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
+        this.audio.play('made')
         this.court.celebrateMake(this.scoring.state.tier)
         this.hud.showMake(this.scoring.state, isHighScore)
       },
@@ -274,6 +292,12 @@ export class Game {
         this.spawnActiveShot(new THREE.Vector3(0, -1.2, 0), position)
         this.phase = this.phase === 'ready' ? 'playing' : this.phase
       },
+      dropAtRim: () => {
+        const hoop = this.court.getHoopPosition()
+        const position = new THREE.Vector3(hoop.x + RIM_RADIUS, RIM_HEIGHT + 0.02, hoop.z)
+        this.spawnActiveShot(new THREE.Vector3(0, -0.9, 0), position)
+        this.phase = this.phase === 'ready' ? 'playing' : this.phase
+      },
       setElapsedSeconds: (elapsedSeconds) => {
         this.phase = 'playing'
         this.timeRemaining = Math.max(0, SHOT_CLOCK_SECONDS - elapsedSeconds)
@@ -295,6 +319,7 @@ export class Game {
         timeRemaining: this.timeRemaining,
         activeShots: this.activeShots.length,
         readyBallAvailable: this.readyBallAvailable,
+        audioEvents: this.audio.getRecentEvents(),
         shots: this.activeShots.map((shot) => ({
           x: shot.position.x,
           y: shot.position.y,
@@ -304,6 +329,27 @@ export class Game {
         })),
       }),
     }
+  }
+
+  private installAudioGestureUnlock(): void {
+    window.addEventListener('pointerdown', this.handleAudioUnlock, { once: true, capture: true })
+    window.addEventListener('keydown', this.handleAudioUnlock, { once: true, capture: true })
+  }
+
+  private removeAudioGestureUnlock(): void {
+    window.removeEventListener('pointerdown', this.handleAudioUnlock, { capture: true })
+    window.removeEventListener('keydown', this.handleAudioUnlock, { capture: true })
+  }
+
+  private toggleAudio(): boolean {
+    const muted = !this.audio.isMuted()
+    this.audio.setMuted(muted)
+
+    if (!muted) {
+      this.handleAudioUnlock()
+    }
+
+    return muted
   }
 
   private syncBall(isFlying: boolean): void {

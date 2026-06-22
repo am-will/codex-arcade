@@ -222,6 +222,16 @@ h1 {
   background: rgba(255, 216, 90, 0.08);
 }
 
+.audio-mode {
+  color: var(--cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.audio-mode.muted {
+  color: var(--muted);
+  background: rgba(143, 164, 186, 0.08);
+}
+
 #status {
   max-width: min(34rem, 62vw);
   padding: 0.7rem 0.9rem;

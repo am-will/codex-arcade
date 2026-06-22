@@ -33,6 +33,7 @@ export interface TestHookMatchState {
   readonly timerSeconds: number;
   readonly player: TestHookFighterState;
   readonly cpu: TestHookFighterState;
+  readonly audioEvents: readonly string[];
   readonly winnerId?: CharacterId;
 }
 
